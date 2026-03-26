@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enumeration\Dado.cs" />
+    <Compile Include="Enumeration\Dinossauros.cs" />
     <Compile Include="Model\Jogador.cs" />
     <Compile Include="Model\Partida.cs" />
     <Compile Include="Util\Config.cs" />

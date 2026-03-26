@@ -8,15 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Extintos.Model;
 
 namespace Extintos
 {
     public partial class FormJogadores : Form
     {
-        private int idDaPartida = 0;
-        private string senhaDoJogador = "";
-        private int idDoJogador = 0;
-        private Jogador dadosJogador;
+         
+        private Jogador dadosJogador; //*******
 
         public FormJogadores()
         { 
@@ -27,29 +26,34 @@ namespace Extintos
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Size = new System.Drawing.Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             this.WindowState = FormWindowState.Maximized;
+            
+
         }
 
-        public FormJogadores(Jogador dadosJogador)
+        internal FormJogadores(Jogador dadosJogador) : this() //Construtor com parâmetro 
         {
             this.dadosJogador = dadosJogador;
+            lblSenhaGeradaa.Text = dadosJogador.Senha;
         }
 
+       
         private void bntListaJogadores_Click(object sender, EventArgs e)
         {
-           dgvJogadores.DataSource = Partida.ListarJogadores(idDaPartida);
+
+           dgvJogadores.DataSource = Partida.ListarJogadores(dadosJogador.idPartida);
 
         }
-     
-        private void FormJogadores_Load(object sender, EventArgs e)
+
+
+
+        private void bntEntrar_Click(object sender, EventArgs e)
         {
+            string retornoEntrar = Jogo.Iniciar(dadosJogador.IdJogador, dadosJogador.Senha);
+            FormDraftosaurus FormDraftosaurus = new FormDraftosaurus(retornoEntrar, dadosJogador);
+            this.Hide();
+
 
         }
-
-        private void btnProximo_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnCadastrarNovoJogador_Click(object sender, EventArgs e)
         {
             Forms.FormLobby.Show();
@@ -69,19 +73,7 @@ namespace Extintos
             this.Hide();
         }
 
-        //private void latJogadores_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-
-        //  string selecaoJogadores = latJogadores.SelectedItem.ToString(); // **
-        // string[] dadosJogadores = selecaoJogadores.Split(',');
-
-        //   int idJogador = Convert.ToInt32(dadosJogadores[0]); //Conversão para int devido os dados das partidas estarem em string. **
-        //   string nomJogador = dadosJogadores[1];
-        //   int pontuacaoJogador = Convert.ToInt32(dadosJogadores[2]);
-
-        //    lblIdGeradoJogado.Text = idJogador.ToString();
-        //    lblSenhaGeradaa.Text = senhaJogador;
-        //}
+     
     }
     }
 

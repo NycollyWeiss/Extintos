@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using Extintos.Model;
 
 namespace Extintos
 {
@@ -29,7 +30,7 @@ namespace Extintos
       
         private void btnListarPartidas_Click(object sender, EventArgs e)
         {
-        dgvPartidas.DataSource = Partida.ListarPartidas("T"); //Lista para dentro do dgvPartidas
+        dgvPartidas.DataSource = Partida.ListarPartidas('T'); //Lista para dentro do dgvPartidas
         }
         private void lstPartidas_SelectedIndexChanged(object sender, EventArgs e)
         {

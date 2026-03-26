@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.bntEntrar = new System.Windows.Forms.Button();
             this.lblJogadorEscolhido = new System.Windows.Forms.Label();
             this.lblFaceDado = new System.Windows.Forms.Label();
             this.bntExibirMao = new System.Windows.Forms.Button();
@@ -37,22 +36,8 @@
             this.lblDadoSorteado = new System.Windows.Forms.Label();
             this.lstMao = new System.Windows.Forms.ListBox();
             this.lblVersao3 = new System.Windows.Forms.Label();
-            this.lblTituloInicioJogo = new System.Windows.Forms.Label();
+            this.lblMensagemInicioPartida = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // bntEntrar
-            // 
-            this.bntEntrar.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.bntEntrar.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.bntEntrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bntEntrar.Location = new System.Drawing.Point(306, 83);
-            this.bntEntrar.Margin = new System.Windows.Forms.Padding(4);
-            this.bntEntrar.Name = "bntEntrar";
-            this.bntEntrar.Size = new System.Drawing.Size(189, 85);
-            this.bntEntrar.TabIndex = 42;
-            this.bntEntrar.Text = "Iniciar";
-            this.bntEntrar.UseVisualStyleBackColor = false;
-            this.bntEntrar.Click += new System.EventHandler(this.bntEntrar_Click);
             // 
             // lblJogadorEscolhido
             // 
@@ -135,6 +120,7 @@
             this.lstMao.Name = "lstMao";
             this.lstMao.Size = new System.Drawing.Size(281, 116);
             this.lstMao.TabIndex = 51;
+            this.lstMao.SelectedIndexChanged += new System.EventHandler(this.lstMao_SelectedIndexChanged);
             // 
             // lblVersao3
             // 
@@ -145,23 +131,21 @@
             this.lblVersao3.Size = new System.Drawing.Size(0, 16);
             this.lblVersao3.TabIndex = 52;
             // 
-            // lblTituloInicioJogo
+            // lblMensagemInicioPartida
             // 
-            this.lblTituloInicioJogo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblTituloInicioJogo.AutoSize = true;
-            this.lblTituloInicioJogo.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTituloInicioJogo.Location = new System.Drawing.Point(297, 27);
-            this.lblTituloInicioJogo.Name = "lblTituloInicioJogo";
-            this.lblTituloInicioJogo.Size = new System.Drawing.Size(216, 36);
-            this.lblTituloInicioJogo.TabIndex = 53;
-            this.lblTituloInicioJogo.Text = "Inicio do Jogo";
+            this.lblMensagemInicioPartida.AutoSize = true;
+            this.lblMensagemInicioPartida.Location = new System.Drawing.Point(28, 28);
+            this.lblMensagemInicioPartida.Name = "lblMensagemInicioPartida";
+            this.lblMensagemInicioPartida.Size = new System.Drawing.Size(44, 16);
+            this.lblMensagemInicioPartida.TabIndex = 53;
+            this.lblMensagemInicioPartida.Text = "label2";
             // 
             // FormDraftosaurus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.lblTituloInicioJogo);
+            this.Controls.Add(this.lblMensagemInicioPartida);
             this.Controls.Add(this.lblVersao3);
             this.Controls.Add(this.lstMao);
             this.Controls.Add(this.lblDadoSorteado);
@@ -170,17 +154,16 @@
             this.Controls.Add(this.bntExibirMao);
             this.Controls.Add(this.lblFaceDado);
             this.Controls.Add(this.lblJogadorEscolhido);
-            this.Controls.Add(this.bntEntrar);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormDraftosaurus";
             this.Text = "FormDraftosaurus";
+            this.Load += new System.EventHandler(this.FormDraftosaurus_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Button bntEntrar;
         private System.Windows.Forms.Label lblJogadorEscolhido;
         private System.Windows.Forms.Label lblFaceDado;
         private System.Windows.Forms.Button bntExibirMao;
@@ -189,6 +172,6 @@
         private System.Windows.Forms.Label lblDadoSorteado;
         private System.Windows.Forms.ListBox lstMao;
         private System.Windows.Forms.Label lblVersao3;
-        private System.Windows.Forms.Label lblTituloInicioJogo;
+        private System.Windows.Forms.Label lblMensagemInicioPartida;
     }
 }

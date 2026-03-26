@@ -7,12 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Extintos
+namespace Extintos.Model
 {
     internal class Jogador
 
     {
-        public int Id { get; set; }
+        public int IdJogador { get; set; }
 
         public string NomeJogador { get; set; } // limitar 20 caracteres 
 
@@ -30,7 +30,7 @@ namespace Extintos
                 
             Jogador jogador = new Jogador();
 
-            jogador.Id = Convert.ToInt32(dadosJogador[0]);
+            jogador.IdJogador = Convert.ToInt32(dadosJogador[0]);
             jogador.Senha = dadosJogador[1];
             jogador.NomeJogador = nomeJogador;
             jogador.Pontuacao = 0;
@@ -43,7 +43,7 @@ namespace Extintos
         public static string BuscaPeloId(int idJogador, int idPartida)
         {
             List<Jogador> jogadores = Partida.ListarJogadores(idPartida);
-            Jogador jogadorEncontrado = jogadores.Find(j => j.Id == idJogador);
+            Jogador jogadorEncontrado = jogadores.Find(j => j.IdJogador == idJogador);
 
             if (jogadorEncontrado == null)
                 return null;
@@ -54,12 +54,12 @@ namespace Extintos
         // busca sem o id da partida (percorre todas as partidas)
         public static string BuscaPeloId(int idJogador)
         {
-            List<Partida> todasPartidas = Partida.ListarPartidas("J");
+            List<Partida> todasPartidas = Partida.ListarPartidas('j');
 
             foreach (Partida partida in todasPartidas)
             {
-                List<Jogador> jogadores = Partida.ListarJogadores(partida.Id);
-                Jogador jogadorEncontrado = jogadores.Find(j => j.Id == idJogador);
+                List<Jogador> jogadores = Partida.ListarJogadores(partida.IdPartida);
+                Jogador jogadorEncontrado = jogadores.Find(j => j.IdJogador == idJogador);
 
                 if (jogadorEncontrado != null)
                     return jogadorEncontrado.NomeJogador;

@@ -1,4 +1,7 @@
 ﻿using Draft;
+using Extintos.Enumeration;
+using Extintos.Model;
+using Extintos.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,15 +16,11 @@ namespace Extintos
 {
     public partial class FormDraftosaurus : Form
     {
-        private int idJogador = 0;
-        private String senhaJogador = "";
-        private string idPartida = "";
-        public FormDraftosaurus(string idPartida, string senhaJogador, int idJogador)
+        private string retorno;
+        private Jogador dadosJogador; //*******
+        public FormDraftosaurus()
         {
             
-            this.senhaJogador = senhaJogador;
-            this.idJogador = idJogador;
-            this.idPartida = idPartida;
             InitializeComponent();
             lblVersao3.Text = Jogo.versao;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
@@ -29,18 +28,17 @@ namespace Extintos
             this.WindowState = FormWindowState.Maximized;
         }
 
-        private void bntEntrar_Click(object sender, EventArgs e)
+        internal FormDraftosaurus(string retorno, Jogador dadosJogador) : this() //Construtor com parâmetros
         {
-            string retornoEntrar = Jogo.Iniciar(idJogador, senhaJogador);
-
-
-            
-
+            this.retorno = retorno;
+            this.dadosJogador = dadosJogador;
+            lblMensagemInicioPartida.Text = retorno;
         }
+        
 
         private void bntExibirMao_Click(object sender, EventArgs e)
         {
-            string retornoMao = Jogo.ExibirMao(idJogador,senhaJogador);
+            string retornoMao = Jogo.ExibirMao(dadosJogador.IdJogador,dadosJogador.Senha);
 
             retornoMao = retornoMao.Replace("\r", "");
             retornoMao = retornoMao.Substring(0, retornoMao.Length - 1);
@@ -55,6 +53,18 @@ namespace Extintos
             
         }
 
-       
+        //Dinossauros.Dinossauro dinossaurio = (Dinossauros.Dinossauro)Enum.Parse(Dinossauros.Dinossauro);
+        //dinossaurio.PegaNome()
+        //dinossaurio.PegaCor();
+
+        private void FormDraftosaurus_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lstMao_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

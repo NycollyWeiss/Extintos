@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using Extintos.Model;
 
 namespace Extintos
 {
@@ -24,7 +25,7 @@ namespace Extintos
 
         private void btnListarAsPartidas_Click(object sender, EventArgs e)
         {
-            dgvPartida.DataSource = Partida.ListarPartidas("T"); //Lista para dentro do dgvPartidas
+            dgvPartida.DataSource = Partida.ListarPartidas('T'); //Lista para dentro do dgvPartidas
 
             dgvPartida.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPartida.EditMode = DataGridViewEditMode.EditProgrammatically;

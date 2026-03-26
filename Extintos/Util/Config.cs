@@ -20,6 +20,6 @@ namespace Extintos
         }
 
 
-        public List<String> jogadores ()
+        //public List<String> jogadores ()
     }
 }

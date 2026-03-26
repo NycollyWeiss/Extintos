@@ -62,7 +62,7 @@ namespace Extintos
             return listaJogadores;
         }
 
-        public static string IniciarPartida(int idJogador, string senhaJogador)
+       /* public static string IniciarPartida(int idJogador, string senhaJogador)
         {
       
             string retornoEntrar = Jogo.Iniciar(idJogador, senhaJogador);
@@ -74,7 +74,7 @@ namespace Extintos
             string mensagemInicio = "O Jogador: " + Jogador.BuscaPeloId(idJogador) + "Iniciou a partida!\n O primeiro a jogar é o : " + Jogador.BuscaPeloId(primeiroJogar) + ;
 
             lblFaceDado.Text = retornoEntrar.Substring(retornoEntrar.IndexOf(',') + 1);
-        }
+        }*/
 
       
     }

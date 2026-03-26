@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static Extintos.Enumeration.DadoFace;
 
 
 namespace Extintos.Enumeration
@@ -39,9 +40,12 @@ namespace Extintos.Enumeration
 
         }
 
-        public static DadoFace ? PegaInfo(this Dado dado) 
+    }
+    internal static class DadoExtension
+    {
+        public static DadoFace? PegaInfo(this Dado dado)
         {
-          var field = dado.GetType().GetField(dado.ToString());
+            var field = dado.GetType().GetField(dado.ToString());
             return field?.GetCustomAttribute<DadoFace>();
         }
 
@@ -50,7 +54,12 @@ namespace Extintos.Enumeration
             return dado.PegaInfo()?.Nome ?? dado.ToString();
         }
 
-        public static string PegaRestricao(this Dado dado) => dado.PegaInfo()?.Restricao ?? string.Empty;
+        public static string PegaRestricao(this Dado dado)
+        {
+            return dado.PegaInfo()?.Restricao ?? string.Empty;
+        }
+
+
     }
 }
 

@@ -46,6 +46,8 @@
             this.lblNomeJogador = new System.Windows.Forms.Label();
             this.lblVersao1 = new System.Windows.Forms.Label();
             this.btnVoltar = new System.Windows.Forms.Button();
+            this.dgvPartidas = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPartidas)).BeginInit();
             this.SuspendLayout();
             // 
             // lblDraftosaurus
@@ -53,7 +55,7 @@
             this.lblDraftosaurus.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblDraftosaurus.AutoSize = true;
             this.lblDraftosaurus.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDraftosaurus.Location = new System.Drawing.Point(223, 23);
+            this.lblDraftosaurus.Location = new System.Drawing.Point(360, 104);
             this.lblDraftosaurus.Name = "lblDraftosaurus";
             this.lblDraftosaurus.Size = new System.Drawing.Size(335, 32);
             this.lblDraftosaurus.TabIndex = 23;
@@ -64,7 +66,7 @@
             this.btnListarPartidas.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnListarPartidas.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.btnListarPartidas.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnListarPartidas.Location = new System.Drawing.Point(312, 69);
+            this.btnListarPartidas.Location = new System.Drawing.Point(712, 155);
             this.btnListarPartidas.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnListarPartidas.Name = "btnListarPartidas";
             this.btnListarPartidas.Size = new System.Drawing.Size(163, 28);
@@ -78,7 +80,7 @@
             this.lstPartidas.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lstPartidas.FormattingEnabled = true;
             this.lstPartidas.ItemHeight = 16;
-            this.lstPartidas.Location = new System.Drawing.Point(252, 119);
+            this.lstPartidas.Location = new System.Drawing.Point(389, 200);
             this.lstPartidas.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lstPartidas.Name = "lstPartidas";
             this.lstPartidas.Size = new System.Drawing.Size(283, 276);
@@ -90,7 +92,7 @@
             this.lblTituloIdPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTituloIdPartida.AutoSize = true;
             this.lblTituloIdPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTituloIdPartida.Location = new System.Drawing.Point(541, 133);
+            this.lblTituloIdPartida.Location = new System.Drawing.Point(839, 433);
             this.lblTituloIdPartida.Name = "lblTituloIdPartida";
             this.lblTituloIdPartida.Size = new System.Drawing.Size(122, 20);
             this.lblTituloIdPartida.TabIndex = 26;
@@ -101,7 +103,7 @@
             this.lblTituloNomePartida.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTituloNomePartida.AutoSize = true;
             this.lblTituloNomePartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTituloNomePartida.Location = new System.Drawing.Point(541, 202);
+            this.lblTituloNomePartida.Location = new System.Drawing.Point(839, 502);
             this.lblTituloNomePartida.Name = "lblTituloNomePartida";
             this.lblTituloNomePartida.Size = new System.Drawing.Size(155, 20);
             this.lblTituloNomePartida.TabIndex = 27;
@@ -112,7 +114,7 @@
             this.lblTituloDataPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTituloDataPartida.AutoSize = true;
             this.lblTituloDataPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTituloDataPartida.Location = new System.Drawing.Point(541, 272);
+            this.lblTituloDataPartida.Location = new System.Drawing.Point(839, 572);
             this.lblTituloDataPartida.Name = "lblTituloDataPartida";
             this.lblTituloDataPartida.Size = new System.Drawing.Size(147, 20);
             this.lblTituloDataPartida.TabIndex = 28;
@@ -123,7 +125,7 @@
             this.btnEntrarPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnEntrarPartida.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.btnEntrarPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEntrarPartida.Location = new System.Drawing.Point(15, 316);
+            this.btnEntrarPartida.Location = new System.Drawing.Point(152, 397);
             this.btnEntrarPartida.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnEntrarPartida.Name = "btnEntrarPartida";
             this.btnEntrarPartida.Size = new System.Drawing.Size(193, 62);
@@ -136,7 +138,7 @@
             // 
             this.lblPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblPartida.AutoSize = true;
-            this.lblPartida.Location = new System.Drawing.Point(543, 170);
+            this.lblPartida.Location = new System.Drawing.Point(841, 470);
             this.lblPartida.Name = "lblPartida";
             this.lblPartida.Size = new System.Drawing.Size(0, 16);
             this.lblPartida.TabIndex = 30;
@@ -145,7 +147,7 @@
             // 
             this.lblNomePartida.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblNomePartida.AutoSize = true;
-            this.lblNomePartida.Location = new System.Drawing.Point(543, 239);
+            this.lblNomePartida.Location = new System.Drawing.Point(841, 539);
             this.lblNomePartida.Name = "lblNomePartida";
             this.lblNomePartida.Size = new System.Drawing.Size(0, 16);
             this.lblNomePartida.TabIndex = 31;
@@ -154,7 +156,7 @@
             // 
             this.lblDataPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblDataPartida.AutoSize = true;
-            this.lblDataPartida.Location = new System.Drawing.Point(543, 306);
+            this.lblDataPartida.Location = new System.Drawing.Point(841, 606);
             this.lblDataPartida.Name = "lblDataPartida";
             this.lblDataPartida.Size = new System.Drawing.Size(0, 16);
             this.lblDataPartida.TabIndex = 32;
@@ -162,7 +164,7 @@
             // txtSenhaPartida
             // 
             this.txtSenhaPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtSenhaPartida.Location = new System.Drawing.Point(15, 250);
+            this.txtSenhaPartida.Location = new System.Drawing.Point(152, 331);
             this.txtSenhaPartida.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtSenhaPartida.Name = "txtSenhaPartida";
             this.txtSenhaPartida.Size = new System.Drawing.Size(165, 22);
@@ -173,7 +175,7 @@
             this.lblSenhadaPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSenhadaPartida.AutoSize = true;
             this.lblSenhadaPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSenhadaPartida.Location = new System.Drawing.Point(15, 219);
+            this.lblSenhadaPartida.Location = new System.Drawing.Point(152, 300);
             this.lblSenhadaPartida.Name = "lblSenhadaPartida";
             this.lblSenhadaPartida.Size = new System.Drawing.Size(141, 18);
             this.lblSenhadaPartida.TabIndex = 36;
@@ -182,7 +184,7 @@
             // txtIDdaPartida
             // 
             this.txtIDdaPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtIDdaPartida.Location = new System.Drawing.Point(15, 176);
+            this.txtIDdaPartida.Location = new System.Drawing.Point(152, 257);
             this.txtIDdaPartida.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtIDdaPartida.Name = "txtIDdaPartida";
             this.txtIDdaPartida.Size = new System.Drawing.Size(165, 22);
@@ -193,7 +195,7 @@
             this.lblIddaPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblIddaPartida.AutoSize = true;
             this.lblIddaPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIddaPartida.Location = new System.Drawing.Point(15, 145);
+            this.lblIddaPartida.Location = new System.Drawing.Point(152, 226);
             this.lblIddaPartida.Name = "lblIddaPartida";
             this.lblIddaPartida.Size = new System.Drawing.Size(110, 18);
             this.lblIddaPartida.TabIndex = 34;
@@ -202,7 +204,7 @@
             // txtNomeJogador
             // 
             this.txtNomeJogador.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtNomeJogador.Location = new System.Drawing.Point(15, 105);
+            this.txtNomeJogador.Location = new System.Drawing.Point(152, 186);
             this.txtNomeJogador.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtNomeJogador.Name = "txtNomeJogador";
             this.txtNomeJogador.Size = new System.Drawing.Size(161, 22);
@@ -213,7 +215,7 @@
             this.lblNomeJogador.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblNomeJogador.AutoSize = true;
             this.lblNomeJogador.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNomeJogador.Location = new System.Drawing.Point(15, 74);
+            this.lblNomeJogador.Location = new System.Drawing.Point(152, 155);
             this.lblNomeJogador.Name = "lblNomeJogador";
             this.lblNomeJogador.Size = new System.Drawing.Size(149, 18);
             this.lblNomeJogador.TabIndex = 38;
@@ -223,7 +225,7 @@
             // 
             this.lblVersao1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblVersao1.AutoSize = true;
-            this.lblVersao1.Location = new System.Drawing.Point(750, 425);
+            this.lblVersao1.Location = new System.Drawing.Point(887, 506);
             this.lblVersao1.Name = "lblVersao1";
             this.lblVersao1.Size = new System.Drawing.Size(0, 16);
             this.lblVersao1.TabIndex = 40;
@@ -240,11 +242,22 @@
             this.btnVoltar.UseVisualStyleBackColor = false;
             this.btnVoltar.Click += new System.EventHandler(this.btnVoltar_Click);
             // 
+            // dgvPartidas
+            // 
+            this.dgvPartidas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPartidas.Location = new System.Drawing.Point(692, 200);
+            this.dgvPartidas.Name = "dgvPartidas";
+            this.dgvPartidas.RowHeadersWidth = 51;
+            this.dgvPartidas.RowTemplate.Height = 24;
+            this.dgvPartidas.Size = new System.Drawing.Size(269, 211);
+            this.dgvPartidas.TabIndex = 42;
+            // 
             // FormPartida
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1075, 613);
+            this.Controls.Add(this.dgvPartidas);
             this.Controls.Add(this.btnVoltar);
             this.Controls.Add(this.lblVersao1);
             this.Controls.Add(this.txtNomeJogador);
@@ -266,6 +279,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormPartida";
             this.Text = "FormPartida";
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPartidas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -291,5 +305,6 @@
         private System.Windows.Forms.Label lblNomeJogador;
         private System.Windows.Forms.Label lblVersao1;
         private System.Windows.Forms.Button btnVoltar;
+        private System.Windows.Forms.DataGridView dgvPartidas;
     }
 }

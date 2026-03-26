@@ -64,6 +64,7 @@ namespace Extintos
             return listaJogadores;
         }
 
+<<<<<<< HEAD
         public static Partida BuscaPeloId(char Status, int Id)
         {
             List<Partida> partidas = Partida.ListarPartidas(Status);
@@ -88,6 +89,9 @@ namespace Extintos
         }
 
         public static string IniciarPartida(int idJogador, string senhaJogador)
+=======
+       /* public static string IniciarPartida(int idJogador, string senhaJogador)
+>>>>>>> 306c4456bfb5ce5e7cec1b8a4d11f88ad52e189a
         {
             string retornoEntrar = Jogo.Iniciar(idJogador, senhaJogador);
             int idPartida = Convert.ToInt32(retornoEntrar.Substring(0, retornoEntrar.IndexOf(',')));
@@ -102,7 +106,14 @@ namespace Extintos
              $"Turno: {verificacao.numeroTurno}\n" +
              $"Face do Dado: {dadoAtual.PegaNome()}\n";
 
+<<<<<<< HEAD
             return mensagemInicio;
         }
+=======
+            lblFaceDado.Text = retornoEntrar.Substring(retornoEntrar.IndexOf(',') + 1);
+        }*/
+
+      
+>>>>>>> 306c4456bfb5ce5e7cec1b8a4d11f88ad52e189a
     }
 }

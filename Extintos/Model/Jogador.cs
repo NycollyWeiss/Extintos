@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Extintos
 {
@@ -19,6 +20,8 @@ namespace Extintos
 
         public int Pontuacao { get; set; }
 
+        public int idPartida { get; set; }
+
         public static Jogador EntrarNaPartida(int idPartida, string nomeJogador, string senhaPartida)
         {
             
@@ -26,10 +29,12 @@ namespace Extintos
             string[] dadosJogador = retornoEntrar.Split(',');
                 
             Jogador jogador = new Jogador();
+
             jogador.Id = Convert.ToInt32(dadosJogador[0]);
             jogador.Senha = dadosJogador[1];
             jogador.NomeJogador = nomeJogador;
             jogador.Pontuacao = 0;
+            jogador.idPartida = idPartida;
 
             return jogador;
         }

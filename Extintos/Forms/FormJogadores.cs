@@ -13,15 +13,13 @@ namespace Extintos
 {
     public partial class FormJogadores : Form
     {
-        private string idPartida = "";
-        private string senhaJogador = "";
-        private int idJogador = 0;
+        private int idDaPartida = 0;
+        private string senhaDoJogador = "";
+        private int idDoJogador = 0;
+        private Jogador dadosJogador;
 
-        public FormJogadores(string idPartida, string senhaJogador, int idJogador)
-        {
-            this.idPartida = idPartida;
-            this.senhaJogador = senhaJogador;
-            this.idJogador = idJogador;
+        public FormJogadores()
+        { 
 
             InitializeComponent();
             lblVersao2.Text = Jogo.versao;
@@ -29,49 +27,46 @@ namespace Extintos
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Size = new System.Drawing.Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             this.WindowState = FormWindowState.Maximized;
-
-
-          
-            lblSenhaGeradaa.Text = senhaJogador;
-            lblIdGeradoJogador.Text = idJogador.ToString();
         }
-      
+
+        public FormJogadores(Jogador dadosJogador)
+        {
+            this.dadosJogador = dadosJogador;
+        }
 
         private void bntListaJogadores_Click(object sender, EventArgs e)
         {
-            int idPa = int.Parse(idPartida);
-            string retornoJogadores = Jogo.ListarJogadores(idPa);
+           dgvJogadores.DataSource = Partida.ListarJogadores(idDaPartida);
 
-            retornoJogadores = retornoJogadores.Replace("\r", "");
-            retornoJogadores = retornoJogadores.Substring(0, retornoJogadores.Length - 1);
-            string[] jogadores = retornoJogadores.Split('\n');
-
-            latJogadores.Items.Clear();
-            for (int i = 0; i < jogadores.Length; i++)
-            {
-                latJogadores.Items.Add(jogadores[i]);
-
-            }
         }
-
-      
-
-        private void btnSim_Click(object sender, EventArgs e)
-        {
-            Forms.FormPartida.Show();
-            this.Hide();
-        }
-
-        private void btnNão_Click(object sender, EventArgs e)
-        {
-            FormDraftosaurus formDraftosaurus = new FormDraftosaurus(idPartida, senhaJogador,idJogador);
-            formDraftosaurus.Show();
-            this.Hide();
-        }
-
+     
         private void FormJogadores_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnProximo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCadastrarNovoJogador_Click(object sender, EventArgs e)
+        {
+            Forms.FormLobby.Show();
+            this.Hide();
+
+        }
+
+        private void btnVoltar2_Click(object sender, EventArgs e)
+        {
+            Forms.FormLobby.Show();
+            this.Hide();
+        }
+
+        private void btnVoltar2_Click_1(object sender, EventArgs e)
+        {
+            Forms.FormLobby.Show();
+            this.Hide();
         }
 
         //private void latJogadores_SelectedIndexChanged(object sender, EventArgs e)

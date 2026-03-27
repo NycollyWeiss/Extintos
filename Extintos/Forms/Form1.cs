@@ -24,9 +24,6 @@ namespace Extintos
 
         private void btnCriarPartida_Click(object sender, EventArgs e)
         {
-           
-          
-
             txtNomedoGrupo.Text = "Extintos";
             string nomePartida = txtNomedaPartida.Text;
             string senhaPartida = txtSenhadaPartida.Text;
@@ -40,10 +37,10 @@ namespace Extintos
                 return;
             }
 
-            lblIdGerado.Text = Jogo.CriarPartida(nomePartida, senhaPartida, nomeGrupo);
+           Jogo.CriarPartida(nomePartida, senhaPartida, nomeGrupo);
 
             //Referenciando o próximo formulário
-            Forms.FormPartida.Show();
+            Forms.FormLobby.Show();
             this.Hide();
         }
 

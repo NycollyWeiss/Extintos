@@ -46,7 +46,7 @@ namespace Extintos
             retorno = retorno.Substring(0, retorno.Length - 1);
             string[] retornoJogadores = retorno.Split('\n');
             List<Jogador> listaJogadores = new List<Jogador>();
-
+            //validar se não ter jogadores na partida
             for (int i = 0; i < retornoJogadores.Length; i++)
             {
                 string jogador = retornoJogadores[i];
@@ -61,6 +61,14 @@ namespace Extintos
 
             return listaJogadores;
         }
+
+        public static int CriarPartida(string nomeDaPartida, string senhaDaPartida, string nomeDoGrupo)
+        {
+            string retorno = Jogo.CriarPartida(nomeDaPartida, senhaDaPartida, nomeDoGrupo);
+            int idPartidaCriada = Convert.ToInt32(retorno);
+            return idPartidaCriada;
+        }
+
 
        /* public static string IniciarPartida(int idJogador, string senhaJogador)
         {

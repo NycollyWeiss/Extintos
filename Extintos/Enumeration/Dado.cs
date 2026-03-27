@@ -39,7 +39,7 @@ namespace Extintos.Enumeration
             WC,
 
         }
-
+       
     }
     internal static class DadoExtension
     {
@@ -60,6 +60,7 @@ namespace Extintos.Enumeration
         }
 
 
+        
     }
 }
 

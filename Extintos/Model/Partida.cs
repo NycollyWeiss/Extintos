@@ -109,7 +109,7 @@ namespace Extintos
             var verificacao = Partida.VerificaPartida(idPartida);
             if (verificacao.statusPartida == 'J')
             {
-                string jacomecou = "Partida já iniciada!";
+                string jacomecou = "Partida iniciada!";
                 return jacomecou;
 
 

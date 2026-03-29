@@ -104,5 +104,10 @@ namespace Extintos
             Forms.Form1.Show();
             this.Hide();
         }
+
+        private void dgvPartida_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            txtIdDaPartida.Text = dgvPartida.CurrentRow.Cells[0].Value.ToString();
+        }
     }
 }

@@ -26,7 +26,13 @@ namespace Extintos
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Size = new System.Drawing.Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             this.WindowState = FormWindowState.Maximized;
-            
+
+            dgvJogadores.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvJogadores.EditMode = DataGridViewEditMode.EditProgrammatically;
+            dgvJogadores.AllowUserToAddRows = false;
+            dgvJogadores.AllowUserToResizeColumns = false;
+            dgvJogadores.AllowUserToResizeRows = false;
+            dgvJogadores.RowHeadersVisible = false;
 
         }
 

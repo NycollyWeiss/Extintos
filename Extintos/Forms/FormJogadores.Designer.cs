@@ -44,20 +44,20 @@
             // 
             this.lblSenhaGeradaJogador.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSenhaGeradaJogador.AutoSize = true;
-            this.lblSenhaGeradaJogador.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSenhaGeradaJogador.Location = new System.Drawing.Point(543, 237);
+            this.lblSenhaGeradaJogador.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSenhaGeradaJogador.Location = new System.Drawing.Point(713, 179);
             this.lblSenhaGeradaJogador.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSenhaGeradaJogador.Name = "lblSenhaGeradaJogador";
-            this.lblSenhaGeradaJogador.Size = new System.Drawing.Size(208, 18);
+            this.lblSenhaGeradaJogador.Size = new System.Drawing.Size(277, 22);
             this.lblSenhaGeradaJogador.TabIndex = 44;
-            this.lblSenhaGeradaJogador.Text = "Senha da Partida Jogador:";
+            this.lblSenhaGeradaJogador.Text = "Senha do jogador adicionado:";
             // 
             // bntListaJogadores
             // 
             this.bntListaJogadores.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.bntListaJogadores.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.bntListaJogadores.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bntListaJogadores.Location = new System.Drawing.Point(362, 103);
+            this.bntListaJogadores.Location = new System.Drawing.Point(398, 131);
             this.bntListaJogadores.Name = "bntListaJogadores";
             this.bntListaJogadores.Size = new System.Drawing.Size(141, 31);
             this.bntListaJogadores.TabIndex = 46;
@@ -69,9 +69,11 @@
             // 
             this.lblSenhaGeradaa.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSenhaGeradaa.AutoSize = true;
-            this.lblSenhaGeradaa.Location = new System.Drawing.Point(546, 278);
+            this.lblSenhaGeradaa.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSenhaGeradaa.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblSenhaGeradaa.Location = new System.Drawing.Point(784, 227);
             this.lblSenhaGeradaa.Name = "lblSenhaGeradaa";
-            this.lblSenhaGeradaa.Size = new System.Drawing.Size(0, 16);
+            this.lblSenhaGeradaa.Size = new System.Drawing.Size(0, 20);
             this.lblSenhaGeradaa.TabIndex = 47;
             // 
             // btnProximo
@@ -79,9 +81,9 @@
             this.btnProximo.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnProximo.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.btnProximo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnProximo.Location = new System.Drawing.Point(750, 471);
+            this.btnProximo.Location = new System.Drawing.Point(745, 304);
             this.btnProximo.Name = "btnProximo";
-            this.btnProximo.Size = new System.Drawing.Size(129, 66);
+            this.btnProximo.Size = new System.Drawing.Size(168, 87);
             this.btnProximo.TabIndex = 49;
             this.btnProximo.Text = "Iniciar Partida";
             this.btnProximo.UseVisualStyleBackColor = false;
@@ -92,7 +94,7 @@
             this.btnCadastrarNovoJogador.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCadastrarNovoJogador.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.btnCadastrarNovoJogador.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCadastrarNovoJogador.Location = new System.Drawing.Point(346, 441);
+            this.btnCadastrarNovoJogador.Location = new System.Drawing.Point(381, 501);
             this.btnCadastrarNovoJogador.Name = "btnCadastrarNovoJogador";
             this.btnCadastrarNovoJogador.Size = new System.Drawing.Size(180, 26);
             this.btnCadastrarNovoJogador.TabIndex = 51;
@@ -105,17 +107,17 @@
             this.lblTituloAddJogadores.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTituloAddJogadores.AutoSize = true;
             this.lblTituloAddJogadores.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTituloAddJogadores.Location = new System.Drawing.Point(292, 50);
+            this.lblTituloAddJogadores.Location = new System.Drawing.Point(538, 50);
             this.lblTituloAddJogadores.Name = "lblTituloAddJogadores";
-            this.lblTituloAddJogadores.Size = new System.Drawing.Size(280, 36);
+            this.lblTituloAddJogadores.Size = new System.Drawing.Size(318, 36);
             this.lblTituloAddJogadores.TabIndex = 53;
-            this.lblTituloAddJogadores.Text = "Veja os Jogadores";
+            this.lblTituloAddJogadores.Text = "Jogadores da Partida";
             // 
             // lblVersao2
             // 
             this.lblVersao2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblVersao2.AutoSize = true;
-            this.lblVersao2.Location = new System.Drawing.Point(826, 558);
+            this.lblVersao2.Location = new System.Drawing.Point(1072, 558);
             this.lblVersao2.Name = "lblVersao2";
             this.lblVersao2.Size = new System.Drawing.Size(0, 16);
             this.lblVersao2.TabIndex = 54;
@@ -134,17 +136,18 @@
             // 
             // dgvJogadores
             // 
+            this.dgvJogadores.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dgvJogadores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvJogadores.Location = new System.Drawing.Point(190, 157);
+            this.dgvJogadores.Location = new System.Drawing.Point(346, 168);
             this.dgvJogadores.Name = "dgvJogadores";
             this.dgvJogadores.RowHeadersWidth = 51;
             this.dgvJogadores.RowTemplate.Height = 24;
-            this.dgvJogadores.Size = new System.Drawing.Size(240, 260);
+            this.dgvJogadores.Size = new System.Drawing.Size(253, 327);
             this.dgvJogadores.TabIndex = 56;
             // 
             // FormJogadores
             // 
-            this.ClientSize = new System.Drawing.Size(891, 583);
+            this.ClientSize = new System.Drawing.Size(1382, 583);
             this.Controls.Add(this.dgvJogadores);
             this.Controls.Add(this.btnVoltar2);
             this.Controls.Add(this.lblVersao2);

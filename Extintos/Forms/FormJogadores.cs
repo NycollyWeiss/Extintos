@@ -48,7 +48,7 @@ namespace Extintos
 
         private void bntEntrar_Click(object sender, EventArgs e)
         {
-            string retornoEntrar = Partida.IniciarPartida(dadosJogador.IdJogador, dadosJogador.Senha);
+            string retornoEntrar = Partida.IniciarPartida(dadosJogador.IdJogador, dadosJogador.Senha, dadosJogador.idPartida);
             FormDraftosaurus FormDraftosaurus = new FormDraftosaurus(retornoEntrar, dadosJogador);
             FormDraftosaurus.Show();
             this.Hide();

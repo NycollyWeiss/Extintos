@@ -125,12 +125,13 @@
             this.lblMensagemInicioPartida.Size = new System.Drawing.Size(35, 13);
             this.lblMensagemInicioPartida.TabIndex = 53;
             this.lblMensagemInicioPartida.Text = "label2";
+            this.lblMensagemInicioPartida.Click += new System.EventHandler(this.lblMensagemInicioPartida_Click);
             // 
             // lblNomeDino
             // 
-            this.lblNomeDino.Location = new System.Drawing.Point(265, 256);
+            this.lblNomeDino.Location = new System.Drawing.Point(265, 85);
             this.lblNomeDino.Name = "lblNomeDino";
-            this.lblNomeDino.Size = new System.Drawing.Size(158, 46);
+            this.lblNomeDino.Size = new System.Drawing.Size(253, 217);
             this.lblNomeDino.TabIndex = 54;
             this.lblNomeDino.Text = "label2";
             // 
@@ -175,7 +176,6 @@
             this.Location = new System.Drawing.Point(15, 15);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormDraftosaurus";
-            this.Load += new System.EventHandler(this.FormDraftosaurus_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
         }

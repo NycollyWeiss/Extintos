@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 
 namespace Extintos
@@ -51,6 +52,11 @@ namespace Extintos
         public static List<Jogador> ListarJogadores(int Id)
         {
             string retorno = Jogo.ListarJogadores(Id);
+            if ("".Equals(retorno))
+            {
+                return new List<Jogador>();
+            } 
+               
             retorno = retorno.Replace("\r", "");
             retorno = retorno.Substring(0, retorno.Length - 1);
             string[] retornoJogadores = retorno.Split('\n');
@@ -95,13 +101,19 @@ namespace Extintos
             );
         }
 
-        public static string IniciarPartida(int idJogador, string senhaJogador)
+        public static string IniciarPartida(int idJogador, string senhaJogador, int idPartida)
 
         {
+      
             string retornoEntrar = Jogo.Iniciar(idJogador, senhaJogador);
-            int idPartida = Convert.ToInt32(retornoEntrar.Substring(0, retornoEntrar.IndexOf(',')));
+            var verificacao = Partida.VerificaPartida(idPartida);
+            if (verificacao.statusPartida == 'J')
+            {
+                string jacomecou = "Partida já iniciada!";
+                return jacomecou;
 
-            var verificacao = Partida.VerificaPartida(idPartida); 
+
+            }
             // usei var pq ela faz uma tupla e guarda tipos diferentes de dados
 
 

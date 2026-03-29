@@ -70,14 +70,33 @@ namespace Extintos.Enumeration
         {
             return cercado.PegaInfo()?.Pontuacao ?? cercado.ToString();
         }
-        
+
         public static List<Cercados> cercadosLista()
         {
-            string cercados = Jogo.ListarCercados();
-            Cercados cercadosConvertidoAmem = (Cercados)Enum.Parse(typeof(Cercados), cercados);
+            string retornCercados = Jogo.ListarCercados();
+            string[] cercados = retornCercados.Replace("\r", "")
+                .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
             List<Cercados> todosCercados = new List<Cercados>();
-            todosCercados.Add(cercadosConvertidoAmem);
-            
+
+
+
+            foreach (string cercado in cercados)
+            {
+                string[] partes = cercado.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (partes.Length == 2)
+                {
+
+                    string codigo = partes[0].ToUpper().Trim();
+                    codigo.ToUpper();
+                    Cercados cercadosConvertidoAmem = (Cercados)Enum.Parse(typeof(Cercados), cercado);
+
+                    todosCercados.Add(cercadosConvertidoAmem);
+                    //ta dividido igual o outro pq depois vai mostrar os dinos no cercado
+                }
+
+                
+            }
             return todosCercados;
         }
 

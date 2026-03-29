@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using static Extintos.Enumeration.DadoFace;
+
 
 
 namespace Extintos.Enumeration
@@ -23,24 +23,32 @@ namespace Extintos.Enumeration
         }
 
 
-        public enum Dado
-        {
-            [DadoFace("Alimentação", "Os dinossauros devem ser posicionados...")]
-            AL,
-            [DadoFace("Floresta", "Os dinossauros devem ser posicionados na seção florestal de seu zoo")]
-            FL,
-            [DadoFace("Pradaria", "Os dinossauros devem ser posicionados na seção de pradarias de seu zoo")]
-            PR,
-            [DadoFace("Tiranossauro Rex", "Os dinossauros devem ser posicionados em um cercado que não tenha um T-Rex")]
-            TI,
-            [DadoFace("Cercado Vazio", "Os dinossauros devem ser posicionados em um cercado ainda vazio")]
-            VZ,
-            [DadoFace("Banheiros", "Os dinossauros devem ser posicionados no lado dos banheiros do seu zoo")]
-            WC,
 
-        }
 
     }
+
+    public enum Dado
+    {
+        [DadoFace("Alimentação", "Os dinossauros devem ser posicionados no lado da praça de alimentação do seu zoo")]
+        AL,
+
+        [DadoFace("Floresta", "Os dinossauros devem ser posicionados na seção florestal de seu zoo")]
+        FL,
+
+        [DadoFace("Pradaria", "Os dinossauros devem ser posicionados na seção de pradarias de seu zoo")]
+        PR,
+
+        [DadoFace("Tiranossauro Rex", "Os dinossauros devem ser posicionados em um cercado que não tenha um T-Rex")]
+        TI,
+
+        [DadoFace("Cercado Vazio", "Os dinossauros devem ser posicionados em um cercado ainda vazio")]
+        VZ,
+
+        [DadoFace("Banheiros", "Os dinossauros devem ser posicionados no lado dos banheiros do seu zoo")]
+        WC,
+
+    }
+
     internal static class DadoExtension
     {
         public static DadoFace? PegaInfo(this Dado dado)
@@ -59,7 +67,57 @@ namespace Extintos.Enumeration
             return dado.PegaInfo()?.Restricao ?? string.Empty;
         }
 
+        public static List<Cercados> ValidaCercados(this Dado dado)
+        {
+            switch (dado)
+            {
+                case Dado.AL:
+                    List<Cercados> listaAlimentacao = new List<Cercados>();
+                    listaAlimentacao.Add(Cercados.FI);
+                    listaAlimentacao.Add(Cercados.MT);
+                    listaAlimentacao.Add(Cercados.PA);
+                    listaAlimentacao.Add(Cercados.RI);
+                    return listaAlimentacao;
 
+                case Dado.FL:
+                    List<Cercados> listaFloresta = new List<Cercados>();
+                    listaFloresta.Add(Cercados.FI);
+                    listaFloresta.Add(Cercados.MT);
+                    listaFloresta.Add(Cercados.RI);
+                    listaFloresta.Add(Cercados.RS);
+                    return listaFloresta;
+
+                case Dado.PR:
+                    List<Cercados> listaPradais = new List<Cercados>();
+                    listaPradais.Add(Cercados.IS);
+                    listaPradais.Add(Cercados.PA);
+                    listaPradais.Add(Cercados.CD);
+                    listaPradais.Add(Cercados.RI);
+                    return listaPradais;
+
+                case Dado.WC:
+                    List<Cercados> listaBanheiro = new List<Cercados>();
+                    listaBanheiro.Add(Cercados.RI);
+                    listaBanheiro.Add(Cercados.RS);
+                    listaBanheiro.Add(Cercados.IS);
+                    listaBanheiro.Add(Cercados.CD);
+                    return listaBanheiro;
+
+                default:
+                    return new List<Cercados>();
+            }
+        }
     }
+}
+//como usa: 
+
+//Dado dadoAtual = Dado.PegaNome();
+
+//List<Cercados> valida = dadoAtual.GetCercados();
+
+//ex de uso pra percorrer ela e ver se pode colocar no cercad
+//foreach (var cercadoEscolido in valida)
+{
+    
 }
 

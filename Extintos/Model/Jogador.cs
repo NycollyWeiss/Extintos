@@ -6,6 +6,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Extintos.Enumeration;
 
 namespace Extintos.Model
 {
@@ -21,6 +22,10 @@ namespace Extintos.Model
         public int Pontuacao { get; set; }
 
         public int idPartida { get; set; }
+        
+        public List<Cercados> meusCercados { get; set; }
+        
+        public List<Dinossauro> meusDinossauros { get; set; }
 
         public static Jogador EntrarNaPartida(int idPartida, string nomeJogador, string senhaPartida)
         {
@@ -68,5 +73,6 @@ namespace Extintos.Model
             return null;
         }
 
+        
     }
 }

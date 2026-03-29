@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Extintos.Enumeration.DadoFace;
+
 
 namespace Extintos
 {
@@ -19,6 +19,8 @@ namespace Extintos
         public char Status { get; set; }
         public int Turno { get; set; }
         public List<Jogador> Jogadores { get; set; }
+        
+        
 
         //  public List<Turno> Turnos { get; set; }
 
@@ -74,9 +76,11 @@ namespace Extintos
             Partida partidaEncontrada = partidas.Find(p => p.IdPartida == IdPartida);
             return partidaEncontrada;
         }
-
+// metodo tipo tupla, tudo que ta nos ( ) é os tipos de retorno e o verificaPartida é o nome e o parametro
+//putaria de c# em java é mais bonito, negocio feiao
+//é uma versao melhor do metodo do claro
         public static (char statusPartida, int numeroTurno, char statusTurno, int idJogador, string faceDado)
-            VerificarPartida(int idPartida)
+            VerificaPartida(int idPartida)
         {
 
             string retorno = Jogo.VerificarPartida(idPartida);
@@ -97,20 +101,24 @@ namespace Extintos
             string retornoEntrar = Jogo.Iniciar(idJogador, senhaJogador);
             int idPartida = Convert.ToInt32(retornoEntrar.Substring(0, retornoEntrar.IndexOf(',')));
 
-            var verificacao = Partida.VerificarPartida(idPartida);
+            var verificacao = Partida.VerificaPartida(idPartida); 
+            // usei var pq ela faz uma tupla e guarda tipos diferentes de dados
 
-            DadoFace.Dado dadoAtual = (DadoFace.Dado)Enum.Parse(typeof(DadoFace.Dado), verificacao.faceDado);
+
+            Dado dadoAtual = (Dado)Enum.Parse(typeof(Dado), verificacao.faceDado);
+            
             //boto um trim ? talvez 
 
             string mensagemInicio = $"O Jogador: {Jogador.BuscaPeloId(idJogador)} iniciou a partida!\n" +
                                     $"O primeiro a jogar é: {Jogador.BuscaPeloId(verificacao.idJogador)}\n" +
                                     $"Turno: {verificacao.numeroTurno}\n" +
                                     $"Face do Dado: {dadoAtual.PegaNome()}\n";
-
-
+            
+            
             return mensagemInicio;
         }
-
+        
+        
     }
 }
 

@@ -53,6 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumeration\AuxCercado.cs" />
+    <Compile Include="Enumeration\AuxDinossauro.cs" />
+    <Compile Include="Enumeration\Cercado.cs" />
     <Compile Include="Enumeration\Dado.cs" />
     <Compile Include="Enumeration\Dinossauros.cs" />
     <Compile Include="Model\Jogador.cs" />

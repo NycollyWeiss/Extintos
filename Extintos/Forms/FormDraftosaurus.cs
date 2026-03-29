@@ -120,6 +120,8 @@ namespace Extintos
                         
                         string retorno = Jogo.Jogar(_dadosJogador.IdJogador,_dadosJogador.Senha, dinoEscolhido, cercadoEscolhido);
                         
+                        MessageBox.Show(
+                            $"Jogada efetuada com sucesso!");
                         //falta atualizar o cercado e a lista de dinossauro
                     }
                 }

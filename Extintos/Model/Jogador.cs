@@ -59,7 +59,7 @@ namespace Extintos.Model
         // busca sem o id da partida (percorre todas as partidas)
         public static string BuscaPeloId(int idJogador)
         {
-            List<Partida> todasPartidas = Partida.ListarPartidas('j');
+            List<Partida> todasPartidas = Partida.ListarPartidas('T');
 
             foreach (Partida partida in todasPartidas)
             {

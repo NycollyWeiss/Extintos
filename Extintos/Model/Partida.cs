@@ -107,13 +107,7 @@ namespace Extintos
       
             string retornoEntrar = Jogo.Iniciar(idJogador, senhaJogador);
             var verificacao = Partida.VerificaPartida(idPartida);
-            if (verificacao.statusPartida == 'J')
-            {
-                string jacomecou = "Partida iniciada!";
-                return jacomecou;
-
-
-            }
+         
             // usei var pq ela faz uma tupla e guarda tipos diferentes de dados
 
 

@@ -27,14 +27,16 @@ namespace Extintos
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Size = new System.Drawing.Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             this.WindowState = FormWindowState.Maximized;
+            
         }
 
         internal FormDraftosaurus(string retornoEntrar, Jogador dadosJogador) : this() //Construtor com parâmetros
         {
             this._retornoEntrar = retornoEntrar;
             this._dadosJogador = dadosJogador;
-            lblMensagemInicioPartida.Text = _retornoEntrar;
+            lblRetornoInicio.Text = _retornoEntrar;
         }
+        
         //metodo de exibir a mao vai ir pro jogador depois
 
         public void bntExibirMao_Click(object sender, EventArgs e)
@@ -66,7 +68,7 @@ namespace Extintos
                 string mao = "";
                 foreach (var item in dinossaurosJogador)
                 {
-                    mao += $"Dino: {item.Dinossauro} | Qtd: {item.QuantidadeDinossauros}\n";
+                    mao += $"Dino: {item.Dinossauro.PegaNome()} | Qtd: {item.QuantidadeDinossauros}\n";
                 }
                 
                 lblNomeDino.Text = mao;

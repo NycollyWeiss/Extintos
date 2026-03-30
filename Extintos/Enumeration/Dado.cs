@@ -102,9 +102,34 @@ namespace Extintos.Enumeration
                     listaBanheiro.Add(Cercados.IS);
                     listaBanheiro.Add(Cercados.CD);
                     return listaBanheiro;
-
-                default:
-                    return new List<Cercados>();
+                
+                case Dado.TI:
+                    List<Cercados> listaTi = new List<Cercados>();
+                    listaTi.Add(Cercados.FI);
+                    listaTi.Add(Cercados.MT);
+                    listaTi.Add(Cercados.PA);
+                    listaTi.Add(Cercados.RI);
+                    listaTi.Add(Cercados.RS);
+                    listaTi.Add(Cercados.IS);
+                    return listaTi;
+                case Dado.VZ:
+                    List<Cercados> listaVz = new List<Cercados>();
+                    listaVz.Add(Cercados.FI);
+                    listaVz.Add(Cercados.MT);
+                    listaVz.Add(Cercados.PA);
+                    listaVz.Add(Cercados.RI);
+                    listaVz.Add(Cercados.RS);
+                    listaVz.Add(Cercados.IS);
+                    return listaVz;
+                default: 
+                    List<Cercados> listaTodos = new List<Cercados>();
+                    listaTodos.Add(Cercados.FI);
+                    listaTodos.Add(Cercados.MT);
+                    listaTodos.Add(Cercados.PA);
+                    listaTodos.Add(Cercados.RI);
+                    listaTodos.Add(Cercados.RS);
+                    listaTodos.Add(Cercados.IS);
+                    return listaTodos;
             }
         }
     }

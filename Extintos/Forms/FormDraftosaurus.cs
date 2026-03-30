@@ -27,7 +27,7 @@ namespace Extintos
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Size = new System.Drawing.Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             this.WindowState = FormWindowState.Maximized;
-            
+
         }
 
         internal FormDraftosaurus(string retornoEntrar, Jogador dadosJogador) : this() //Construtor com parâmetros
@@ -36,7 +36,7 @@ namespace Extintos
             this._dadosJogador = dadosJogador;
             lblRetornoInicio.Text = _retornoEntrar;
         }
-        
+
         //metodo de exibir a mao vai ir pro jogador depois
 
         public void bntExibirMao_Click(object sender, EventArgs e)
@@ -70,23 +70,23 @@ namespace Extintos
                 {
                     mao += $"Dino: {item.Dinossauro.PegaNome()} | Qtd: {item.QuantidadeDinossauros}\n";
                 }
-                
+
                 lblNomeDino.Text = mao;
 
 
             }
         }
 
-        private void btnJogar_Click(object sender, EventArgs e)
+        public void btnJogar_Click(object sender, EventArgs e)
         {
             var verificacao = Partida.VerificaPartida(_dadosJogador.idPartida);
+
+            List<AuxCercado> cercadosJogador = new List<AuxCercado>();
+            List<Cercados> todos = CercadosExtension.cercadosLista();
             if (verificacao.numeroTurno == 1 && verificacao.idJogador == _dadosJogador.IdJogador)
             {
                 //depois fazer o jogador ter a lista de cercados nele 
-                ;
 
-                List<AuxCercado> cercadosJogador = new List<AuxCercado>();
-                List<Cercados> todos = CercadosExtension.cercadosLista();
                 foreach (Cercados cercado in todos)
                 {
                     cercadosJogador.Add(new AuxCercado(cercado, 0));
@@ -98,9 +98,9 @@ namespace Extintos
             List<Cercados> cercadosOk = dadoAtual.ValidaCercados();
 
 
-            string dinoEscolhido = "de onde ele for escolher, se vai ser txt ou checkbox";
+            string dinoEscolhido = txtDino.Text.ToUpper();
 
-            string cercadoEscolhido = "de onde ele for escolher, se vai ser txt ou checkbox";
+            string cercadoEscolhido = txtCercado.Text.ToUpper();
 
             if (!cercadosOk.Contains((Cercados)Enum.Parse(typeof(Cercados), cercadoEscolhido)))
             {
@@ -108,11 +108,18 @@ namespace Extintos
                     $"Voce nao pode jogar nesse cercado devido ao dado do turno\n" +
                     $"Dado atual: {dadoAtual.PegaNome()}\n" +
                     $"A restição diz que {dadoAtual.PegaRestricao()}\n" +
-                    $"Escolha outro cercado!!");
-                return;
+                    $"Escolha outro cercado!!", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                MessageBox.Show(
+                    $"foi", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //criar metodo pra atualizar dinos no cercado
             }
 
+
             string retornoMao = Jogo.ExibirMao(_dadosJogador.IdJogador, _dadosJogador.Senha);
+            retornoMao = retornoMao.Substring(1);
             string[] linhasRetorno = retornoMao.Replace("\r", "")
                 .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -130,45 +137,45 @@ namespace Extintos
 
                     string codigo = partes[0].Trim();
                     int quantidade = int.Parse(partes[1].Trim());
-                    Dinossauro dinossauro = (Dinossauro)Enum.Parse(typeof(Dinossauro), codigo);
+                    Dinossauro dinossauro = (Dinossauro)Enum.Parse(typeof(Dinossauro), codigo.ToUpper());
                     dinossaurosJogador.Add(new AuxDinossauro(dinossauro, quantidade));
 
                 }
-
-                string mao = dinossaurosJogador.ToString();
-
-
-
-                if (!dinossaurosJogador.Contains((AuxDinossauro)Enum.Parse(typeof(Dinossauro), dinoEscolhido)))
-
+               
+            }
+            
+            Dinossauro dino = (Dinossauro)Enum.Parse(typeof(Dinossauro), dinoEscolhido);
+            Cercados cerca = (Cercados)Enum.Parse(typeof(Cercados), cercadoEscolhido);
+            foreach (var dinossauro in dinossaurosJogador)
+            {
+                if (dinossauro.Dinossauro.Equals(dino))
                 {
-                    MessageBox.Show(
-                        $"Voce nao tem esse dinossauro escolha um dos seus\n" +
-                        $"{dinossaurosJogador}");
-                }
-                //salva o dinossauro  e cercado escolhido como string pra n mexer mt
-                //depois a gente deixa pra escolher ou o dino ou o cercado antes 
-
-                if (dinossaurosJogador.Contains((AuxDinossauro)Enum.Parse(typeof(Dinossauro), dinoEscolhido)))
-                {
-                    if (cercadosOk.Contains((Cercados)Enum.Parse(typeof(Cercados), cercadoEscolhido)))
+                    MessageBox.Show($"foi2", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    string retorno = Jogo.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha,dinoEscolhido,cercadoEscolhido);
+                    lblMensagemInicioPartida.Text= retorno;
+                    foreach (var cercado in cercadosJogador)
                     {
+                        if (cercado.Cercados.Equals(cerca))
+                            
+                        { var cercadin =  cercadosJogador.FirstOrDefault(p => p.Cercados == cerca);
+                            cercadin.QuantidadeDinos += 1;
 
-                        string retorno = Jogo.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha, dinoEscolhido,
-                            cercadoEscolhido);
-
-                        MessageBox.Show(
-                            $"Jogada efetuada com sucesso!" +
-                            $"{retorno}");
-                        //falta atualizar o cercado e a lista de dinossauro
+//depois faz o cercado ter lista de dinos git 
+                        }
                     }
                 }
-
-
+                
+                }
+            
+            
+            
+            
+            
+            
+            
+            
             }
         }
-
-
     }
-}
+
 

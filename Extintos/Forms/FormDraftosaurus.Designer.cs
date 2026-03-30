@@ -34,7 +34,11 @@
             this.lblNomeDino = new System.Windows.Forms.Label();
             this.btnJogar = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnCampinaDaDiferenca = new System.Windows.Forms.Button();
             this.lblRetornoInicio = new System.Windows.Forms.Label();
+            this.txtDino = new System.Windows.Forms.TextBox();
+            this.txtCercado = new System.Windows.Forms.TextBox();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // bntExibirMao
@@ -91,6 +95,7 @@
             this.btnJogar.Name = "btnJogar";
             this.btnJogar.Size = new System.Drawing.Size(99, 46);
             this.btnJogar.TabIndex = 56;
+            this.btnJogar.Tag = "";
             this.btnJogar.Text = "Jogar";
             this.btnJogar.UseVisualStyleBackColor = false;
             this.btnJogar.Click += new System.EventHandler(this.btnJogar_Click);
@@ -98,12 +103,25 @@
             // panel1
             // 
             this.panel1.Anchor = System.Windows.Forms.AnchorStyles.None;
+        
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel1.Controls.Add(this.btnCampinaDaDiferenca);
             this.panel1.Location = new System.Drawing.Point(281, 10);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(534, 518);
             this.panel1.TabIndex = 57;
+            // 
+            // btnCampinaDaDiferenca
+            // 
+            this.btnCampinaDaDiferenca.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.btnCampinaDaDiferenca.BackgroundImage = global::Extintos.Properties.Resources.botãoCampinaDaDiferença1;
+            this.btnCampinaDaDiferenca.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnCampinaDaDiferenca.Location = new System.Drawing.Point(345, 181);
+            this.btnCampinaDaDiferenca.Name = "btnCampinaDaDiferenca";
+            this.btnCampinaDaDiferenca.Size = new System.Drawing.Size(125, 28);
+            this.btnCampinaDaDiferenca.TabIndex = 59;
+            this.btnCampinaDaDiferenca.UseVisualStyleBackColor = false;
             // 
             // lblRetornoInicio
             // 
@@ -112,12 +130,28 @@
             this.lblRetornoInicio.Size = new System.Drawing.Size(193, 71);
             this.lblRetornoInicio.TabIndex = 58;
             // 
+            // txtDino
+            // 
+            this.txtDino.Location = new System.Drawing.Point(12, 439);
+            this.txtDino.Name = "txtDino";
+            this.txtDino.Size = new System.Drawing.Size(100, 20);
+            this.txtDino.TabIndex = 59;
+            // 
+            // txtCercado
+            // 
+            this.txtCercado.Location = new System.Drawing.Point(148, 439);
+            this.txtCercado.Name = "txtCercado";
+            this.txtCercado.Size = new System.Drawing.Size(100, 20);
+            this.txtCercado.TabIndex = 60;
+            // 
             // FormDraftosaurus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1028, 578);
+            this.Controls.Add(this.txtCercado);
+            this.Controls.Add(this.txtDino);
             this.Controls.Add(this.lblRetornoInicio);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnJogar);
@@ -126,17 +160,22 @@
             this.Controls.Add(this.lblVersao3);
             this.Controls.Add(this.bntExibirMao);
             this.Location = new System.Drawing.Point(15, 15);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormDraftosaurus";
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.TextBox txtDino;
+        private System.Windows.Forms.TextBox txtCercado;
+
+        private System.Windows.Forms.Button btnCampinaDaDiferenca;
 
         private System.Windows.Forms.Button btnJogar;
 
         private System.Windows.Forms.Label lblNomeDino;
 
-        private System.Windows.Forms.RichTextBox richTextBox1;
 
         #endregion
 

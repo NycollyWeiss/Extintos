@@ -105,9 +105,9 @@ namespace Extintos
             if (!cercadosOk.Contains((Cercados)Enum.Parse(typeof(Cercados), cercadoEscolhido)))
             {
                 MessageBox.Show(
-                    $"Voce nao pode jogar nesse cercado devido ao dado do turno\n" +
-                    $"Dado atual: {dadoAtual.PegaNome()}\n" +
-                    $"A restição diz que {dadoAtual.PegaRestricao()}\n" +
+                    $"Voce nao pode jogar nesse cercado devido ao dado do turno\n\n" +
+                    $"Dado atual: {dadoAtual.PegaNome()}\n\n" +
+                    $"A restição diz que {dadoAtual.PegaRestricao()}\n\n" +
                     $"Escolha outro cercado!!", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else

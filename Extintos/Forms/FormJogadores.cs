@@ -34,6 +34,7 @@ namespace Extintos
             dgvJogadores.AllowUserToResizeRows = false;
             dgvJogadores.RowHeadersVisible = false;
 
+
         }
 
         internal FormJogadores(Jogador dadosJogador) : this() //Construtor com parâmetro 

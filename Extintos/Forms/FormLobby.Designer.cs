@@ -49,9 +49,9 @@
             // 
             // lblVersao
             // 
-            this.lblVersao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblVersao.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblVersao.AutoSize = true;
-            this.lblVersao.Location = new System.Drawing.Point(1316, 701);
+            this.lblVersao.Location = new System.Drawing.Point(1344, 693);
             this.lblVersao.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblVersao.Name = "lblVersao";
             this.lblVersao.Size = new System.Drawing.Size(0, 16);

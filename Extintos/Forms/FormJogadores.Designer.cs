@@ -120,7 +120,7 @@
             // 
             this.lblVersao2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblVersao2.AutoSize = true;
-            this.lblVersao2.Location = new System.Drawing.Point(1072, 558);
+            this.lblVersao2.Location = new System.Drawing.Point(1260, 547);
             this.lblVersao2.Name = "lblVersao2";
             this.lblVersao2.Size = new System.Drawing.Size(0, 16);
             this.lblVersao2.TabIndex = 54;
@@ -140,6 +140,8 @@
             // dgvJogadores
             // 
             this.dgvJogadores.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.dgvJogadores.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvJogadores.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

@@ -116,7 +116,7 @@
             // btnListarAsPartidas
             // 
             this.btnListarAsPartidas.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnListarAsPartidas.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.btnListarAsPartidas.BackColor = System.Drawing.Color.MediumAquamarine;
             this.btnListarAsPartidas.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnListarAsPartidas.Location = new System.Drawing.Point(539, 91);
             this.btnListarAsPartidas.Name = "btnListarAsPartidas";
@@ -189,7 +189,7 @@
             // btnEntrarNaPartida
             // 
             this.btnEntrarNaPartida.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnEntrarNaPartida.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.btnEntrarNaPartida.BackColor = System.Drawing.Color.MediumAquamarine;
             this.btnEntrarNaPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEntrarNaPartida.Location = new System.Drawing.Point(478, 387);
             this.btnEntrarNaPartida.Name = "btnEntrarNaPartida";

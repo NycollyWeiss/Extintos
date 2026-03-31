@@ -23,7 +23,7 @@ namespace Extintos
         {
 
             InitializeComponent();
-            lblVersao3.Text = Jogo.versao;
+            lblVersaoTres.Text = Jogo.versao;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Size = new System.Drawing.Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             this.WindowState = FormWindowState.Maximized;
@@ -113,8 +113,10 @@ namespace Extintos
             else
             {
                 MessageBox.Show(
-                    $"foi", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    $"Jogada realizada com sucesso!", "Boa!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 //criar metodo pra atualizar dinos no cercado
+
+
             }
 
 
@@ -150,9 +152,9 @@ namespace Extintos
             {
                 if (dinossauro.Dinossauro.Equals(dino))
                 {
-                    MessageBox.Show($"foi2", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                   //MessageBox.Show($"foi2", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     string retorno = Jogo.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha,dinoEscolhido,cercadoEscolhido);
-                    lblMensagemInicioPartida.Text= retorno;
+                   // lblMensagemInicioPartida.Text= retorno;
                     foreach (var cercado in cercadosJogador)
                     {
                         if (cercado.Cercados.Equals(cerca))
@@ -175,7 +177,9 @@ namespace Extintos
             
             
             }
-        }
+
+ 
+    }
     }
 
 

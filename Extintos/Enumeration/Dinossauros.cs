@@ -33,17 +33,17 @@ namespace Extintos
     
     public enum Dinossauro
     {
-        [DinossauroInfo("Braquiossauro", "Roxo", "BR")]
+        [DinossauroInfo("(BR) Braquiossauro", "Roxo", "BR")]
         BR,
-        [DinossauroInfo("Espinossauro", "Laranja","EP")]
+        [DinossauroInfo("(EP) Espinossauro", "Laranja","EP")]
         EP,
-        [DinossauroInfo("Estegossauro","Azul", "ET")]
+        [DinossauroInfo("(ET) Estegossauro","Azul", "ET")]
         ET,
-        [DinossauroInfo("Parasaurolófo", "Verde","PA")]
+        [DinossauroInfo("(PA) Parasaurolófo", "Verde","PA")]
         PA,
-        [DinossauroInfo("Tiranossauro","Vermelho","TI")]
+        [DinossauroInfo("(TI) Tiranossauro","Vermelho","TI")]
         TI,
-        [DinossauroInfo("Tricerátops", "Amarelo","TR")]
+        [DinossauroInfo("(TR) Tricerátops", "Amarelo","TR")]
         TR
     }
 

@@ -170,16 +170,43 @@ namespace Extintos
                 }
             
             
-            
-            
-            
-            
-            
-            
+                   
             }
 
- 
+        private void btnVerificarPartida_Click(object sender, EventArgs e)
+        {
+            VerificarPartida();
+            
+
+        }
+
+        private void VerificarPartida()
+        {
+
+            var verificacao = Partida.VerificaPartida(_dadosJogador.idPartida);
+
+            
+            char statusPartida = verificacao.statusPartida; // J ou E
+            int numeroTurno = verificacao.numeroTurno;      // 1 a 12
+            char statusTurno = verificacao.statusTurno;     // A ou F
+            int jogadorDaVez = verificacao.idJogador;       // ID
+            string faceDado = verificacao.faceDado;         // PR, FL, etc
+
+            
+            string resumo = $"{statusPartida}{numeroTurno}{statusTurno}{jogadorDaVez}{faceDado}";
+
+            txtVerificarPartida.Text = resumo;
+
+        
+            lblDescricaoVerificacao.Text = "Status da Partida | Nº Turno | Status Turno | Jogador | Dado\n";
+
+            
+            txtVerificarPartida.Visible = true;
+            lblDescricaoVerificacao.Visible = true;
+        }
+
     }
+
     }
 
 

@@ -18,7 +18,7 @@ namespace Extintos
         public string Nome { get; set; }
         public DateTime Data { get; set; }
         public char Status { get; set; }
-        public int Turno { get; set; }
+       // public int Turno { get; set; }
         public List<Jogador> Jogadores { get; set; }
         
         
@@ -42,7 +42,7 @@ namespace Extintos
                 p.Nome = dados[1];
                 p.Data = Convert.ToDateTime(dados[2]);
                 p.Status = Convert.ToChar(dados[3]);
-                p.Jogadores = Partida.ListarJogadores(p.IdPartida);
+                //p.Jogadores = Partida.ListarJogadores(p.IdPartida);
                 listaPartidas.Add(p);
             }
 

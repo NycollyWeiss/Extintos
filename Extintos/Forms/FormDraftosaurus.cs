@@ -80,103 +80,83 @@ namespace Extintos
         public void btnJogar_Click(object sender, EventArgs e)
         {
             var verificacao = Partida.VerificaPartida(_dadosJogador.idPartida);
-
-            List<AuxCercado> cercadosJogador = new List<AuxCercado>();
-            List<Cercados> todos = CercadosExtension.cercadosLista();
-            if (verificacao.numeroTurno == 1 && verificacao.idJogador == _dadosJogador.IdJogador)
+            if (verificacao.idJogador == _dadosJogador.IdJogador)
             {
-                //depois fazer o jogador ter a lista de cercados nele 
+                List<Cercados> todos = CercadosExtension.cercadosLista();
 
-                foreach (Cercados cercado in todos)
+                Dado dadoAtual = (Dado)Enum.Parse(typeof(Dado), verificacao.faceDado);
+
+                List<Cercados> cercadosOk = dadoAtual.ValidaCercados();
+
+                string dinoEscolhido = txtDino.Text.ToUpper();
+
+                string cercadoEscolhido = txtCercado.Text.ToUpper();
+
+                if (!cercadosOk.Contains((Cercados)Enum.Parse(typeof(Cercados), cercadoEscolhido)))
                 {
-                    cercadosJogador.Add(new AuxCercado(cercado, 0));
+                    MessageBox.Show(
+                        $"Voce nao pode jogar nesse cercado devido ao dado do turno\n\n" +
+                        $"Dado atual: {dadoAtual.PegaNome()}\n\n" +
+                        $"A restição diz que {dadoAtual.PegaRestricao()}\n\n" +
+                        $"Escolha outro cercado!!", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-            }
-
-            Dado dadoAtual = (Dado)Enum.Parse(typeof(Dado), verificacao.faceDado);
-
-            List<Cercados> cercadosOk = dadoAtual.ValidaCercados();
-
-
-            string dinoEscolhido = txtDino.Text.ToUpper();
-
-            string cercadoEscolhido = txtCercado.Text.ToUpper();
-
-            if (!cercadosOk.Contains((Cercados)Enum.Parse(typeof(Cercados), cercadoEscolhido)))
-            {
-                MessageBox.Show(
-                    $"Voce nao pode jogar nesse cercado devido ao dado do turno\n\n" +
-                    $"Dado atual: {dadoAtual.PegaNome()}\n\n" +
-                    $"A restição diz que {dadoAtual.PegaRestricao()}\n\n" +
-                    $"Escolha outro cercado!!", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                MessageBox.Show(
-                    $"Jogada realizada com sucesso!", "Boa!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //criar metodo pra atualizar dinos no cercado
-
-
-            }
-
-
-            string retornoMao = Jogo.ExibirMao(_dadosJogador.IdJogador, _dadosJogador.Senha);
-            retornoMao = retornoMao.Substring(1);
-            string[] linhasRetorno = retornoMao.Replace("\r", "")
-                .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-            //esse new[] ta criando um novo array pra guardar por linha, pq eles vem tudo na mesma linha
-            List<AuxDinossauro> dinossaurosJogador = new List<AuxDinossauro>();
-
-
-
-            foreach (string linha in linhasRetorno)
-            {
-                string[] partes = linha.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (partes.Length == 2)
+                else
                 {
+                    MessageBox.Show(
+                        $"Jogada realizada com sucesso!", "Boa!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    //criar metodo pra atualizar dinos no cercado
 
-                    string codigo = partes[0].Trim();
-                    int quantidade = int.Parse(partes[1].Trim());
-                    Dinossauro dinossauro = (Dinossauro)Enum.Parse(typeof(Dinossauro), codigo.ToUpper());
-                    dinossaurosJogador.Add(new AuxDinossauro(dinossauro, quantidade));
 
                 }
-               
-            }
-            
-            Dinossauro dino = (Dinossauro)Enum.Parse(typeof(Dinossauro), dinoEscolhido);
-            Cercados cerca = (Cercados)Enum.Parse(typeof(Cercados), cercadoEscolhido);
-            foreach (var dinossauro in dinossaurosJogador)
-            {
-                if (dinossauro.Dinossauro.Equals(dino))
+
+
+                string retornoMao = Jogo.ExibirMao(_dadosJogador.IdJogador, _dadosJogador.Senha);
+                retornoMao = retornoMao.Substring(1);
+                string[] linhasRetorno = retornoMao.Replace("\r", "")
+                    .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+                //esse new[] ta criando um novo array pra guardar por linha, pq eles vem tudo na mesma linha
+                List<AuxDinossauro> dinossaurosJogador = new List<AuxDinossauro>();
+
+
+
+                foreach (string linha in linhasRetorno)
                 {
-                   //MessageBox.Show($"foi2", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    string retorno = Jogo.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha,dinoEscolhido,cercadoEscolhido);
-                   // lblMensagemInicioPartida.Text= retorno;
-                    foreach (var cercado in cercadosJogador)
+                    string[] partes = linha.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (partes.Length == 2)
                     {
-                        if (cercado.Cercados.Equals(cerca))
-                            
-                        { var cercadin =  cercadosJogador.FirstOrDefault(p => p.Cercados == cerca);
-                            cercadin.QuantidadeDinos += 1;
 
-//depois faz o cercado ter lista de dinos git 
-                        }
+                        string codigo = partes[0].Trim();
+                        int quantidade = int.Parse(partes[1].Trim());
+                        Dinossauro dinossauro = (Dinossauro)Enum.Parse(typeof(Dinossauro), codigo.ToUpper());
+                        dinossaurosJogador.Add(new AuxDinossauro(dinossauro, quantidade));
+
+                    }
+
+                }
+
+                Dinossauro dino = (Dinossauro)Enum.Parse(typeof(Dinossauro), dinoEscolhido);
+                Cercados cerca = (Cercados)Enum.Parse(typeof(Cercados), cercadoEscolhido);
+                foreach (var dinossauro in dinossaurosJogador)
+                {
+                    if (dinossauro.Dinossauro.Equals(dino))
+                    {
+                        //MessageBox.Show($"foi2", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        string retorno = Jogo.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha, dinoEscolhido,
+                            cercadoEscolhido);
+                        // lblMensagemInicioPartida.Text= retorno;
+                        _dadosJogador.ColocarDinossauro(dino, cerca);
                     }
                 }
-                
-                }
-            
-            
-                   
             }
 
+        }
+        
         private void btnVerificarPartida_Click(object sender, EventArgs e)
         {
             VerificarPartida();
-            
+                
 
         }
 
@@ -185,28 +165,31 @@ namespace Extintos
 
             var verificacao = Partida.VerificaPartida(_dadosJogador.idPartida);
 
-            
+                
             char statusPartida = verificacao.statusPartida; // J ou E
             int numeroTurno = verificacao.numeroTurno;      // 1 a 12
             char statusTurno = verificacao.statusTurno;     // A ou F
             int jogadorDaVez = verificacao.idJogador;       // ID
             string faceDado = verificacao.faceDado;         // PR, FL, etc
 
-            
+                
             string resumo = $"{statusPartida}{numeroTurno}{statusTurno}{jogadorDaVez}{faceDado}";
 
             txtVerificarPartida.Text = resumo;
 
-        
+            
             lblDescricaoVerificacao.Text = "Status da Partida | Nº Turno | Status Turno | Jogador | Dado\n";
 
-            
+                
             txtVerificarPartida.Visible = true;
             lblDescricaoVerificacao.Visible = true;
         }
-
     }
+}
 
-    }
+
+     
+    
+
 
 

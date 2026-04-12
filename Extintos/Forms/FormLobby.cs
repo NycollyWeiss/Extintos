@@ -110,5 +110,40 @@ namespace Extintos
         {
             txtIdDaPartida.Text = dgvPartida.CurrentRow.Cells[0].Value.ToString();
         }
+
+        private void btnVoltarParaPartida_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void btnVoltarParaPartida_Click_1(object sender, EventArgs e)
+        {
+            lblTituloNomeDoJogador.Text = "ID da Partida: ";
+            //txtNomeDoJogador.Name = "txtIdDaPartida";
+            
+            lblTituloIDDaPartida.Text = "Nome do Jogador: ";
+            //txtIdDaPartida.Name = "txtNomeDoJogador";
+            
+            lblTituloSenhaDaPartida.Text = "Senha do Jogador: ";
+            // txtSenhaDaPartida.Name = "txtSenhaDoJogador";
+
+            btnEntrarNaPartida.Text = "Voltar para para partida";
+
+            int idPartidaJogando = Convert.ToInt32(txtNomeDoJogador.Text);
+            string jogador = txtIdDaPartida.Text;
+            string senhaJogador = txtSenhaDaPartida.Text;
+            
+            string jogadores = Jogo.ListarJogadores(idPartidaJogando);
+            string[] ativos = jogadores.Split(',');
+            for (int i = 0; i < ativos.Length; i++)
+            {
+              //  if (jogador.Equals(ativos[i]))
+               // {
+                    
+               // }
+            }
+
+            
+        }
     }
 }

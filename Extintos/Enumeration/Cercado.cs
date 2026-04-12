@@ -79,17 +79,16 @@ namespace Extintos.Enumeration
             List<Cercados> todosCercados = new List<Cercados>();
 
 
-
             foreach (string cercado in cercados)
             {
                 string[] partes = cercado.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (partes.Length == 2)
+                if (partes.Length > 1)
                 {
 
                     string codigo = partes[0].ToUpper().Trim();
                     codigo.ToUpper();
-                    Cercados cercadosConvertidoAmem = (Cercados)Enum.Parse(typeof(Cercados), cercado);
+                    Cercados cercadosConvertidoAmem = (Cercados)Enum.Parse(typeof(Cercados), codigo);
 
                     todosCercados.Add(cercadosConvertidoAmem);
                     //ta dividido igual o outro pq depois vai mostrar os dinos no cercado
@@ -98,6 +97,17 @@ namespace Extintos.Enumeration
                 
             }
             return todosCercados;
+        }
+
+        public static List<AuxCercado> CercadoAuxLista()
+        {
+            List<Cercados> todosCercados = cercadosLista();
+            List<AuxCercado> auxCercados = new List<AuxCercado>();
+            foreach (Cercados cercado in todosCercados)
+            {
+                auxCercados.Add(new AuxCercado(cercado));
+            }
+            return auxCercados;
         }
 
         public static bool SePodeAdicionar(this Cercados cercado, List<string> dinosNoCercado, string novoDino)

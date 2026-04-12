@@ -1,15 +1,17 @@
-﻿namespace Extintos.Enumeration
+﻿using System.Collections.Generic;
+
+namespace Extintos.Enumeration
 {
     public class AuxCercado
     {
         public Cercados Cercados  { get; set; }
-        public  int QuantidadeDinos { get; set; }
+        
+        public List<Dinossauro> Dinossaurios { get; } =  new List<Dinossauro>();
 
 
-        public AuxCercado(Cercados cercados, int quantidadedinos)
+        public AuxCercado(Cercados cercados)
         {
             Cercados = cercados;
-            QuantidadeDinos= quantidadedinos;
         }
         
     }

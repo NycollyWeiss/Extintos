@@ -11,7 +11,6 @@ namespace Extintos
         public static Form1 Form1 = new Form1();
         internal static FormDraftosaurus FormDraftosaurus = new FormDraftosaurus();
         internal static FormJogadores FormJogadores = new FormJogadores();
-        internal static FormPartida FormPartida = new FormPartida(); //Classe pai
         public static FormLobby FormLobby = new FormLobby();
 
 

@@ -22,10 +22,9 @@ namespace Extintos.Model
         public int Pontuacao { get; set; }
 
         public int idPartida { get; set; }
-        
-        public List<Cercados> meusCercados { get; set; }
-        
-        public List<Dinossauro> meusDinossauros { get; set; }
+
+        public List<AuxCercado> meusCercados { get; set; } = CercadosExtension.CercadoAuxLista();
+
 
         public static Jogador EntrarNaPartida(int idPartida, string nomeJogador, string senhaPartida)
         {
@@ -73,6 +72,11 @@ namespace Extintos.Model
             return null;
         }
 
+        public void ColocarDinossauro(Dinossauro dino, Cercados cerca)
+        {
+            AuxCercado cercado = meusCercados.Find(c => c.Cercados.Equals(cerca));
+            cercado.Dinossaurios.Add(dino);
+        }
         
     }
 }

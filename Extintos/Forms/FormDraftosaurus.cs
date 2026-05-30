@@ -550,8 +550,8 @@ namespace Extintos
 
             tabX = (ClientSize.Width - tabTamanho) / 2;
             tabY = (ClientSize.Height - tabTamanho) / 2;
-            maoX = 20;
-            maoY = ClientSize.Height - maoAltura - 10;
+            maoX = (ClientSize.Width - maoLargura) / 16;
+            maoY = ClientSize.Height - maoAltura;
 
 
             g.DrawImage(imgTabuleiro, tabX, tabY, tabTamanho, tabTamanho);

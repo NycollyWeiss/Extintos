@@ -6,6 +6,18 @@ using Extintos.LeonKennedy;
 
 namespace Extintos.Model
 {
+
+    /*           -----Estratégia principal do bot.-----
+    
+     Explicação do arquivo:
+     Percorre e avalia todos os dinossauros disponíveis na mão e todos os cercados possíveis,
+     acessa o EstrategiaValiator, verifica quais jogadas são válidas, descarta as inválidas e escolhe a jogada com maior score.
+     
+    O score é uma soma comum de três fatores:
+     - O ganho de pontuação imediata (comidinha do guloso)
+     - O bônus da jogada (calculado pelo EstrategiaAnalizador)
+     - O potencial futuro da jogada (calculado pelo EstrategiaAnalizador)
+    */
     internal class EstrategiaGulosa : IEstategia
     {
         private readonly ConfigEstrategia _config;
@@ -17,14 +29,12 @@ namespace Extintos.Model
 
         public string Nome => "Guloso Inteligente";
 
-        public (Dinossauro dino, Cercados cercado)? Avaliar(
-            InformacoesTurno info)
+        public (Dinossauro dino, Cercados cercado)? Avaliar(InformacoesTurno info)
         {
             if (info == null)
                 return null;
 
-            if (info.MaoJogador == null ||
-                info.MaoJogador.All(x => x.QuantidadeDinossauros <= 0))
+            if (info.MaoJogador == null || info.MaoJogador.All(x => x.QuantidadeDinossauros <= 0))
                 return null;
 
             var melhorScore = int.MinValue;
@@ -40,16 +50,10 @@ namespace Extintos.Model
 
                 foreach (Cercados cercado in Enum.GetValues(typeof(Cercados)))
                 {
-                    if (!EstrategiaValidator.JogadaValidator(
-                            info,
-                            cercado,
-                            dino))
+                    if (!EstrategiaValidator.JogadaValidator(info, cercado, dino))
                         continue;
 
-                    var score = AvaliarJogada(
-                        info,
-                        dino,
-                        cercado);
+                    var score = AvaliarJogada(info, dino, cercado);
 
                     if (score > melhorScore)
                     {
@@ -66,35 +70,18 @@ namespace Extintos.Model
             return (melhorDino, melhorCercado);
         }
 
-        private int AvaliarJogada(
-            InformacoesTurno info,
-            Dinossauro dino,
-            Cercados cercado)
+        private int AvaliarJogada(InformacoesTurno info, Dinossauro dino, Cercados cercado)
         {
-            var ganhoPontuacao =
-                ComidinhaDoGuloso(info, dino, cercado);
+            var ganhoPontuacao = ComidinhaDoGuloso(info, dino, cercado);
 
-            var bonus =
-                EstrategiaAnalizador.BonusJogada(
-                    info,
-                    cercado,
-                    dino);
+            var bonus = EstrategiaAnalizador.BonusJogada(info, cercado, dino);
 
-            var potencial =
-                EstrategiaAnalizador.PotencialFuturo(
-                    info,
-                    cercado,
-                    dino);
+            var potencial = EstrategiaAnalizador.PotencialFuturo(info, cercado, dino);
 
-            return ganhoPontuacao +
-                   bonus +
-                   potencial;
+            return ganhoPontuacao + bonus + potencial;
         }
 
-        private int ComidinhaDoGuloso(
-            InformacoesTurno info,
-            Dinossauro dino,
-            Cercados cercado)
+        private int ComidinhaDoGuloso(InformacoesTurno info, Dinossauro dino, Cercados cercado)
         {
             var antes = PontuacaoTotal(info);
             var depois = PontuacaoSimulada(info, cercado, dino);
@@ -102,16 +89,13 @@ namespace Extintos.Model
             return depois - antes;
         }
 
-        private int PontuacaoTotal(
-            InformacoesTurno info)
+        private int PontuacaoTotal(InformacoesTurno info)
         {
             var pontos = 0;
 
             foreach (var cercado in info.CercadosJogador)
             {
-                var dinos =
-                    cercado.Dinossauros ??
-                    new List<Dinossauro>();
+                var dinos = cercado.Dinossauros ?? new List<Dinossauro>();
 
                 var qtd = dinos.Count;
 
@@ -122,8 +106,7 @@ namespace Extintos.Model
                         break;
 
                     case Cercados.CD:
-                        pontos += ScoreCampinaDiferenca(
-                            dinos.Distinct().Count());
+                        pontos += ScoreCampinaDiferenca(dinos.Distinct().Count());
                         break;
 
                     case Cercados.MT:
@@ -149,12 +132,9 @@ namespace Extintos.Model
                         {
                             var unico = dinos[0];
 
-                            var apareceEmOutro =
-                                info.CercadosJogador
-                                    .Where(c => c.Cercados != Cercados.IS)
-                                    .SelectMany(c =>
-                                        c.Dinossauros ??
-                                        new List<Dinossauro>())
+                            var apareceEmOutro = info.CercadosJogador
+                                .Where(c => c.Cercados != Cercados.IS)
+                                    .SelectMany(c =>c.Dinossauros ??new List<Dinossauro>())
                                     .Any(d => d == unico);
 
                             if (!apareceEmOutro)
@@ -168,10 +148,7 @@ namespace Extintos.Model
             return pontos;
         }
 
-        private int PontuacaoSimulada(
-            InformacoesTurno info,
-            Cercados alvo,
-            Dinossauro novoDino)
+        private int PontuacaoSimulada(InformacoesTurno info, Cercados alvo, Dinossauro novoDino)
         {
             var pontos = 0;
 
@@ -218,12 +195,9 @@ namespace Extintos.Model
                     case Cercados.IS:
                         if (qtd == 1)
                         {
-                            var apareceEmOutro =
-                                info.CercadosJogador
-                                    .Where(c => c.Cercados != Cercados.IS)
-                                    .SelectMany(c =>
-                                        c.Dinossauros ??
-                                        new List<Dinossauro>())
+                            var apareceEmOutro = info.CercadosJogador
+                                .Where(c => c.Cercados != Cercados.IS)
+                                    .SelectMany(c => c.Dinossauros ?? new List<Dinossauro>())
                                     .Any(d => d == novoDino);
 
                             if (!apareceEmOutro)
@@ -237,8 +211,7 @@ namespace Extintos.Model
             return pontos;
         }
 
-        private int ScoreFlorestaIgualdade(
-            int qtd)
+        private int ScoreFlorestaIgualdade(int qtd)
         {
             return qtd switch
             {
@@ -252,8 +225,7 @@ namespace Extintos.Model
             };
         }
 
-        private int ScoreCampinaDiferenca(
-            int qtd)
+        private int ScoreCampinaDiferenca(int qtd)
         {
             return qtd switch
             {
@@ -268,8 +240,7 @@ namespace Extintos.Model
         }
 
         private (Dinossauro, Cercados)?
-            ObterPrimeiraJogadaValida(
-                InformacoesTurno info)
+            ObterPrimeiraJogadaValida(InformacoesTurno info)
         {
             foreach (var item in info.MaoJogador)
             {
@@ -285,7 +256,6 @@ namespace Extintos.Model
                             item.Dinossauro,
                             cercado);
             }
-
             return null;
         }
     }

@@ -521,7 +521,6 @@ namespace Extintos
                 {
                     if (index >= 6) break; // Limita a 6 dinos na mão
 
-
                     var coluna = index % 3;
                     var linha = index / 3;
 

@@ -638,13 +638,27 @@ namespace Extintos
             }
         }
 
+
+
+        private void FixarDinoSelecionadoNoTabuleiro(Point posicao)
+        {
+            dinosFixosNoTabuleiro.Add(new DinoNoTabuleiro
+            {
+                Tipo = dinoSelecionado.Tipo,
+                Area = new Rectangle(posicao.X - 25, posicao.Y - 25, 50, 50)
+            });
+
+            dinos.Remove(dinoSelecionado);
+            dinoSelecionado = null;
+
+            Invalidate();
+        }
+
         private void frmMouseUp(object sender, MouseEventArgs e)
         {
             if (dinoSelecionado != null)
             {
-                // Áreas de hitbox do tabuleiro
                 var cercadosMapeados = ObterCercadosMapeados();
-               
 
                 var jogadaRealizada = false;
 
@@ -658,29 +672,23 @@ namespace Extintos
                             break;
                         }
 
-                        // Movimento manual do jogador - envia ao servidor
                         try
                         {
                             var codigoDino = ConverterParaCodigoDino(dinoSelecionado.Tipo);
-                            var retorno = Jogo.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha, codigoDino,
+                            var retorno = Jogo.Jogar(
+                                _dadosJogador.IdJogador,
+                                _dadosJogador.Senha,
+                                codigoDino,
                                 cercado.Key);
 
                             if (!retorno.Contains("ERRO"))
                             {
                                 MessageBox.Show("Jogada realizada com sucesso!");
 
-                                // Salva o dino no tabuleiro
-                                dinosFixosNoTabuleiro.Add(new DinoNoTabuleiro
-                                {
-                                    Tipo = dinoSelecionado.Tipo,
-                                    Area = new Rectangle(e.X - 25, e.Y - 25, 50, 50)
-                                });
+                                FixarDinoSelecionadoNoTabuleiro(e.Location);
 
                                 jogadaRealizada = true;
 
-                                dinos.Remove(dinoSelecionado);
-
-                                // Atualiza a mão para o próximo turno
                                 bntExibirMao_Click(null, null);
                                 break;
                             }
@@ -693,8 +701,8 @@ namespace Extintos
                         }
                     }
 
-                // Se soltou fora de um cercado válido, recria a mão
-                if (!jogadaRealizada) CriarDinos(ultimaMaoRecebida);
+                if (!jogadaRealizada)
+                    CriarDinos(ultimaMaoRecebida);
             }
 
             dinoSelecionado = null;
@@ -718,7 +726,7 @@ namespace Extintos
             try
             {
                 _movimentoDoBot = true;
-                Console.WriteLine($" Iniciando animação visual: {codigoDino} → {siglaCercado}");
+                Console.WriteLine($"Iniciando animação visual: {codigoDino} → {siglaCercado}");
 
 
                 DinossauroVisual dinoParaMover = null;
@@ -734,7 +742,7 @@ namespace Extintos
 
                 if (dinoParaMover == null)
                 {
-                    Console.WriteLine($"⚠ Dinossauro {codigoDino} não encontrado na mão!");
+                    Console.WriteLine($" Dinossauro {codigoDino} não encontrado na mão!");
                     return;
                 }
 
@@ -842,7 +850,7 @@ namespace Extintos
                     }
                 }));
 
-                Console.WriteLine("✅ Animação visual concluída!");
+                Console.WriteLine(" Animação visual concluída!");
             }
             catch (Exception ex)
             {
@@ -904,7 +912,7 @@ namespace Extintos
             catch (Exception ex)
             {
                 Console.WriteLine($" ERRO NO TIMER: {ex.Message}");
-                Console.WriteLine($"📚STACK TRACE: {ex.StackTrace}");
+                Console.WriteLine($"STACK TRACE: {ex.StackTrace}");
 
                 if (ex.InnerException != null)
                     Console.WriteLine($" INNER: {ex.InnerException.Message}");

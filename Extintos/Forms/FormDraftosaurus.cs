@@ -590,18 +590,11 @@ namespace Extintos
 
         #region Lógica de Mouse (Clicar e Arrastar)
 
-        private void frmMouseDown(object sender, MouseEventArgs e)
+
+        private void SelecionarDinossauro(Point posicao)
         {
-            var areaMao = new Rectangle(maoX, maoY, maoLargura, maoAltura);
-            if (areaMao.Contains(e.Location) && !maoAberta)
-            {
-                bntExibirMao_Click(null, null);
-                return;
-            }
-
-
             for (var i = dinos.Count - 1; i >= 0; i--)
-                if (dinos[i].area.Contains(e.Location))
+                if (dinos[i].area.Contains(posicao))
                 {
                     dinoSelecionado = dinos[i];
                     dinoSelecionado.ativo = true;
@@ -612,15 +605,35 @@ namespace Extintos
                 }
         }
 
+        private void frmMouseDown(object sender, MouseEventArgs e)
+        {
+            var areaMao = new Rectangle(maoX, maoY, maoLargura, maoAltura);
+            if (areaMao.Contains(e.Location) && !maoAberta)
+            {
+                bntExibirMao_Click(null, null);
+                return;
+            }
+
+            SelecionarDinossauro(e.Location);
+        }
+
+
+        private void AtualizarPosicaoDinoSelecionado(Point posicao)
+        {
+            dinoSelecionado.posicao.X = posicao.X - dinoSelecionado.largura / 2;
+            dinoSelecionado.posicao.Y = posicao.Y - dinoSelecionado.altura / 2;
+            dinoSelecionado.area = new Rectangle(
+                dinoSelecionado.posicao.X,
+                dinoSelecionado.posicao.Y,
+                dinoSelecionado.largura,
+                dinoSelecionado.altura);
+        }
+
         private void frmMouseMove(object sender, MouseEventArgs e)
         {
             if (dinoSelecionado != null)
             {
-                dinoSelecionado.posicao.X = e.X - dinoSelecionado.largura / 2;
-                dinoSelecionado.posicao.Y = e.Y - dinoSelecionado.altura / 2;
-                dinoSelecionado.area = new Rectangle(dinoSelecionado.posicao.X, dinoSelecionado.posicao.Y,
-                    dinoSelecionado.largura, dinoSelecionado.altura);
-
+                AtualizarPosicaoDinoSelecionado(e.Location);
                 Invalidate();
             }
         }
@@ -662,7 +675,6 @@ namespace Extintos
                                     Tipo = dinoSelecionado.Tipo,
                                     Area = new Rectangle(e.X - 25, e.Y - 25, 50, 50)
                                 });
-
 
                                 jogadaRealizada = true;
 

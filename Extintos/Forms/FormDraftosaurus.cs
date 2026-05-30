@@ -626,76 +626,67 @@ namespace Extintos
         }
 
         private void frmMouseUp(object sender, MouseEventArgs e)
-        {
-            if (dinoSelecionado != null)
+{
+    if (dinoSelecionado != null)
+    {
+        // Áreas de hitbox do tabuleiro
+        var cercadosMapeados = ObterCercadosMapeados();
+
+        var jogadaRealizada = false;
+
+        foreach (var cercado in cercadosMapeados)
+            if (cercado.Value.Contains(e.Location))
             {
-                // Áreas de hitbox do tabuleiro
-                var cercadosMapeados = new Dictionary<string, Rectangle>
+                if (_movimentoDoBot)
                 {
-                    { "FI", new Rectangle(tabX + 20, tabY + 30, 220, 130) },
-                    { "MT", new Rectangle(tabX + 20, tabY + 180, 160, 140) },
-                    { "PA", new Rectangle(tabX + 30, tabY + 350, 170, 150) },
-                    { "RS", new Rectangle(tabX + 360, tabY + 30, 150, 100) },
-                    { "CD", new Rectangle(tabX + 330, tabY + 150, 220, 160) },
-                    { "IS", new Rectangle(tabX + 350, tabY + 330, 180, 160) },
-                    { "RI", new Rectangle(tabX + 220, tabY + 380, 110, 150) }
-                };
+                    Console.WriteLine("Movimento do bot detectado - pulando envio ao servidor");
+                    jogadaRealizada = true;
+                    break;
+                }
 
-                var jogadaRealizada = false;
+             
+                //Tenta entrar no servidor 
+                try
+                {
+                    var codigoDino = ConverterParaCodigoDino(dinoSelecionado.Tipo);
+                    var retorno = Jogo.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha, codigoDino,
+                        cercado.Key);
 
-                foreach (var cercado in cercadosMapeados)
-                    if (cercado.Value.Contains(e.Location))
+                    if (!retorno.Contains("ERRO"))
                     {
-                        if (_movimentoDoBot)
+                        MessageBox.Show("Jogada realizada com sucesso!");
+
+                      
+                        dinosFixosNoTabuleiro.Add(new DinoNoTabuleiro
                         {
-                            Console.WriteLine("Movimento do bot detectado - pulando envio ao servidor");
-                            jogadaRealizada = true;
-                            break;
-                        }
+                            Tipo = dinoSelecionado.Tipo,
+                            Area = new Rectangle(e.X - 25, e.Y - 25, 50, 50)
+                        });
 
-                        // Movimento manual do jogador - envia ao servidor
-                        try
-                        {
-                            var codigoDino = ConverterParaCodigoDino(dinoSelecionado.Tipo);
-                            var retorno = Jogo.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha, codigoDino,
-                                cercado.Key);
+                        jogadaRealizada = true;
 
-                            if (!retorno.Contains("ERRO"))
-                            {
-                                MessageBox.Show("Jogada realizada com sucesso!");
+                        dinos.Remove(dinoSelecionado);
 
-                                // Salva o dino no tabuleiro
-                                dinosFixosNoTabuleiro.Add(new DinoNoTabuleiro
-                                {
-                                    Tipo = dinoSelecionado.Tipo,
-                                    Area = new Rectangle(e.X - 25, e.Y - 25, 50, 50)
-                                });
-
-
-                                jogadaRealizada = true;
-
-                                dinos.Remove(dinoSelecionado);
-
-                                // Atualiza a mão para o próximo turno
-                                bntExibirMao_Click(null, null);
-                                break;
-                            }
-
-                            MessageBox.Show("O Servidor recusou: " + retorno);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Erro técnico: " + ex.Message);
-                        }
+                        //Atualização de mão 
+                        bntExibirMao_Click(null, null);
+                        break;
                     }
 
-                // Se soltou fora de um cercado válido, recria a mão
-                if (!jogadaRealizada) CriarDinos(ultimaMaoRecebida);
+                    MessageBox.Show("O Servidor recusou: " + retorno);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro técnico: " + ex.Message);
+                }
             }
 
-            dinoSelecionado = null;
-            Invalidate();
-        }
+   
+        if (!jogadaRealizada) CriarDinos(ultimaMaoRecebida);
+    }
+
+    dinoSelecionado = null;
+    Invalidate();
+}
 
         #endregion
 
@@ -710,154 +701,138 @@ namespace Extintos
         }
 
         private async Task ExecutarMovimentoVisual(string codigoDino, string siglaCercado)
+{
+    try
+    {
+        _movimentoDoBot = true;
+        Console.WriteLine($" Iniciando animação visual: {codigoDino} → {siglaCercado}");
+
+        DinossauroVisual dinoParaMover = null;
+        foreach (var d in dinos)
         {
-            try
+            var codigoAtual = ConverterParaCodigoDino(d.Tipo);
+            if (codigoAtual.Equals(codigoDino, StringComparison.OrdinalIgnoreCase))
             {
-                _movimentoDoBot = true;
-                Console.WriteLine($" Iniciando animação visual: {codigoDino} → {siglaCercado}");
-
-
-                DinossauroVisual dinoParaMover = null;
-                foreach (var d in dinos)
-                {
-                    var codigoAtual = ConverterParaCodigoDino(d.Tipo);
-                    if (codigoAtual.Equals(codigoDino, StringComparison.OrdinalIgnoreCase))
-                    {
-                        dinoParaMover = d;
-                        break;
-                    }
-                }
-
-                if (dinoParaMover == null)
-                {
-                    Console.WriteLine($"⚠ Dinossauro {codigoDino} não encontrado na mão!");
-                    return;
-                }
-
-
-                var cercadosMapeados = new Dictionary<string, Rectangle>
-                {
-                    { "FI", new Rectangle(tabX + 20, tabY + 30, 220, 130) },
-                    { "MT", new Rectangle(tabX + 20, tabY + 180, 160, 140) },
-                    { "PA", new Rectangle(tabX + 30, tabY + 350, 170, 150) },
-                    { "RS", new Rectangle(tabX + 360, tabY + 30, 150, 100) },
-                    { "CD", new Rectangle(tabX + 330, tabY + 150, 220, 160) },
-                    { "IS", new Rectangle(tabX + 350, tabY + 330, 180, 160) },
-                    { "RI", new Rectangle(tabX + 220, tabY + 380, 110, 150) }
-                };
-
-                if (!cercadosMapeados.ContainsKey(siglaCercado))
-                {
-                    Console.WriteLine($" Cercado {siglaCercado} não encontrado no mapeamento!");
-                    return;
-                }
-
-                var cercadoDestino = cercadosMapeados[siglaCercado];
-
-
-                var posicaoInicial = new Point(
-                    PointToScreen(dinoParaMover.posicao).X + dinoParaMover.largura / 2,
-                    PointToScreen(dinoParaMover.posicao).Y + dinoParaMover.altura / 2
-                );
-
-                var posicaoFinal = new Point(
-                    PointToScreen(new Point(cercadoDestino.X, cercadoDestino.Y)).X + cercadoDestino.Width / 2,
-                    PointToScreen(new Point(cercadoDestino.X, cercadoDestino.Y)).Y + cercadoDestino.Height / 2
-                );
-
-                Console.WriteLine($" Origem: ({posicaoInicial.X}, {posicaoInicial.Y})");
-                Console.WriteLine($" Destino: ({posicaoFinal.X}, {posicaoFinal.Y})");
-
-
-                MouseInput.MoveTo(posicaoInicial.X, posicaoInicial.Y);
-                await Task.Delay(2000);
-
-
-                var mouseDownArgs = new MouseEventArgs(MouseButtons.Left, 1,
-                    dinoParaMover.posicao.X + dinoParaMover.largura / 2,
-                    dinoParaMover.posicao.Y + dinoParaMover.altura / 2, 0);
-
-                Invoke(new Action(() => frmMouseDown(this, mouseDownArgs)));
-
-                MouseInput.LeftDown();
-                await Task.Delay(3000);
-
-                Console.WriteLine($"Mouse pressionado sobre {codigoDino}");
-
-                // Anima o movimento até o cercado
-                await MouseInput.MoveToAnimated(posicaoInicial, posicaoFinal, 3000);
-
-                // Durante a animação, dispara eventos MouseMove para atualizar a UI
-                var passos = 20;
-                for (var i = 0; i <= passos; i++)
-                {
-                    var progresso = (float)i / passos;
-                    var x = (int)(dinoParaMover.posicao.X +
-                                  (cercadoDestino.X + cercadoDestino.Width / 2 - dinoParaMover.posicao.X) *
-                                  progresso);
-                    var y = (int)(dinoParaMover.posicao.Y +
-                                  (cercadoDestino.Y + cercadoDestino.Height / 2 - dinoParaMover.posicao.Y) *
-                                  progresso);
-
-                    var mouseMoveArgs = new MouseEventArgs(MouseButtons.Left, 0, x, y, 0);
-                    Invoke(new Action(() => frmMouseMove(this, mouseMoveArgs)));
-
-                    await Task.Delay(15);
-                }
-
-                Console.WriteLine($" Dino chegou ao cercado {siglaCercado}");
-
-                //Solta o mouse (MouseUp)
-                await Task.Delay(1000);
-
-                // Calcula a posição local do mouse dentro do cercado
-                var posicaoLocalFinal = new Point(
-                    cercadoDestino.X + cercadoDestino.Width / 2,
-                    cercadoDestino.Y + cercadoDestino.Height / 2
-                );
-
-                var mouseUpArgs = new MouseEventArgs(MouseButtons.Left, 1,
-                    posicaoLocalFinal.X, posicaoLocalFinal.Y, 0);
-
-
-                MouseInput.LeftUp();
-
-                // Atualiza manualmente o estado visual
-                Invoke(new Action(() =>
-                {
-                    if (dinoSelecionado != null)
-                    {
-                        // Adiciona o dino ao tabuleiro visualmente
-                        dinosFixosNoTabuleiro.Add(new DinoNoTabuleiro
-                        {
-                            Tipo = dinoSelecionado.Tipo,
-                            Area = new Rectangle(
-                                posicaoLocalFinal.X - 25,
-                                posicaoLocalFinal.Y - 25,
-                                50, 50)
-                        });
-
-                        // Remove da mão
-                        dinos.Remove(dinoSelecionado);
-                        dinoSelecionado = null;
-
-                        // Redesenha
-                        Invalidate();
-                    }
-                }));
-
-                Console.WriteLine("✅ Animação visual concluída!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro na animação visual: {ex.Message}");
-                Console.WriteLine($" Stack: {ex.StackTrace}");
-            }
-            finally
-            {
-                _movimentoDoBot = false; // Sempre reseta a flag
+                dinoParaMover = d;
+                break;
             }
         }
+
+        if (dinoParaMover == null)
+        {
+            Console.WriteLine($"⚠ Dinossauro {codigoDino} não encontrado na mão!");
+            return;
+        }
+
+        var cercadosMapeados = ObterCercadosMapeados();
+
+        if (!cercadosMapeados.ContainsKey(siglaCercado))
+        {
+            Console.WriteLine($" Cercado {siglaCercado} não encontrado no mapeamento!");
+            return;
+        }
+
+        var cercadoDestino = cercadosMapeados[siglaCercado];
+
+        var posicaoInicial = new Point(
+            PointToScreen(dinoParaMover.posicao).X + dinoParaMover.largura / 2,
+            PointToScreen(dinoParaMover.posicao).Y + dinoParaMover.altura / 2
+        );
+
+        var posicaoFinal = new Point(
+            PointToScreen(new Point(cercadoDestino.X, cercadoDestino.Y)).X + cercadoDestino.Width / 2,
+            PointToScreen(new Point(cercadoDestino.X, cercadoDestino.Y)).Y + cercadoDestino.Height / 2
+        );
+
+        Console.WriteLine($" Origem: ({posicaoInicial.X}, {posicaoInicial.Y})");
+        Console.WriteLine($" Destino: ({posicaoFinal.X}, {posicaoFinal.Y})");
+
+        MouseInput.MoveTo(posicaoInicial.X, posicaoInicial.Y);
+        await Task.Delay(2000);
+
+        var mouseDownArgs = new MouseEventArgs(MouseButtons.Left, 1,
+            dinoParaMover.posicao.X + dinoParaMover.largura / 2,
+            dinoParaMover.posicao.Y + dinoParaMover.altura / 2, 0);
+
+        Invoke(new Action(() => frmMouseDown(this, mouseDownArgs)));
+
+        MouseInput.LeftDown();
+        await Task.Delay(3000);
+
+        Console.WriteLine($"Mouse pressionado sobre {codigoDino}");
+
+        // Animação do movimento da mão pro cercado
+        await MouseInput.MoveToAnimated(posicaoInicial, posicaoFinal, 3000);
+
+        
+        var passos = 20;
+        for (var i = 0; i <= passos; i++)
+        {
+            var progresso = (float)i / passos;
+            var x = (int)(dinoParaMover.posicao.X +
+                          (cercadoDestino.X + cercadoDestino.Width / 2 - dinoParaMover.posicao.X) *
+                          progresso);
+            var y = (int)(dinoParaMover.posicao.Y +
+                          (cercadoDestino.Y + cercadoDestino.Height / 2 - dinoParaMover.posicao.Y) *
+                          progresso);
+
+            var mouseMoveArgs = new MouseEventArgs(MouseButtons.Left, 0, x, y, 0);
+            Invoke(new Action(() => frmMouseMove(this, mouseMoveArgs)));
+
+            await Task.Delay(15);
+        }
+
+        Console.WriteLine($" Dino chegou ao cercado {siglaCercado}");
+
+
+        await Task.Delay(1000);
+
+ 
+        var posicaoLocalFinal = new Point(
+            cercadoDestino.X + cercadoDestino.Width / 2,
+            cercadoDestino.Y + cercadoDestino.Height / 2
+        );
+
+        var mouseUpArgs = new MouseEventArgs(MouseButtons.Left, 1,
+            posicaoLocalFinal.X, posicaoLocalFinal.Y, 0);
+
+        MouseInput.LeftUp();
+
+        // Atualização manual do estado visual
+        Invoke(new Action(() =>
+        {
+            if (dinoSelecionado != null)
+            {
+                
+                dinosFixosNoTabuleiro.Add(new DinoNoTabuleiro
+                {
+                    Tipo = dinoSelecionado.Tipo,
+                    Area = new Rectangle(
+                        posicaoLocalFinal.X - 25,
+                        posicaoLocalFinal.Y - 25,
+                        50, 50)
+                });
+
+                
+                dinos.Remove(dinoSelecionado);
+                dinoSelecionado = null;
+
+                Invalidate();
+            }
+        }));
+
+        Console.WriteLine("Animação visual concluída!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Erro na animação visual: {ex.Message}");
+        Console.WriteLine($" Stack: {ex.StackTrace}");
+    }
+    finally
+    {
+        _movimentoDoBot = false; 
+    }
+}
 
         private async Task AtualizarDadoAsync()
         {
@@ -923,7 +898,22 @@ namespace Extintos
         #endregion
 
         #region Métodos Auxiliares
-
+        
+        private Dictionary<string, Rectangle> ObterCercadosMapeados()
+        {
+            return new Dictionary<string, Rectangle>
+            {
+                { "FI", new Rectangle(tabX + 20, tabY + 30, 220, 130) },
+                { "MT", new Rectangle(tabX + 20, tabY + 180, 160, 140) },
+                { "PA", new Rectangle(tabX + 30, tabY + 350, 170, 150) },
+                { "RS", new Rectangle(tabX + 360, tabY + 30, 150, 100) },
+                { "CD", new Rectangle(tabX + 330, tabY + 150, 220, 160) },
+                { "IS", new Rectangle(tabX + 350, tabY + 330, 180, 160) },
+                { "RI", new Rectangle(tabX + 220, tabY + 380, 110, 150) }
+            };
+        }
+        
+        
         private string ConverterParaCodigoDino(string tipo)
         {
             var t = tipo.ToUpper();

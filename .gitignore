@@ -1,1 +1,17 @@
 .idea/*
+
+
+[Bb]in/
+[Oo]bj/
+
+
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+
+
+Thumbs.db
+Desktop.ini

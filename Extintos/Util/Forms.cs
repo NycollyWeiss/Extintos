@@ -1,9 +1,9 @@
-﻿using Extintos;
+﻿using Extintos.Telas;
 
 internal class Forms
 {
-    public static Form1 Form1 = new();
-    internal static FormDraftosaurus FormDraftosaurus = new();
-    internal static FormJogadores FormJogadores = new();
-    public static FormLobby FormLobby = new();
+    public static TelaInicial TelaInicial = new TelaInicial();
+    public static Lobby Lobby = new Lobby();
+    public static Jogadores Jogadores = new Jogadores();
+    public static TelaPartida TelaPartida = new TelaPartida();
 }

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using Draft;
 using Extintos.Model;
-using Extintos.Util;
+using Extintos.Services;
+using Extintos.Auxiliares;
 
 namespace Extintos.Enumeration
 {

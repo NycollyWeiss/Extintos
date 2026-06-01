@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Extintos.Enumeration;
 using Extintos.LeonKennedy;
+using Extintos.Model;
 
-namespace Extintos.Model
+namespace Extintos.Interfaces
 {
     internal class EstrategiaGulosa : IEstategia
     {
@@ -40,7 +41,7 @@ namespace Extintos.Model
 
                 foreach (Cercados cercado in Enum.GetValues(typeof(Cercados)))
                 {
-                    if (!EstrategiaValidator.JogadaValidator(
+                    if (!Validator.JogadaValidator(
                             info,
                             cercado,
                             dino))
@@ -277,7 +278,7 @@ namespace Extintos.Model
                     continue;
 
                 foreach (Cercados cercado in Enum.GetValues(typeof(Cercados)))
-                    if (EstrategiaValidator.JogadaValidator(
+                    if (Validator.JogadaValidator(
                             info,
                             cercado,
                             item.Dinossauro))

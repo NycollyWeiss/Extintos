@@ -62,12 +62,6 @@ namespace Extintos.Enumeration
         {
             return dino.GetInfo()?.Nome ?? dino.ToString();
         }
-
-        public static string PegaCor(this Dinossauro dino)
-        {
-            return dino.GetInfo()?.Cor;
-        }
-
         public static string PegaCodigo(this Dinossauro dino)
         {
             return dino.GetInfo()?.Codigo;

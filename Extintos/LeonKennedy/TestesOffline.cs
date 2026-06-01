@@ -492,14 +492,7 @@ namespace Extintos.LeonKennedy
     {
         private static readonly Random rng = new();
 
-        // ── Ponto de entrada público ──────────────────────────────────────
-
-        /// <summary>
-        /// Roda uma partida completa com <paramref name="qtdJogadores"/> jogadores
-        /// (2, 3 ou 4). O layout de bots segue a regra:
-        ///   - Jogador 0  → sempre Guloso  (o "nosso" bot)
-        ///   - Demais     → alternando Aleatório / Guloso
-        /// </summary>
+     
         public static void ExecutarPartida(int qtdJogadores, Action<string> log)
         {
             if (qtdJogadores < 2 || qtdJogadores > 4)
@@ -507,11 +500,11 @@ namespace Extintos.LeonKennedy
 
             log("");
             log($"╔══════════════════════════════════════════════════════╗");
-            log($"║  PARTIDA SIMULADA — {qtdJogadores} JOGADORES              ║");
+            log($"║  PARTIDA SIMULADA — {qtdJogadores} JOGADORES         ║");
             log($"╚══════════════════════════════════════════════════════╝");
             log("");
 
-            // ── Criar jogadores ──────────────────────────────────────────
+           
             var jogadores = CriarJogadores(qtdJogadores);
 
             log("Jogadores nesta partida:");
@@ -524,15 +517,11 @@ namespace Extintos.LeonKennedy
             log($" Saco criado: {baralho.Count} dinossauros, sorteando...");
             log("");
 
-            // ── Distribuir mãos iniciais ─────────────────────────────────
-            // Cada jogador recebe MaoSize cartas
+       
             const int maoSize = 6;
             DistribuirMaos(jogadores, baralho, maoSize, log);
 
-            // ── Rodar turnos ─────────────────────────────────────────────
-            // Uma "rodada" = cada jogador joga uma vez; depois as mãos passam.
-            // O jogo termina quando nenhum jogador tiver mais cartas válidas
-            // OU após um limite de rodadas (para não loopar infinito).
+          
             const int maxRodadas = 30;
             var rodada = 0;
 
@@ -560,32 +549,29 @@ namespace Extintos.LeonKennedy
 
                     if (jogada == null)
                     {
-                        log($"  ⚠️  {jogador.Nome} não tem jogada válida — passa a vez.");
+                        log($"   {jogador.Nome} não tem jogada válida — passa a vez.");
                         continue;
                     }
 
-                    // Aplica jogada
+                
                     jogador.RemoverDaMao(jogada.Value.dino);
                     jogador.AdicionarAoCercado(jogada.Value.dino, jogada.Value.cercado);
 
-                    log($"  ✅ Jogada: [{jogada.Value.dino}] → cercado [{jogada.Value.cercado}]");
-                    log($"  📊 Pontuação de {jogador.Nome}: {jogador.CalcularPontuacao()} pts");
+                    log($"  Jogada: [{jogada.Value.dino}] → cercado [{jogada.Value.cercado}]");
+                    log($"  Pontuação de {jogador.Nome}: {jogador.CalcularPontuacao()} pts");
 
                     algumJogou = true;
                 }
 
-                // ── Passagem de mão (draft) ──────────────────────────────
-                // Após todos jogarem na rodada, cada mão passa para o próximo
                 PassarMaos(jogadores, log);
 
-                // Reabastece do baralho quem ficou com mão vazia
+              
                 ReabastecerMaos(jogadores, baralho, maoSize, log);
 
                 log("");
                 LogPlacar(jogadores, log);
 
-                // Condição de término: ninguém jogou nesta rodada
-                // (mãos vazias ou sem jogadas válidas) e baralho esgotado
+       
                 if (!algumJogou && baralho.Count == 0)
                 {
                     log("\n🏁 Nenhum jogador tem mais jogadas possíveis. Fim de partida!");
@@ -593,11 +579,10 @@ namespace Extintos.LeonKennedy
                 }
             }
 
-            // ── Resultado final ──────────────────────────────────────────
             LogResultadoFinal(jogadores, log);
         }
 
-        // ── Runners para cada configuração de jogadores ──────────────────
+      
 
         public static void ExecutarPartida2Jogadores(Action<string> log) =>
             ExecutarPartida(2, log);
@@ -608,10 +593,7 @@ namespace Extintos.LeonKennedy
         public static void ExecutarPartida4Jogadores(Action<string> log) =>
             ExecutarPartida(4, log);
 
-        // ─────────────────────────────────────────────────────────────────
-        //  Criação e setup
-        // ─────────────────────────────────────────────────────────────────
-
+      
         private static List<JogadorSimulado> CriarJogadores(int qtd)
         {
          
@@ -799,12 +781,12 @@ namespace Extintos.LeonKennedy
                 : 0;
 
             if (ganhoEscolhido < melhorGanho)
-                log($"  ⚠️  Escolha sub-ótima! Melhor disponível era +{melhorGanho}, escolheu +{ganhoEscolhido}  (bot Aleatório)");
+                log($"    Escolha sub-ótima! Melhor disponível era +{melhorGanho}, escolheu +{ganhoEscolhido}  (bot Aleatório)");
         }
 
         private static void LogPlacar(List<JogadorSimulado> jogadores, Action<string> log)
         {
-            log("  📊 PLACAR ATUAL:");
+            log("   PLACAR ATUAL:");
             var ordenados = jogadores.OrderByDescending(j => j.PontuacaoTotal).ToList();
 
             for (var i = 0; i < ordenados.Count; i++)

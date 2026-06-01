@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Extintos.Enumeration
@@ -57,6 +58,10 @@ namespace Extintos.Enumeration
             return dado.PegaInfo()?.Restricao ?? string.Empty;
         }
 
+        public static List<DadoFace> listaDadoFaces(this Dado dado)
+        {
+            return Enum.GetValues(typeof(Dado)).Cast<DadoFace>().ToList();
+        }
         public static List<Cercados> ValidaCercados(this Dado dado)
         {
             switch (dado)

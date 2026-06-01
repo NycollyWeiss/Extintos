@@ -30,235 +30,237 @@ namespace Extintos
 
         #endregion
 
+private async Task LoopRobozinhoAsync()
+{
+    try
+    {
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
 
-        private async Task LoopRobozinhoAsync()
+        var token = _cts.Token;
+
+        if (_dadosJogador == null)
         {
-            try
+            Console.WriteLine("Jogador nulo.");
+            return;
+        }
+
+        if (_dadosJogador.idPartida <= 0 ||
+            string.IsNullOrWhiteSpace(_dadosJogador.Senha))
+        {
+            Console.WriteLine("Partida ou senha inválida.");
+            return;
+        }
+
+        var decisoes = new InformacoesTurno(
+            _dadosJogador.IdJogador,
+            _dadosJogador.idPartida,
+            _dadosJogador.Senha,
+            _dadosJogador);
+
+        turnoAtual = decisoes.NumeroTurno;
+
+        Console.WriteLine();
+        Console.WriteLine("======================================");
+        Console.WriteLine($"Turno atual: {turnoAtual}");
+        Console.WriteLine("======================================");
+
+        if (_ultimoTurnoJogado == turnoAtual)
+        {
+            Console.WriteLine($"Já joguei no turno {turnoAtual}");
+            return;
+        }
+
+        if (_ultimoTurnoProcessado != turnoAtual)
+        {
+            if (turnoAtual == 1)
             {
-                _cts?.Cancel();
-                _cts = new CancellationTokenSource();
-
-                var token = _cts.Token;
-
-                if (_dadosJogador == null)
-                {
-                    Console.WriteLine("Jogador nulo.");
-                    return;
-                }
-
-                if (_dadosJogador.idPartida <= 0 ||
-                    string.IsNullOrWhiteSpace(_dadosJogador.Senha))
-                {
-                    Console.WriteLine("Partida ou senha inválida.");
-                    return;
-                }
-
-                var decisoes = new InformacoesTurno(
-                    _dadosJogador.IdJogador,
-                    _dadosJogador.idPartida,
-                    _dadosJogador.Senha,
-                    _dadosJogador);
-
-                turnoAtual = decisoes.NumeroTurno;
-
-                Console.WriteLine();
-                Console.WriteLine("======================================");
-                Console.WriteLine($"Turno atual: {turnoAtual}");
-                Console.WriteLine("======================================");
-
-                if (_ultimoTurnoJogado == turnoAtual)
-                {
-                    Console.WriteLine($"Já joguei no turno {turnoAtual}");
-                    return;
-                }
-
-                if (_ultimoTurnoProcessado != turnoAtual)
-                {
-                    if (turnoAtual == 1)
-                    {
-                        DinossaurosNoUniverso.Clear();
-                        DinossaurosNoUniverso.AddRange(decisoes.MaoJogador);
-                    }
-                    else if (turnoAtual == 2 ||
-                             turnoAtual == 7 ||
-                             turnoAtual == 8)
-                    {
-                        DinossaurosNoUniverso.AddRange(decisoes.MaoJogador);
-                    }
-                    else if (turnoAtual == 3 ||
-                             turnoAtual == 9)
-                    {
-                        try
-                        {
-                            var turnos =
-                                Jogo.VerificarTurno(
-                                    _dadosJogador.idPartida,
-                                    2);
-
-                            var dinosOponente =
-                                DadosOponete.ParserDinosOponente(
-                                    turnos,
-                                    _dadosJogador.IdJogador);
-
-                            DinossaurosNoUniverso.AddRange(
-                                dinosOponente);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(
-                                $"Falha ao obter dinos do oponente: {ex.Message}");
-                        }
-                    }
-
-                    var consolidado = DinossaurosNoUniverso
-                        .GroupBy(x => x.Dinossauro)
-                        .Select(g =>
-                            new AuxDinossauro(
-                                g.Key,
-                                g.Sum(x => x.QuantidadeDinossauros)))
-                        .ToList();
-
-                    DinossaurosNoUniverso.Clear();
-                    DinossaurosNoUniverso.AddRange(consolidado);
-
-                    _ultimoTurnoProcessado = turnoAtual;
-                }
-
-                Console.WriteLine($"Jogador: {_dadosJogador.IdJogador}");
-                Console.WriteLine($"Turno: {decisoes.NumeroTurno}");
-                Console.WriteLine($"Dado: {decisoes.DadoAtual}");
-
-                Console.WriteLine("MÃO:");
-
-                foreach (var d in decisoes.MaoJogador)
-                    Console.WriteLine(
-                        $"{d.Dinossauro} x{d.QuantidadeDinossauros}");
-
-                Console.WriteLine("CERCADOS:");
-
-                foreach (var c in decisoes.CercadosJogador)
-                    Console.WriteLine(
-                        $"{c.Cercados} -> {c.Dinossauros.Count}");
-
-                if (decisoes.MaoJogador == null ||
-                    decisoes.MaoJogador.Count == 0)
-                {
-                    Console.WriteLine("Mão vazia.");
-                    return;
-                }
-
-                if (decisoes.CercadosJogador == null ||
-                    decisoes.CercadosJogador.Count == 0)
-                {
-                    Console.WriteLine("Nenhum cercado carregado.");
-                    return;
-                }
-
-                var jogada = estrategia.Avaliar(decisoes);
-
-                if (!jogada.HasValue)
-                {
-                    Console.WriteLine(
-                        "Estratégia não encontrou jogada válida.");
-                    return;
-                }
-
-                var escolha = jogada.Value;
-
-                Console.WriteLine(
-                    $"Escolha: {escolha.dino.PegaNome()} -> {escolha.cercado.PegaNome()}");
-
-                await Task.Delay(
-                    RandomHelper.Next(2000, 3000),
-                    token);
-
-                var codigoDino =
-                    escolha.dino.PegaCodigo();
-
-                var codigoCercado =
-                    escolha.cercado.PegaCodigo();
-
-                Console.WriteLine(
-                    $"Enviando: {codigoDino} -> {codigoCercado}");
-
-                proximoTurno =
-                    await DraftService.JogarAsync(
-                        _dadosJogador.IdJogador,
-                        _dadosJogador.Senha,
-                        codigoDino,
-                        codigoCercado,
-                        token);
-
-                Console.WriteLine(
-                    $"Servidor retornou: {proximoTurno}");
-
-                if (proximoTurno == decisoes.NumeroTurno)
-                {
-                    Console.WriteLine(
-                        "Servidor recusou ou não processou a jogada.");
-
-                    return;
-                }
-
-                Console.WriteLine(
-                    "Jogada confirmada.");
-
-                _dadosJogador.ColocarDinossauro(
-                    escolha.dino,
-                    escolha.cercado);
-
-                _ultimoTurnoJogado =
-                    decisoes.NumeroTurno;
-
-                ultimoTurnoExibido =
-                    decisoes.NumeroTurno;
-
+                DinossaurosNoUniverso.Clear();
+                DinossaurosNoUniverso.AddRange(decisoes.MaoJogador);
+            }
+            else if (turnoAtual == 2 ||
+                     turnoAtual == 7 ||
+                     turnoAtual == 8)
+            {
+                DinossaurosNoUniverso.AddRange(decisoes.MaoJogador);
+            }
+            else if (turnoAtual == 3 ||
+                     turnoAtual == 9)
+            {
                 try
                 {
-                    await ExecutarMovimentoVisual(
-                        codigoDino,
-                        codigoCercado);
+                    var turnos =
+                        Jogo.VerificarTurno(
+                            _dadosJogador.idPartida,
+                            2);
+
+                    var dinosOponente =
+                        DadosOponete.ParserDinosOponente(
+                            turnos,
+                            _dadosJogador.IdJogador);
+
+                    DinossaurosNoUniverso.AddRange(
+                        dinosOponente);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(
-                        $"Erro na animação: {ex.Message}");
+                        $"Falha ao obter dinos do oponente: {ex.Message}");
                 }
-
-                JaJogueiNesseTurno(
-                    decisoes.NumeroTurno);
-            }
-            catch (OperationCanceledException)
-            {
-                Console.WriteLine(
-                    "Operação cancelada.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(
-                    $"ERRO COMPLETO: {ex}");
-
-                Console.WriteLine(
-                    $"STACK: {ex.StackTrace}");
             }
 
-            try
-            {
-                await Task.Delay(2000);
+            var consolidado = DinossaurosNoUniverso
+                .GroupBy(x => x.Dinossauro)
+                .Select(g =>
+                    new AuxDinossauro(
+                        g.Key,
+                        g.Sum(x => x.QuantidadeDinossauros)))
+                .ToList();
 
-                var historico =
-                    Jogo.ListarHistorico(
-                        _dadosJogador.idPartida);
+            DinossaurosNoUniverso.Clear();
+            DinossaurosNoUniverso.AddRange(consolidado);
 
-                Console.WriteLine(
-                    "Histórico atualizado? " +
-                    historico.Contains(
-                        _dadosJogador.IdJogador.ToString()));
-            }
-            catch
-            {
-            }
+            _ultimoTurnoProcessado = turnoAtual;
         }
+
+        Console.WriteLine($"Jogador: {_dadosJogador.IdJogador}");
+        Console.WriteLine($"Turno: {decisoes.NumeroTurno}");
+        Console.WriteLine($"Dado: {decisoes.DadoAtual}");
+
+        Console.WriteLine("MÃO:");
+
+        foreach (var d in decisoes.MaoJogador)
+            Console.WriteLine(
+                $"{d.Dinossauro} x{d.QuantidadeDinossauros}");
+
+        Console.WriteLine("CERCADOS:");
+
+        foreach (var c in decisoes.CercadosJogador)
+            Console.WriteLine(
+                $"{c.Cercados} -> {c.Dinossauros.Count}");
+
+        if (decisoes.MaoJogador == null ||
+            decisoes.MaoJogador.Count == 0)
+        {
+            Console.WriteLine("Mão vazia.");
+            return;
+        }
+
+        if (decisoes.CercadosJogador == null ||
+            decisoes.CercadosJogador.Count == 0)
+        {
+            Console.WriteLine("Nenhum cercado carregado.");
+            return;
+        }
+
+        var jogada = estrategia.Avaliar(decisoes);
+
+       
+        Extintos.LeonKennedy.TesteOnline.TestesOnlines(decisoes, jogada, Console.WriteLine);        // ===========================================
+
+        if (!jogada.HasValue)
+        {
+            Console.WriteLine(
+                "Estratégia não encontrou jogada válida.");
+            return;
+        }
+
+        var escolha = jogada.Value;
+
+        Console.WriteLine(
+            $"Escolha: {escolha.dino.PegaNome()} -> {escolha.cercado.PegaNome()}");
+
+        await Task.Delay(
+            RandomHelper.Next(2000, 3000),
+            token);
+
+        var codigoDino =
+            escolha.dino.PegaCodigo();
+
+        var codigoCercado =
+            escolha.cercado.PegaCodigo();
+
+        Console.WriteLine(
+            $"Enviando: {codigoDino} -> {codigoCercado}");
+
+        proximoTurno =
+            await DraftService.JogarAsync(
+                _dadosJogador.IdJogador,
+                _dadosJogador.Senha,
+                codigoDino,
+                codigoCercado,
+                token);
+
+        Console.WriteLine(
+            $"Servidor retornou: {proximoTurno}");
+
+        if (proximoTurno == decisoes.NumeroTurno)
+        {
+            Console.WriteLine(
+                "Servidor recusou ou não processou a jogada.");
+
+            return;
+        }
+
+        Console.WriteLine(
+            "Jogada confirmada.");
+
+        _dadosJogador.ColocarDinossauro(
+            escolha.dino,
+            escolha.cercado);
+
+        _ultimoTurnoJogado =
+            decisoes.NumeroTurno;
+
+        ultimoTurnoExibido =
+            decisoes.NumeroTurno;
+
+        try
+        {
+            await ExecutarMovimentoVisual(
+                codigoDino,
+                codigoCercado);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(
+                $"Erro na animação: {ex.Message}");
+        }
+
+        JaJogueiNesseTurno(
+            decisoes.NumeroTurno);
+    }
+    catch (OperationCanceledException)
+    {
+        Console.WriteLine(
+            "Operação cancelada.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(
+            $"ERRO COMPLETO: {ex}");
+
+        Console.WriteLine(
+            $"STACK: {ex.StackTrace}");
+    }
+
+    try
+    {
+        await Task.Delay(2000);
+
+        var historico =
+            Jogo.ListarHistorico(
+                _dadosJogador.idPartida);
+
+        Console.WriteLine(
+            "Histórico atualizado? " +
+            historico.Contains(
+                _dadosJogador.IdJogador.ToString()));
+    }
+    catch
+    {
+    }
+}
 
         private bool JaJogueiNesseTurno(int turnoAtual)
         {
@@ -343,7 +345,7 @@ namespace Extintos
         private int _totalDinosUltimaLeitura = -1;
         private bool _movimentoDoBot; // Flag para saber se o movimento é do bot
 
-        // Dicionários e listas
+        
         private readonly Dictionary<int, string> nomesJogadores = new();
         private readonly List<DinoNoTabuleiro> dinosFixosNoTabuleiro = new();
         private readonly List<DinossauroVisual> dinos = new();
@@ -422,9 +424,9 @@ namespace Extintos
             picDado.Visible = true;
         }
 
-        #endregion
+    
 
-        #region Comunicação com Servidor
+    
 
         public void bntExibirMao_Click(object sender, EventArgs e)
         {
@@ -496,9 +498,9 @@ namespace Extintos
             }
         }
 
-        #endregion
 
-        #region Desenho e Interface Visual
+
+   
 
         private void CriarDinos(List<AuxDinossauro> maoJogador)
         {

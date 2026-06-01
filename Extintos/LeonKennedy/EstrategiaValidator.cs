@@ -33,6 +33,7 @@ namespace Extintos.Model
                 dino);
         }
 
+      
         private static bool ValidarDado(
             InformacoesTurno info,
             Cercados cercado,

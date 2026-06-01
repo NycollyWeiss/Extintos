@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Extintos.LeonKennedy;
 
 namespace Extintos
 {
@@ -8,7 +9,7 @@ namespace Extintos
         [STAThread]
         private static void Main()
         {
-            Application.Run(Forms.Form1);
+            Application.Run(new FormResultadoTeste());
         }
     }
 }

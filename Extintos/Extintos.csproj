@@ -76,6 +76,7 @@
             <DependentUpon>ResultadoTeste.cs</DependentUpon>
         </Compile>
         <Compile Include="LeonKennedy\TestesOffline.cs"/>
+        <Compile Include="LeonKennedy\TestesOnlines.cs" />
         <Compile Include="Model\InformacoesTurno.cs"/>
         <Compile Include="Model\Jogador.cs"/>
         <Compile Include="Model\Partida.cs"/>

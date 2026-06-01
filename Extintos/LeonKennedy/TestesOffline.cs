@@ -67,17 +67,7 @@ namespace Extintos.LeonKennedy
         }
 
         
-      /*private static List<Dado> GerarDado()
-        {
-            var lista = new List<DadoFace>();
-            var dado = Enum.GetValues(typeof(Dado)).Cast<Dado>();
 
-            foreach (var da in dado) lista.Add(new DadoFace(dado.ToString);
-                return lista;
-            
-        }
-*/
-         
 
           private static List<AuxCercado> GerarCercados()
         {
@@ -317,12 +307,7 @@ namespace Extintos.LeonKennedy
             return PontuacaoTotal;
         }
 
-        // ── Decisão de jogada ──────────────────────────────────────────────
-
-        /// <summary>
-        /// Retorna a jogada escolhida junto com o log detalhado de todas as
-        /// possibilidades avaliadas e os ganhos de cada uma.
-        /// </summary>
+        // ── Decisão de jogada ───────────────────────────────────────────
         public (Dinossauro dino, Cercados cercado)? Jogar(
             int turno,
             Dado dado,

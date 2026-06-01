@@ -1,11 +1,43 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Extintos.LeonKennedy
 {
+
+    public class TransparenteRichTextBox : RichTextBox
+    {
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr LoadLibrary(string lpFileName);
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+
+                LoadLibrary("Msftedit.dll");
+                CreateParams cp = base.CreateParams;
+                cp.ClassName = "RICHEDIT50W";
+                cp.ExStyle |= 0x20;
+                return cp;
+            }
+        }
+
+        public TransparenteRichTextBox()
+        {
+            SetStyle(ControlStyles.Opaque, true);
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+
+        }
+    }
+
     public class FormResultadoTeste : Form
     {
         private Button btnExecutar;
@@ -13,7 +45,7 @@ namespace Extintos.LeonKennedy
         private Panel panelBotoes;
         private Panel panelDireita;
         private Panel panelEsquerda;
-        private FlowLayoutPanel panelLogs;
+        private TransparenteRichTextBox txtLogs;
         private PictureBox pictureBox1;
 
         public FormResultadoTeste()
@@ -29,13 +61,12 @@ namespace Extintos.LeonKennedy
 
         private void InitializeComponents()
         {
-            Text = "🫦🫦🫦Leon Kennedy Guloso🫦🫦🫦";
+            Text = "🫦🫦🫦Leon Kennedy Guloso🫦🫦🫦"; //aqui
             Size = new Size(900, 600);
             MinimumSize = new Size(700, 500);
             StartPosition = FormStartPosition.CenterScreen;
             Font = new Font("Segoe UI", 9F);
             DoubleBuffered = true;
-
 
             try
             {
@@ -54,13 +85,12 @@ namespace Extintos.LeonKennedy
                 Width = 250,
                 BackColor = Color.Transparent
             };
-
+            
             panelDireita = new Panel
             {
                 Dock = DockStyle.Fill,
-                BackColor = Color.Transparent
+                BackColor = Color.FromArgb(140, 15, 15, 20)
             };
-
 
             pictureBox1 = new PictureBox
             {
@@ -68,7 +98,6 @@ namespace Extintos.LeonKennedy
                 SizeMode = PictureBoxSizeMode.Zoom,
                 BackColor = Color.Transparent
             };
-
             try
             {
                 var foto1 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "leonCoelinho.jpg");
@@ -81,19 +110,19 @@ namespace Extintos.LeonKennedy
 
             panelEsquerda.Controls.Add(pictureBox1);
 
-
-            panelLogs = new FlowLayoutPanel
+            // CONFIGURAÇÃO DO LOG
+            txtLogs = new TransparenteRichTextBox
             {
                 Dock = DockStyle.Fill,
-                Padding = new Padding(20),
-                AutoScroll = true,
-                FlowDirection = FlowDirection.TopDown,
-                WrapContents = false,
-                BackColor = Color.Transparent
+                ReadOnly = true,
+                BorderStyle = BorderStyle.None,
+                ForeColor = Color.FromArgb(240, 240, 240),
+                Font = new Font("Consolas", 11F, FontStyle.Bold), // Fonte ligeiramente maior melhora a leitura sobre imagens
+                Margin = new Padding(20),
+                ScrollBars = RichTextBoxScrollBars.Vertical
             };
 
-            panelDireita.Controls.Add(panelLogs);
-
+            panelDireita.Controls.Add(txtLogs);
 
             panelBotoes = new Panel
             {
@@ -140,50 +169,54 @@ namespace Extintos.LeonKennedy
             Controls.Add(panelEsquerda);
         }
 
-
         private async void BtnExecutar_Click(object sender, EventArgs e)
         {
             btnExecutar.Enabled = false;
             btnExecutar.Text = "Executando...";
-            panelLogs.Controls.Clear();
+            txtLogs.Clear();
 
             Log("Iniciando testes do Guloso...\n");
 
-            await Task.Run(() => { TestRunnerOffline.ExecutarTodos(Log); });
+            await Task.Run(() =>
+            {
+                PartidaSimulada.ExecutarPartida4Jogadores(Log);
+            });
 
             Log("\nFinalizado!");
             btnExecutar.Text = "▶ Executar Novamente";
             btnExecutar.Enabled = true;
         }
 
+        // NOVO MÉTODO DE LOG: Paleta de cores de alto contraste calibrada para fundos escuros e artísticos
         private void Log(string msg)
         {
-            if (panelLogs.InvokeRequired) Console.WriteLine(msg);
+            if (txtLogs.InvokeRequired)
+            {
+                txtLogs.Invoke(new Action(() => Log(msg)));
+                return;
+            }
 
-            var texto = msg.Trim();
-            if (string.IsNullOrEmpty(texto))
+            if (string.IsNullOrEmpty(msg))
                 return;
 
-            var cor = Color.White;
+            var cor = Color.FromArgb(240, 240, 240);
 
-            if (texto.Contains("❌"))
-                cor = Color.Red;
-            else if (texto.Contains("✔"))
-                cor = Color.LimeGreen;
-            else if (texto.Contains("[TESTE]"))
-                cor = Color.DeepSkyBlue;
-            else if (texto.Contains("🚀") || texto.Contains("🏁"))
-                cor = Color.Gold;
+            if (msg.Contains("❌"))
+                cor = Color.FromArgb(255, 80, 80);       // Vermelho vivo para erros
+            else if (msg.Contains("✔"))
+                cor = Color.FromArgb(50, 255, 130);     // Verde limão brilhante para sucessos
+            else if (msg.Contains("[TESTE]"))
+                cor = Color.FromArgb(0, 210, 255);      // Neon Cyber Azul para identificadores
+            else if (msg.Contains("🚀") || msg.Contains("🏁"))
+                cor = Color.FromArgb(255, 215, 0);       // Ouro vibrante para marcos importantes
 
-            var lbl = new Label
-            {
-                Text = texto,
-                AutoSize = true,
-                ForeColor = cor,
-                BackColor = Color.Transparent,
-                Font = new Font("Consolas", 10F, FontStyle.Bold),
-                Margin = new Padding(0, 2, 0, 2)
-            };
+            txtLogs.SelectionStart = txtLogs.TextLength;
+            txtLogs.SelectionLength = 0;
+            txtLogs.SelectionColor = cor;
+            txtLogs.AppendText(msg + Environment.NewLine);
+            txtLogs.SelectionColor = txtLogs.ForeColor;
+
+            txtLogs.Invalidate();
         }
     }
 }

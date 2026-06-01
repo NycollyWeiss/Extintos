@@ -1,9 +1,12 @@
 ﻿using Extintos.Telas;
 
-internal class Forms
+namespace Extintos
 {
-    public static TelaInicial TelaInicial = new TelaInicial();
-    public static Lobby Lobby = new Lobby();
-    public static Jogadores Jogadores = new Jogadores();
-    public static TelaPartida TelaPartida = new TelaPartida();
+    internal static class Forms
+    {
+        public static readonly TelaInicial TelaInicial = new TelaInicial();
+        public static readonly Lobby Lobby = new Lobby();
+        public static readonly Jogadores Jogadores = new Jogadores();
+        public static readonly TelaPartida TelaPartida = new TelaPartida();
+    }
 }

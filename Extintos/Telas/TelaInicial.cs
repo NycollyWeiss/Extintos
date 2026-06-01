@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Draft;
 
+
 namespace Extintos.Telas
 {
 
@@ -19,7 +20,7 @@ namespace Extintos.Telas
         {
             InitializeComponent();
             lblVersao.Text = Jogo.versao;
-            ConfigTela.Fullscreen(Forms.TelaInicial);
+            ConfigTela.Fullscreen(this);
 
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Size = new System.Drawing.Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);

@@ -11,7 +11,6 @@ namespace Extintos
         public int largura;
 
         public Point posicao;
-        // -------------------------------
 
         public DinossauroVisual(Image img, int x, int y)
         {
@@ -22,7 +21,6 @@ namespace Extintos
             ativo = false;
         }
 
-        // --- ADICIONE ESTA LINHA AQUI ---
         public string Tipo { get; set; }
     }
 }

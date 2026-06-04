@@ -3,12 +3,20 @@ using Extintos.Enumeration;
 
 namespace Extintos.LeonKennedy
 {
+   
+    /*           -----Analisador de qualidade das jogadas.-----
+        Explicação do arquivo:
+        Recebe o estado atual do turno, o cercado escolhido e o dinossauro escolhido,
+        calcula bônus e potencial futuro para jogadas que já passaram pela validação
+        e ajuda a estratégia principal a comparar opções válidas.
+
+        Este arquivo não valida se uma jogada é permitida e não escolhe a jogada final.
+        Ele apenas calcula fatores extras que entram na composição do score.
+    */
+
     public class EstrategiaAnalizador
     {
-        public static int BonusJogada(
-            InformacoesTurno info,
-            Cercados cercado,
-            Dinossauro dino)
+        public static int BonusJogada(InformacoesTurno info, Cercados cercado, Dinossauro dino)
         {
             var bonus = 0;
 
@@ -64,13 +72,9 @@ namespace Extintos.LeonKennedy
             return bonus;
         }
 
-        public static int PotencialFuturo(
-            InformacoesTurno info,
-            Cercados cercado,
-            Dinossauro dino)
+        public static int PotencialFuturo(InformacoesTurno info, Cercados cercado, Dinossauro dino)
         {
-            var alvo = info.CercadosJogador
-                .First(x => x.Cercados == cercado);
+            var alvo = info.CercadosJogador.First(x => x.Cercados == cercado);
 
             var qtd = alvo.Dinossauros.Count;
 

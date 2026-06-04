@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Draft;
 using Extintos.Enumeration;
+using Extintos.Auxiliares;
 
 namespace Extintos.Model
 {

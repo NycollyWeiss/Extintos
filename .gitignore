@@ -1,9 +1,10 @@
 .idea/*
 
-
 [Bb]in/
 [Oo]bj/
 
+Extintos/bin
+Extintos/obj
 
 .vs/
 *.suo
@@ -11,7 +12,6 @@
 *.userosscache
 *.sln.docstates
 
-TestResults/
 
 
 Thumbs.db

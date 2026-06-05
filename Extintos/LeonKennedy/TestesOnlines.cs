@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Extintos.Enumeration;
-using Extintos.Interfaces;
-using Extintos.LeonKennedy;
 using Extintos.Model;
 
-
-
+  
+namespace Extintos.LeonKennedy
+{
     public static class TesteOnline
     {
     
@@ -120,5 +119,5 @@ using Extintos.Model;
             return ganhoPontuacao + bonus + potencial;
         }
     }
-
+}
   

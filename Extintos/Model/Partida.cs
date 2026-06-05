@@ -85,24 +85,30 @@ namespace Extintos
             VerificaPartida(int idPartida)
         {
             var retorno = Jogo.VerificarPartida(idPartida);
+
+            // Se o servidor retornar ERRO, lançamos uma exceção clara para o log
+            if (retorno.StartsWith("ERRO"))
+            {
+                throw new Exception(retorno);
+            }
+
             var dados = retorno.Split(',');
+            
+            // Garantia de que temos dados suficientes
+            if (dados.Length < 5) throw new Exception("Formato de retorno inválido: " + retorno);
 
             return (
-                Convert.ToChar(dados[0]), // statusPartida se é J ou E
-                Convert.ToInt32(dados[1]), // numeroTurn 1-12
-                Convert.ToChar(dados[2]), // statusTurno se tá A ou F
+                Convert.ToChar(dados[0]), // statusPartida
+                Convert.ToInt32(dados[1]), // numeroTurno
+                Convert.ToChar(dados[2]), // statusTurno
                 Convert.ToInt32(dados[3]), // idJogador
-                dados[4] // faceDado AL, FL, PR e tal
+                dados[4]                  // faceDado
             );
         }
 
 
         public static string IniciarPartida(int idJogador, string senhaJogador, int idPartida)
-            /*
-             Parte central da lógica do código.
-             Ele combina a ação (iniciar) com a consulta (verificar status)
-             e formata uma mensagem para o usuário.
-            */
+          
         {
             var retornoEntrar = Jogo.Iniciar(idJogador, senhaJogador);
             var verificacao = VerificaPartida(idPartida);

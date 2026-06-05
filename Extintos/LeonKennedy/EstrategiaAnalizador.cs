@@ -82,7 +82,7 @@ namespace Extintos.LeonKennedy
             {
                 case Cercados.MT:
 
-                    return (3 - qtd) * 10;
+                    return (3 - qtd) * 7;
 
                 case Cercados.FI:
 

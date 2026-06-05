@@ -48,7 +48,7 @@ namespace Extintos.LeonKennedy
             {
                 MaoJogador = GerarMao(),
                 CercadosJogador = GerarCercados(),
-                NumeroTurno = rng.Next(1, 6),
+                NumeroTurno = 0,
                 DadoAtual = Dado.AL,
                 StatusPartida = 'E',
                 StatusTurno = 'A',
@@ -227,7 +227,7 @@ namespace Extintos.LeonKennedy
                         break;
 
                     case Cercados.RS:
-                        if (qtd == 1 && info.NumeroTurno >10) pts += 7;
+                        if (qtd == 1 && info.NumeroTurno > 10) pts += 7;
                         break;
 
                     case Cercados.IS:
@@ -263,9 +263,7 @@ namespace Extintos.LeonKennedy
     }
  
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Tipos de bot disponíveis na simulação
-    // ─────────────────────────────────────────────────────────────────────────
+    
     public enum TipoBot
     {
         Guloso,
@@ -439,7 +437,7 @@ namespace Extintos.LeonKennedy
                     case Cercados.IS:
                         if (qtd == 1)
                         {
-                            // Único no mundo: não aparece em nenhum outro cercado deste jogador
+                            
                             var unico = cercados
                                 .SelectMany(x => x.Dinossauros ?? new List<Dinossauro>())
                                 .Count(d => d == dinos[0]) > 1;
@@ -498,7 +496,7 @@ namespace Extintos.LeonKennedy
             log("");
 
          
-            var baralho = CriarBaralho();
+            var baralho = CriarBaralho(0);
             log($" Saco criado: {baralho.Count} dinossauros, sorteando...");
             log("");
 
@@ -507,15 +505,15 @@ namespace Extintos.LeonKennedy
             DistribuirMaos(jogadores, baralho, maoSize, log);
 
           
-            const int maxRodadas = 30;
+            const int maxTurno = 30;
             var rodada = 0;
 
-            while (rodada < maxRodadas)
+            while (rodada < maxTurno)
             {
                 rodada++;
 
                 log($"┌─────────────────────────────────────────────────────");
-                log($"│  RODADA {rodada}");
+                log($"│  RODADA {rodada}");                                  
                 log($"└─────────────────────────────────────────────────────");
 
                 var algumJogou = false;
@@ -598,21 +596,28 @@ namespace Extintos.LeonKennedy
 
             return jogadores;
         }
-        
+
 
         /// <summary>
         /// Baralho: todas as combinações de Dinossauro * quantidade típica.
         /// Ajuste os multiplicadores conforme as regras reais do jogo.
         /// </summary>
-        private static List<Dinossauro> CriarBaralho()
+        /// <param name="jogadores"></param>
+        private static List<Dinossauro> CriarBaralho(int jogadores)
         {
             var baralho = new List<Dinossauro>();
             var dinos = Enum.GetValues(typeof(Dinossauro)).Cast<Dinossauro>().ToList();
 
-            // 4 cópias de cada dino (ajuste conforme quantidade real do jogo)
-            foreach (var d in dinos)
-                for (var i = 0; i < 4; i++)
+            switch (jogadores)
+            {
+                case 2:
+                    for (var i = 0; i < 4; i++)
                     baralho.Add(d);
+                    break;
+                case 3: 
+                
+            }
+               
 
             // Embaralha (Fisher-Yates)
             for (var i = baralho.Count - 1; i > 0; i--)

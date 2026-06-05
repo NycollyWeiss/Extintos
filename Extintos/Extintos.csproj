@@ -108,6 +108,7 @@
           <DependentUpon>ResultadoTeste.cs</DependentUpon>
         </Compile>
         <Compile Include="Testes\TestesOffline.cs" />
+        <Compile Include="Testes\TestesOnline.cs" />
         <Compile Include="Util\Forms.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

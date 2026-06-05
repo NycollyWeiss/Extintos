@@ -28,15 +28,42 @@ namespace Extintos.Model
             set => _meusCercados = value;
         }
 
-        public static Jogador EntrarNaPartida(int idPartida, string nomeJogador, string senhaPartida)
-
+        public static Jogador EntrarNaPartida(int idPartida, string nomeJogador, string senhaJogador)
         {
-            var retornoEntrar = Jogo.Entrar(idPartida, nomeJogador, senhaPartida);
+            var retornoEntrar = Jogo.Entrar(idPartida, nomeJogador, senhaJogador);
+
+         
+            if (retornoEntrar.StartsWith("ERRO"))
+            {
+                throw new Exception($"Servidor recusou a entrada: {retornoEntrar}");
+            }
+
+            // 2. Verifica se a resposta está vazia ou nula
+            if (string.IsNullOrWhiteSpace(retornoEntrar))
+            {
+                throw new Exception("Servidor retornou uma resposta vazia ao tentar entrar na partida.");
+            }
+
             var dadosJogador = retornoEntrar.Split(',');
+
+            // 3. Verifica se o formato tem o esperado (ID e Senha)
+            if (dadosJogador.Length < 2)
+            {
+                throw new Exception($"Formato de resposta inesperado do servidor: '{retornoEntrar}'");
+            }
 
             var jogador = new Jogador();
 
-            jogador.IdJogador = Convert.ToInt32(dadosJogador[0]);
+            // 4. Conversão segura para evitar o FormatException
+            if (int.TryParse(dadosJogador[0], out int idConvertido))
+            {
+                jogador.IdJogador = idConvertido;
+            }
+            else
+            {
+                throw new Exception($"O valor retornado pelo servidor para o ID não é um número válido: '{dadosJogador[0]}'");
+            }
+
             jogador.Senha = dadosJogador[1];
             jogador.NomeJogador = nomeJogador;
             jogador.Pontuacao = 0;
@@ -45,7 +72,6 @@ namespace Extintos.Model
 
             return jogador;
         }
-
         public static string BuscaPeloId(int idJogador, int idPartida)
         {
             var jogadores = Partida.ListarJogadores(idPartida);

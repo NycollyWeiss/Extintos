@@ -4,7 +4,7 @@ using Extintos.Enumeration;
 namespace Extintos.LeonKennedy
 {
    
-    /*           -----Analisador de qualidade das jogadas.-----
+    /*           -----Analisador de qualidade das jogadas-----
         Explicação do arquivo:
         Recebe o estado atual do turno, o cercado escolhido e o dinossauro escolhido,
         calcula bônus e potencial futuro para jogadas que já passaram pela validação

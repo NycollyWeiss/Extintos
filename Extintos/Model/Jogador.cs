@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Draft;
 using Extintos.Enumeration;
 using Extintos.Auxiliares;
+using Extintos.Services;
 
 namespace Extintos.Model
 {
@@ -31,7 +32,7 @@ namespace Extintos.Model
         public static Jogador EntrarNaPartida(int idPartida, string nomeJogador, string senhaPartida)
 
         {
-            var retornoEntrar = Jogo.Entrar(idPartida, nomeJogador, senhaPartida);
+            var retornoEntrar = DraftService.EntrarPartida(idPartida, nomeJogador, senhaPartida);
             var dadosJogador = retornoEntrar.Split(',');
 
             var jogador = new Jogador();

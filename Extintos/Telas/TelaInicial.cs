@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Draft;
+using Extintos.Services;
 
 
 namespace Extintos.Telas
@@ -19,7 +20,7 @@ namespace Extintos.Telas
         public TelaInicial() 
         {
             InitializeComponent();
-            lblVersao.Text = Jogo.versao;
+            lblVersao.Text = DraftService.Versao;
             ConfigTela.Fullscreen(this);
 
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
@@ -45,7 +46,7 @@ namespace Extintos.Telas
             }
             
             
-            string retorno = Jogo.CriarPartida(nomePartida, senhaPartida, nomeGrupo);
+            string retorno = DraftService.CriarPartida(nomePartida, senhaPartida, nomeGrupo);
             
             if (string.IsNullOrEmpty(retorno))
             {

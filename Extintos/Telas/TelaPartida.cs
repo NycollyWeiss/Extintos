@@ -93,15 +93,9 @@ namespace Extintos.Telas
                     {
                         try
                         {
-                            var turnos =
-                                Jogo.VerificarTurno(
-                                    _dadosJogador.idPartida,
-                                    2);
+                            var turnos = DraftService.ObterTurnos(_dadosJogador.idPartida, 2);
 
-                            var dinosOponente =
-                                DadosOponete.ParserDinosOponente(
-                                    turnos,
-                                    _dadosJogador.IdJogador);
+                            var dinosOponente = DadosOponete.ParserDinosOponente(turnos, _dadosJogador.IdJogador);
 
                             DinossaurosNoUniverso.AddRange(
                                 dinosOponente);
@@ -249,9 +243,7 @@ namespace Extintos.Telas
             {
                 await Task.Delay(2000);
 
-                var historico =
-                    Jogo.ListarHistorico(
-                        _dadosJogador.idPartida);
+                var historico = DraftService.ObterHistoricoBruto(_dadosJogador.idPartida);
 
                 Console.WriteLine(
                     "Histórico atualizado? " +
@@ -265,7 +257,7 @@ namespace Extintos.Telas
 
         private bool JaJogueiNesseTurno(int turnoAtual)
         {
-            var historico = Jogo.ListarHistorico(_dadosJogador.idPartida);
+            var historico = DraftService.ObterHistoricoBruto(_dadosJogador.idPartida);
             if (string.IsNullOrWhiteSpace(historico)) return false;
 
             var termoTurno = $"Turno {turnoAtual}";
@@ -290,7 +282,7 @@ namespace Extintos.Telas
             {
                 await Task.Delay(delayMs);
 
-                var historicoBruto = Jogo.ListarHistorico(_dadosJogador.idPartida);
+                var historicoBruto = DraftService.ObterHistoricoBruto(_dadosJogador.idPartida);
                 Console.WriteLine($"🔍 Verificando histórico ({i + 1}/{tentativas})...");
 
                 if (historicoBruto.Contains($"Turno {turno}") && historicoBruto.Contains(idJogador.ToString()))
@@ -380,7 +372,7 @@ namespace Extintos.Telas
             SetStyle(
                 ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer,
                 true);
-            lblVersaoTres.Text = Jogo.versao;
+            lblVersaoTres.Text = DraftService.Versao;
             ConfigurarSistema();
             ConfigurarJanela();
         }
@@ -435,25 +427,10 @@ namespace Extintos.Telas
         {
             try
             {
-                var retornoMao = Jogo.ExibirMao(_dadosJogador.IdJogador, _dadosJogador.Senha);
-                if (string.IsNullOrEmpty(retornoMao)) return;
+                var dinossaurosJogador = DraftService.ObterMao(_dadosJogador.IdJogador, _dadosJogador.Senha);
 
-                var linhas = retornoMao.Replace("\r", "")
-                    .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                var dinossaurosJogador = new List<AuxDinossauro>();
-
-                foreach (var linha in linhas)
-                {
-                    var partes = linha.Split(',');
-                    if (partes.Length == 2)
-                    {
-                        var codigo = partes[0].Trim().ToUpper();
-                        var quantidade = int.Parse(partes[1].Trim());
-                        var dino = (Dinossauro)Enum.Parse(typeof(Dinossauro), codigo);
-
-                        dinossaurosJogador.Add(new AuxDinossauro(dino, quantidade));
-                    }
-                }
+                if (dinossaurosJogador == null || dinossaurosJogador.Count == 0)
+                    return;
 
                 CriarDinos(dinossaurosJogador);
             }
@@ -468,7 +445,7 @@ namespace Extintos.Telas
         {
             try
             {
-                var retorno = Jogo.ListarJogadores(_dadosJogador.idPartida);
+                var retorno = DraftService.ListarJogadoresBruto(_dadosJogador.idPartida);
                 var linhas = retorno.Replace("\r", "")
                     .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -489,7 +466,7 @@ namespace Extintos.Telas
         {
             try
             {
-                var retorno = Jogo.ListarHistorico(_dadosJogador.idPartida);
+                var retorno = DraftService.ObterHistoricoBruto(_dadosJogador.idPartida);
                 txtHistorico.Text = retorno.Replace(".", ".\r\n");
                 txtHistorico.ScrollBars = ScrollBars.Both;
                 txtHistorico.Multiline = true;
@@ -729,11 +706,7 @@ namespace Extintos.Telas
                         try
                         {
                             var codigoDino = ConverterParaCodigoDino(dinoSelecionado.Tipo);
-                            var retorno = Jogo.Jogar(
-                                _dadosJogador.IdJogador,
-                                _dadosJogador.Senha,
-                                codigoDino,
-                                cercado.Key);
+                            var retorno = DraftService.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha, codigoDino, cercado.Key);
 
                             if (!retorno.Contains("ERRO"))
                             {
@@ -943,7 +916,7 @@ namespace Extintos.Telas
 
             try
             {
-                var dadosVerificacao = Jogo.VerificarPartida(_dadosJogador.idPartida);
+                var dadosVerificacao = DraftService.VerificarPartidaBruto(_dadosJogador.idPartida);
                 var dados = dadosVerificacao.Split(',');
                 var statusPartida = dados[0];
 

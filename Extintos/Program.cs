@@ -10,10 +10,10 @@ namespace Extintos
         private static void Main()
         {
             //Draftosaurus
-            //Application.Run(Forms.TelaInicial);
+            Application.Run(Forms.TelaInicial);
             
             //Teste Leon
-            Application.Run(new FormResultadoTeste());
+            //Application.Run(new FormResultadoTeste());
             
             /* Para mudar a quantidade de jogadores:
                ResultadoTeste.cs -->  Procurar por "PartidaSimulada.ExecutarPartidaJogadores(Log);"

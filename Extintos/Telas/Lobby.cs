@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Draft;
 using Extintos.Model;
+using Extintos.Services;
 
 namespace Extintos.Telas
 {
@@ -11,7 +12,7 @@ namespace Extintos.Telas
         public Lobby()
         {
             InitializeComponent();
-            lblVersao.Text = Jogo.versao;
+            lblVersao.Text = DraftService.Versao;
             FormBorderStyle = FormBorderStyle.Sizable;
             Size = new Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             WindowState = FormWindowState.Maximized;
@@ -55,7 +56,7 @@ namespace Extintos.Telas
             var idPartida = Convert.ToInt32(idDaPartida);
 
             //Verifica se o jogador colocado já está na partida
-            var jogadores = Jogo.ListarJogadores(idPartida);
+            var jogadores = DraftService.ListarJogadoresBruto(idPartida);
             var ativos = jogadores.Split(',');
             for (var i = 0; i < ativos.Length; i++)
                 if (nomeJogador.Equals(ativos[i]))
@@ -125,7 +126,7 @@ namespace Extintos.Telas
             var jogador = txtIdDaPartida.Text;
             var senhaJogador = txtSenhaDaPartida.Text;
 
-            var jogadores = Jogo.ListarJogadores(idPartidaJogando);
+            var jogadores = DraftService.ListarJogadoresBruto(idPartidaJogando);
             var ativos = jogadores.Split(',');
             for (var i = 0; i < ativos.Length; i++)
             {

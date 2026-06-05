@@ -9,11 +9,56 @@ using System.Windows.Forms;
 using Draft;
 using Extintos.Enumeration;
 using Extintos.Auxiliares;
+using Extintos.Model;
 
 namespace Extintos.Services
 {
     public class DraftService
     {
+        public static List<AuxDinossauro> ObterMao(int idJogador, string senhaJogador)
+        {
+            var raw = Jogo.ExibirMao(idJogador, senhaJogador);
+            return ParserMao.Parse(raw);
+        }
+        
+        public static string EntrarPartida(int idPartida, string nomeJogador, string senhaPartida)
+        {
+            return Jogo.Entrar(idPartida, nomeJogador, senhaPartida);
+        }
+        
+        public static string CriarPartida(string nomePartida, string senhaPartida, string nomeGrupo)
+        {
+            return Jogo.CriarPartida(nomePartida, senhaPartida, nomeGrupo);
+        }
+        
+        public static string ListarJogadoresBruto(int idPartida)
+        {
+            return Jogo.ListarJogadores(idPartida);
+        }
+        
+        public static string ObterHistoricoBruto(int idPartida)
+        {
+            return Jogo.ListarHistorico(idPartida);
+        }
+        
+        public static string VerificarPartidaBruto(
+            int idPartida)
+        {
+            return Jogo.VerificarPartida(idPartida);
+        }
+        
+        public static string Versao => Jogo.versao;
+        
+        public static string ObterTurnos(int idPartida, int quantidade)
+        {
+            return Jogo.VerificarTurno(idPartida, quantidade);
+        }
+        
+        public static string Jogar(int idJogador, string senha, string codigoDino, string codigoCercado)
+        {
+            return Jogo.Jogar(idJogador, senha, codigoDino, codigoCercado);
+        }
+        
         public static async Task<T> ChamarSeguroAsync<T>(Func<T> metodoDll, CancellationToken token,
             int timeoutMs = 5000, bool requerUiThread = true)
         {
@@ -61,15 +106,13 @@ namespace Extintos.Services
                 throw new TimeoutException($"Timeout DLL ({timeoutMs}ms)");
             }
         }
-
-
-        public static async Task<PartidaInfo> ObterEstadoAsync(int idPartida, CancellationToken token)
+        
+        public static async Task<PartidasInfo.PartidaInfo> ObterEstadoAsync(int idPartida, CancellationToken token)
         {
             var raw = await ChamarSeguroAsync(() => Jogo.VerificarPartida(idPartida), token, 3000);
-            return PartidaInfo.Parse(raw);
+            return new PartidasInfo.PartidaInfo(raw);
         }
-
-
+        
         public static async Task<List<AuxDinossauro>> ObterMaoAsync(int idJogador, string senha,
             CancellationToken token)
         {
@@ -135,29 +178,6 @@ namespace Extintos.Services
         public static async Task<string> ListarFacesAsync(CancellationToken token)
         {
             return await ChamarSeguroAsync(Jogo.ListarFacesDado, token);
-        }
-    }
-
-
-    public class PartidaInfo
-    {
-        public char StatusPartida { get; set; } // J ou E
-        public int TurnoAtual { get; set; }
-        public char StatusTurno { get; set; } // A ou F
-        public int IdJogadorDaVez { get; set; }
-        public string FaceDado { get; set; } = string.Empty;
-
-        public static PartidaInfo Parse(string csv)
-        {
-            var p = csv.Split(',');
-            return new PartidaInfo
-            {
-                StatusPartida = p[0][0],
-                TurnoAtual = int.Parse(p[1]),
-                StatusTurno = p[2][0],
-                IdJogadorDaVez = int.Parse(p[3]),
-                FaceDado = p[4].Trim()
-            };
         }
     }
 

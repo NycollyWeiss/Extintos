@@ -13,14 +13,13 @@ namespace Extintos.Enumeration
         {
             try
             {
-                var estado = Partida.VerificaPartida(idPartida); // atribuir resposabilidade pro draftserver
-                StatusPartida = estado.statusPartida;
-                StatusTurno = estado.statusTurno;
-                DadoAtual = (Dado)Enum.Parse(typeof(Dado), estado.faceDado); //criar funçao de parse de tipos
-                JogueioDado = estado.idJogador == idJogador;
-                NumeroTurno = estado.numeroTurno;
-                var raw = Jogo.ExibirMao(idJogador, senhaJogador); // atribuir resposabilidade pro draftserver
-                MaoJogador = ParserMao.Parse(raw);
+                var estado = PartidasInfo.PartidaInfo.Obter(idPartida); // atribuir resposabilidade pro draftserver
+                StatusPartida = estado.StatusPartida;
+                StatusTurno = estado.StatusTurno;
+                DadoAtual = estado.FaceDadoAtual;
+                JogueioDado = estado.IdJogadorDaVez == idJogador;
+                NumeroTurno = estado.TurnoAtual;
+                MaoJogador = DraftService.ObterMao(idJogador, senhaJogador);
                 CercadosJogador = jogador.meusCercados;
                 IdJogadorQueRolouDado = idJogador;
             }

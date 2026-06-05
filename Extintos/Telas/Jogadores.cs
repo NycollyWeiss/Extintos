@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Draft;
 using Extintos.Model;
+using Extintos.Services;
 
 namespace Extintos.Telas
 {
@@ -14,7 +15,7 @@ namespace Extintos.Telas
         public Jogadores()
         {
             InitializeComponent();
-            lblVersao2.Text = Jogo.versao;
+            lblVersao2.Text = DraftService.Versao;
 
             FormBorderStyle = FormBorderStyle.Sizable;
             Size = new Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);

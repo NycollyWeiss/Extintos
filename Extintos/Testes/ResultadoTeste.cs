@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Extintos.LeonKennedy;
 
+      
 
 public class TransparenteRichTextBox : RichTextBox
     {

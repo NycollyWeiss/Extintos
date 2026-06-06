@@ -2,7 +2,7 @@
 
 namespace Extintos.Interfaces
 {
-    internal interface IEstategia
+    public interface IEstategia
     {
         string Nome { get; }
         (Dinossauro dino, Cercados cercado)? Avaliar(InformacoesTurno informacoesTurno);

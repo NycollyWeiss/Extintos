@@ -303,17 +303,6 @@ namespace Extintos.Telas
             return total;
         }
 
-        #region Classe Auxiliar
-
-        public class DinoNoTabuleiro
-        {
-            public string Tipo { get; set; }
-            public string Cercado { get; set; }
-            public Rectangle Area { get; set; }
-        }
-
-        #endregion
-
         #region Campos e Propriedades
 
         private readonly Jogador _dadosJogador;
@@ -509,7 +498,7 @@ namespace Extintos.Telas
                     var posX = centroX + coluna * espacamentoX;
                     var posY = centroY + linha * espacamentoY;
 
-                    var d = new DinossauroVisual(PegarImagemDinossauro(item.Dinossauro), posX, posY)
+                    var d = new DinossauroVisual(ProvedorDeImagens.PegarImagemDinossauro(item.Dinossauro), posX, posY)
                     {
                         Tipo = item.Dinossauro.ToString(),
                         largura = tamanhoDino,
@@ -578,7 +567,7 @@ namespace Extintos.Telas
             foreach (var dinoFixo in dinosFixosNoTabuleiro)
             {
                 var tipoEnum = (Dinossauro)Enum.Parse(typeof(Dinossauro), dinoFixo.Tipo.ToUpper());
-                var img = PegarImagemDinossauro(tipoEnum);
+                var img = ProvedorDeImagens.PegarImagemDinossauro(tipoEnum);
                 g.DrawImage(img, dinoFixo.Area.X, dinoFixo.Area.Y, dinoFixo.Area.Width, dinoFixo.Area.Height);
             }
 
@@ -671,12 +660,7 @@ namespace Extintos.Telas
             {
                 Tipo = dinoSelecionado.Tipo,
                 Cercado = cercado,
-                Area = new Rectangle(
-                    posicao.X - 20,
-                    posicao.Y - 20,
-                    60,
-                    60
-                )
+                Area = new Rectangle(posicao.X - 20, posicao.Y - 20, 60, 60)
             });
 
             dinos.Remove(dinoSelecionado);
@@ -705,7 +689,7 @@ namespace Extintos.Telas
 
                         try
                         {
-                            var codigoDino = ConverterParaCodigoDino(dinoSelecionado.Tipo);
+                            var codigoDino = ConversorDinos.ConverterParaCodigo(dinoSelecionado.Tipo);
                             var retorno = DraftService.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha, codigoDino, cercado.Key);
 
                             if (!retorno.Contains("ERRO"))
@@ -759,7 +743,7 @@ namespace Extintos.Telas
                 DinossauroVisual dinoParaMover = null;
                 foreach (var d in dinos)
                 {
-                    var codigoAtual = ConverterParaCodigoDino(d.Tipo);
+                    var codigoAtual = ConversorDinos.ConverterParaCodigo(d.Tipo);
                     if (codigoAtual.Equals(codigoDino, StringComparison.OrdinalIgnoreCase))
                     {
                         dinoParaMover = d;
@@ -891,7 +875,7 @@ namespace Extintos.Telas
                 {
                     bntExibirMao_Click(null, null);
 
-                    var imagemDado = PegarImagemDado(info.faceDado.Trim());
+                    var imagemDado = ProvedorDeImagens.PegarImagemDado(info.faceDado.Trim());
                     if (imagemDado != null) picDado.Image = imagemDado;
                     ultimoTurnoExibido = info.numeroTurno;
                     rodadaAtual = ((info.numeroTurno - 1) / 6) + 1;
@@ -944,32 +928,6 @@ namespace Extintos.Telas
         #endregion
 
         #region Métodos Auxiliares
-
-        private string ConverterParaCodigoDino(string tipo)
-        {
-            var t = tipo.ToUpper();
-            if (t.Contains("TIRANOSSAURO") || t == "TI") return "Ti";
-            if (t.Contains("BRAQUIOSSAURO") || t == "BR") return "Br";
-            if (t.Contains("ESTEGOSSAURO") || t == "ET") return "Et";
-            if (t.Contains("PARASAUROLOFO") || t == "PA") return "Pa";
-            if (t.Contains("ESPINOSSAURO") || t == "EP") return "Ep";
-            if (t.Contains("TRICERATOPS") || t == "TR") return "Tr";
-            return tipo;
-        }
-
-        private Image PegarImagemDinossauro(Dinossauro dino)
-        {
-            switch (dino)
-            {
-                case Dinossauro.TI: return Resources.Tiranossauro;
-                case Dinossauro.BR: return Resources.Braquiossauro;
-                case Dinossauro.ET: return Resources.Estegossauro;
-                case Dinossauro.PA: return Resources.Parasaurolofo;
-                case Dinossauro.EP: return Resources.Espinossauro;
-                case Dinossauro.TR: return Resources.Triceratops;
-                default: return null;
-            }
-        }
 
         private Dictionary<string, Rectangle> ObterCercadosMapeados()
         {
@@ -1073,20 +1031,6 @@ namespace Extintos.Telas
             {
                 new(tabX + 490, tabY + 435)
             };
-        }
-
-        private Image PegarImagemDado(string face)
-        {
-            switch (face)
-            {
-                case "AL": return Resources.Dado_Alimentacao;
-                case "FL": return Resources.Dado_Floresta;
-                case "PR": return Resources.Dado_Pradaria;
-                case "TI": return Resources.Dado_ReiSelva;
-                case "VZ": return Resources.Dado_CercadoVazio;
-                case "WC": return Resources.Dado_Banheiro;
-                default: return null;
-            }
         }
 
         #endregion

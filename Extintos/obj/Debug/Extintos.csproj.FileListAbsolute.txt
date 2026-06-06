@@ -72,3 +72,24 @@ C:\Users\Nycol\source\repos\Extintos\Extintos\obj\Debug\Extintos.Telas.Jogadores
 C:\Users\Nycol\source\repos\Extintos\Extintos\obj\Debug\Extintos.Telas.Lobby.resources
 C:\Users\Nycol\source\repos\Extintos\Extintos\obj\Debug\Extintos.Telas.TelaInicial.resources
 C:\Users\Nycol\source\repos\Extintos\Extintos\obj\Debug\Extintos.Telas.TelaPartida.resources
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\bin\Debug\Resources\leon.jpg
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\bin\Debug\Resources\leonCoelinho.jpg
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\bin\Debug\Resources\leonSemCamisa.jpg
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\bin\Debug\Extintos.exe.config
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\bin\Debug\Extintos.exe
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\bin\Debug\Extintos.pdb
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\bin\Debug\DraftServer.dll
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\bin\Debug\DraftServer.xml
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.csproj.AssemblyReference.cache
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Interop.MediaPlayer.dll
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.csproj.ResolveComReference.cache
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.Properties.Resources.resources
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.Telas.Jogadores.resources
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.Telas.Lobby.resources
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.Telas.TelaInicial.resources
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.Telas.TelaPartida.resources
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.csproj.GenerateResource.cache
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.csproj.CoreCompileInputs.cache
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.csproj.Up2Date
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.exe
+C:\Users\JOÃO VICTOR\RiderProjects\Extintos\Extintos\obj\Debug\Extintos.pdb

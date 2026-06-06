@@ -55,7 +55,6 @@
     <ItemGroup>
         <Compile Include="Auxiliares\AuxCercado.cs" />
         <Compile Include="Auxiliares\AuxDinossauro.cs" />
-        <Compile Include="DinossauroVisual.cs" />
         <Compile Include="Enumeration\Cercado.cs" />
         <Compile Include="Enumeration\Dado.cs" />
         <Compile Include="Enumeration\Dinossauros.cs" />
@@ -66,21 +65,27 @@
         <Compile Include="LeonKennedy\EstrategiaAnalizador.cs" />
         <Compile Include="LeonKennedy\EstrategiaGulosa.cs" />
         <Compile Include="LeonKennedy\EstrategiaWays.cs" />
+        <Compile Include="Model\DinoNoTabuleiro.cs" />
+        <Compile Include="Model\DinossauroVisual.cs" />
         <Compile Include="Model\InformacoesTurno.cs" />
         <Compile Include="Model\Jogador.cs" />
         <Compile Include="Model\Oponente.cs" />
         <Compile Include="Model\Partida.cs" />
         <Compile Include="Model\PartidaInfo.cs" />
         <Compile Include="Model\Tabuleiro.cs" />
+        <Compile Include="Model\TabuleiroLayout.cs" />
         <Compile Include="Properties\Resources.Designer.cs">
             <AutoGen>True</AutoGen>
             <DesignTime>True</DesignTime>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <Compile Include="Services\BotService.cs" />
         <Compile Include="Services\ConfigTela.cs" />
+        <Compile Include="Services\ConversorDinos.cs" />
         <Compile Include="Services\DraftService.cs" />
         <Compile Include="Services\Helper.cs" />
         <Compile Include="Services\MouseInput.cs" />
+        <Compile Include="Services\ProvedorDeImagens.cs" />
         <Compile Include="Services\Validator.cs" />
         <Compile Include="Telas\Jogadores.cs">
           <SubType>Form</SubType>

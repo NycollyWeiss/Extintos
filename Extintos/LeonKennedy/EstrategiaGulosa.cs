@@ -151,12 +151,12 @@ namespace Extintos.Interfaces
                     cercado.Dinossauros ??
                     new List<Dinossauro>();
                 
-                var qtd = dinos.Count;
+                var qtdDinos = dinos.Count;
 
                 switch (cercado.Cercados)
                 {
                     case Cercados.FI:
-                        pontos += ScoreFlorestaIgualdade(qtd);
+                        pontos += ScoreFlorestaIgualdade(qtdDinos);
                         break;
 
                     case Cercados.CD:
@@ -165,36 +165,39 @@ namespace Extintos.Interfaces
                         break;
 
                     case Cercados.MT:
-                        if (qtd == 3)
+                        if (qtdDinos == 3)
                             pontos += 7;
                         break;
 
                     case Cercados.PA:
-                        pontos += qtd / 2 * 5;
+                        pontos += qtdDinos / 2 * 5;
                         break;
 
                     case Cercados.RI:
-                        pontos += qtd;
+                        pontos += qtdDinos;
                         break;
 
                     case Cercados.RS:
-                        if (qtd == 1 && info.NumeroTurno >= 11)
+                        if (qtdDinos == 1 && info.NumeroTurno >= 11)
                             pontos += 7;
                       
                         break;
 
                     case Cercados.IS:
-                        if (qtd == 1)
+                        if (qtdDinos == 1)
                         {
                             var dinoIlha = dinos[0];
 
-                            var unico = !info.CercadosJogador
-                                .Where(x => x.Cercados != Cercados.IS)
-                                .SelectMany(x => x.Dinossauros ?? new List<Dinossauro>())
-                                .Any(d => d == dinoIlha);
+                            var especieEhUnica = info.CercadosJogador
+                                .SelectMany(c =>
+                                    c.Dinossauros ?? new List<Dinossauro>())
+                                .Count(d => d == dinoIlha) == 1;
 
-                            if (unico && IlhaSolitariaPontua(info.NumeroTurno))
+                            if (especieEhUnica &&
+                                IlhaSolitariaPontua(info.NumeroTurno))
+                            {
                                 pontos += 7;
+                            }
                         }
 
                         break;
@@ -220,12 +223,12 @@ namespace Extintos.Interfaces
                 if (cercado.Cercados == alvo)
                     dinos.Add(novoDino);
 
-                var qtd = dinos.Count;
+                var qtdDinos = dinos.Count;
 
                 switch (cercado.Cercados)
                 {
                     case Cercados.FI:
-                        pontos += ScoreFlorestaIgualdade(qtd);
+                        pontos += ScoreFlorestaIgualdade(qtdDinos);
                         break;
 
                     case Cercados.CD:
@@ -234,20 +237,20 @@ namespace Extintos.Interfaces
                         break;
 
                     case Cercados.MT:
-                        if (qtd == 3)
+                        if (qtdDinos == 3)
                             pontos += 7;
                         break;
 
                     case Cercados.PA:
-                        pontos += qtd / 2 * 5;
+                        pontos += qtdDinos / 2 * 5;
                         break;
 
                     case Cercados.RI:
-                        pontos += qtd;
+                        pontos += qtdDinos;
                         break;
 
                     case Cercados.RS:
-                        if (qtd == 1 && info.NumeroTurno >= 11)
+                        if (qtdDinos == 1 && info.NumeroTurno >= 11)
                             pontos += 7;
                         else
                         {
@@ -256,7 +259,7 @@ namespace Extintos.Interfaces
                         break;
 
                     case Cercados.IS:
-                        if (qtd == 1)
+                        if (qtdDinos == 1)
                         {
                             var apareceEmOutro =
                                 info.CercadosJogador
@@ -279,9 +282,9 @@ namespace Extintos.Interfaces
         }
 
         public int ScoreFlorestaIgualdade(
-            int qtd)
+            int qtdDinos)
         {
-            return qtd switch
+            return qtdDinos switch
             {
                 1 => 2,
                 2 => 4,
@@ -294,9 +297,9 @@ namespace Extintos.Interfaces
         }
 
         public int ScoreCampinaDiferenca(
-            int qtd)
+            int qtdDinos)
         {
-            return qtd switch
+            return qtdDinos switch
             {
                 1 => 1,
                 2 => 3,

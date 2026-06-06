@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Extintos.Enumeration;
+using Extintos.Auxiliares;
 
 #region Attribute para Metadados dos Cercados
 

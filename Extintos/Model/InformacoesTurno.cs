@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using Draft;
 using Extintos.Model;
-using Extintos.Util;
+using Extintos.Services;
+using Extintos.Auxiliares;
 
 namespace Extintos.Enumeration
 {
@@ -12,14 +13,13 @@ namespace Extintos.Enumeration
         {
             try
             {
-                var estado = Partida.VerificaPartida(idPartida); // atribuir resposabilidade pro draftserver
-                StatusPartida = estado.statusPartida;
-                StatusTurno = estado.statusTurno;
-                DadoAtual = (Dado)Enum.Parse(typeof(Dado), estado.faceDado); //criar funçao de parse de tipos
-                JogueioDado = estado.idJogador == idJogador;
-                NumeroTurno = estado.numeroTurno;
-                var raw = Jogo.ExibirMao(idJogador, senhaJogador); // atribuir resposabilidade pro draftserver
-                MaoJogador = ParserMao.Parse(raw);
+                var estado = PartidasInfo.PartidaInfo.Obter(idPartida); // atribuir resposabilidade pro draftserver
+                StatusPartida = estado.StatusPartida;
+                StatusTurno = estado.StatusTurno;
+                DadoAtual = estado.FaceDadoAtual;
+                JogueioDado = estado.IdJogadorDaVez == idJogador;
+                NumeroTurno = estado.TurnoAtual;
+                MaoJogador = DraftService.ObterMao(idJogador, senhaJogador);
                 CercadosJogador = jogador.meusCercados;
                 IdJogadorQueRolouDado = idJogador;
             }
@@ -42,6 +42,7 @@ namespace Extintos.Enumeration
         public char StatusTurno { get; set; }
 
         public int IdJogadorQueRolouDado { get; set; }
+        public int QuantidadeJogadores { get; set; }
 
         public static InformacoesTurno CriarOffline(
             List<AuxDinossauro> mao,

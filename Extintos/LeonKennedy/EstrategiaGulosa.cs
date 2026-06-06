@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Extintos.Auxiliares;
 using Extintos.Enumeration;
 using Extintos.LeonKennedy;
+using Extintos.Model;
 
-namespace Extintos.Model
+namespace Extintos.Interfaces
 {
     internal class EstrategiaGulosa : IEstategia
     {
@@ -40,7 +42,7 @@ namespace Extintos.Model
 
                 foreach (Cercados cercado in Enum.GetValues(typeof(Cercados)))
                 {
-                    if (!EstrategiaValidator.JogadaValidator(
+                    if (!Validator.JogadaValidator(
                             info,
                             cercado,
                             dino))
@@ -71,6 +73,21 @@ namespace Extintos.Model
             Dinossauro dino,
             Cercados cercado)
         {
+
+            if (cercado == Cercados.RS)
+            {
+                bool podeVirarRei =
+                    Tabuleiro.DinoViraReiDaSelva(
+                        info,
+                        dino,
+                        info.QuantidadeJogadores);
+
+                if (!podeVirarRei)
+                {
+                    return -100;
+                }
+            }
+
             var ganhoPontuacao =
                 ComidinhaDoGuloso(info, dino, cercado);
 
@@ -91,7 +108,7 @@ namespace Extintos.Model
                    potencial;
         }
 
-        private int ComidinhaDoGuloso(
+        public int ComidinhaDoGuloso(
             InformacoesTurno info,
             Dinossauro dino,
             Cercados cercado)
@@ -101,18 +118,18 @@ namespace Extintos.Model
 
             return depois - antes;
         }
-
-        private int PontuacaoTotal(
+//validar a quatidade nos cercados dos oponetes, precisa do tabuleiro universal
+        public int PontuacaoTotal(
             InformacoesTurno info)
         {
             var pontos = 0;
-
+            
             foreach (var cercado in info.CercadosJogador)
             {
                 var dinos =
                     cercado.Dinossauros ??
                     new List<Dinossauro>();
-
+                
                 var qtd = dinos.Count;
 
                 switch (cercado.Cercados)
@@ -140,8 +157,9 @@ namespace Extintos.Model
                         break;
 
                     case Cercados.RS:
-                        if (qtd == 1)
+                        if (qtd == 1 && info.NumeroTurno >= 11)
                             pontos += 7;
+                      
                         break;
 
                     case Cercados.IS:
@@ -168,7 +186,7 @@ namespace Extintos.Model
             return pontos;
         }
 
-        private int PontuacaoSimulada(
+        public int PontuacaoSimulada(
             InformacoesTurno info,
             Cercados alvo,
             Dinossauro novoDino)
@@ -211,8 +229,12 @@ namespace Extintos.Model
                         break;
 
                     case Cercados.RS:
-                        if (qtd == 1)
+                        if (qtd == 1 && info.NumeroTurno >= 11)
                             pontos += 7;
+                        else
+                        {
+                            pontos += 0;
+                        }
                         break;
 
                     case Cercados.IS:
@@ -229,6 +251,7 @@ namespace Extintos.Model
                             if (!apareceEmOutro)
                                 pontos += 7;
                         }
+                        
 
                         break;
                 }
@@ -237,7 +260,7 @@ namespace Extintos.Model
             return pontos;
         }
 
-        private int ScoreFlorestaIgualdade(
+        public int ScoreFlorestaIgualdade(
             int qtd)
         {
             return qtd switch
@@ -252,7 +275,7 @@ namespace Extintos.Model
             };
         }
 
-        private int ScoreCampinaDiferenca(
+        public int ScoreCampinaDiferenca(
             int qtd)
         {
             return qtd switch
@@ -267,7 +290,7 @@ namespace Extintos.Model
             };
         }
 
-        private (Dinossauro, Cercados)?
+      public (Dinossauro, Cercados)?
             ObterPrimeiraJogadaValida(
                 InformacoesTurno info)
         {
@@ -277,7 +300,7 @@ namespace Extintos.Model
                     continue;
 
                 foreach (Cercados cercado in Enum.GetValues(typeof(Cercados)))
-                    if (EstrategiaValidator.JogadaValidator(
+                    if (Validator.JogadaValidator(
                             info,
                             cercado,
                             item.Dinossauro))

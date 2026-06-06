@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Extintos.Enumeration;
+using Extintos.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Extintos.Enumeration;
-using Extintos.Model;
+using Extintos.Auxiliares;
+using Extintos.Interfaces;
 
 namespace Extintos.LeonKennedy
 {
@@ -17,6 +19,8 @@ namespace Extintos.LeonKennedy
             log("========================================");
 
             for (var i = 0; i < 50; i++)
+                
+                
             {
                 var info = CriarEstadoFake();
                 var estrategia = new EstrategiaGulosa();
@@ -66,10 +70,20 @@ namespace Extintos.LeonKennedy
             return lista;
         }
 
-        
+
+        /*private static List<Dado> GerarDado()
+          {
+              var lista = new List<DadoFace>();
+              var dado = Enum.GetValues(typeof(Dado)).Cast<Dado>();
+
+              foreach (var da in dado) lista.Add(new DadoFace(dado.ToString);
+                  return lista;
+
+          }
+  */
 
 
-          private static List<AuxCercado> GerarCercados()
+        private static List<AuxCercado> GerarCercados()
         {
             var lista = new List<AuxCercado>();
             var dinos = Enum.GetValues(typeof(Dinossauro)).Cast<Dinossauro>().ToList();
@@ -148,8 +162,8 @@ namespace Extintos.LeonKennedy
             }
         }
 
-       
-        
+
+
 
         private static int CalcularGanho(InformacoesTurno info, Dinossauro dino, Cercados cercado)
         {
@@ -163,23 +177,33 @@ namespace Extintos.LeonKennedy
             var melhor = int.MinValue;
 
             foreach (var item in info.MaoJogador.Where(x => x.QuantidadeDinossauros > 0))
-            foreach (var c in CercadosExtension.CercadosLista())
-            {
-                var atual = info.CercadosJogador.FirstOrDefault(x => x.Cercados == c);
-                var lista = atual?.Dinossauros ?? new List<Dinossauro>();
+                foreach (var c in CercadosExtension.CercadosLista())
+                {
+                    var atual = info.CercadosJogador.FirstOrDefault(x => x.Cercados == c);
+                    var lista = atual?.Dinossauros ?? new List<Dinossauro>();
 
-                if (!c.SePodeColocarNoCercado(lista, item.Dinossauro))
-                    continue;
+                    if (!c.SePodeColocarNoCercado(lista, item.Dinossauro))
+                        continue;
 
-                var ganho = CalcularGanho(info, item.Dinossauro, c);
+                    var ganho = CalcularGanho(info, item.Dinossauro, c);
 
-                if (ganho > melhor)
-                    melhor = ganho;
-            }
+                    if (ganho > melhor)
+                        melhor = ganho;
+                }
 
             return melhor;
         }
 
+        #region Configuração de Regra do Ilha Solitária
+
+        private const int TurnoMinimoPontuarIlhaSolitaria = 10;
+
+        private static bool IlhaSolitariaPontua(int turnoAtual)
+        {
+            return turnoAtual >= TurnoMinimoPontuarIlhaSolitaria;
+        }
+
+        #endregion
 
         private static int Pontuacao(InformacoesTurno info)
         {
@@ -205,7 +229,13 @@ namespace Extintos.LeonKennedy
                     case Cercados.CD:
                         pts += dinos.Distinct().Count() switch
                         {
-                            1 => 1, 2 => 3, 3 => 6, 4 => 10, 5 => 15, 6 => 21, _ => 0
+                            1 => 1,
+                            2 => 3,
+                            3 => 6,
+                            4 => 10,
+                            5 => 15,
+                            6 => 21,
+                            _ => 0
                         };
                         if (dinos.Contains(dinoTrex))
                         {
@@ -233,11 +263,15 @@ namespace Extintos.LeonKennedy
                     case Cercados.IS:
                         if (qtd == 1)
                         {
-                            var unico = !info.CercadosJogador
-                                .SelectMany(x => x.Dinossauros ?? new List<Dinossauro>())
-                                .Any(d => d == dinos[0]);
+                            var dinoIlha = dinos[0];
 
-                            if (unico) pts += 7;
+                            var unico = !info.CercadosJogador
+                                .Where(x => x.Cercados != Cercados.IS)
+                                .SelectMany(x => x.Dinossauros ?? new List<Dinossauro>())
+                                .Any(d => d == dinoIlha);
+
+                            if (unico && IlhaSolitariaPontua(info.NumeroTurno))
+                                pts += 7;
                         }
 
                         break;
@@ -258,12 +292,13 @@ namespace Extintos.LeonKennedy
             var alvoC = clone.First(c => c.Cercados == alvo);
             alvoC.Dinossauros.Add(dino);
 
-            return Pontuacao(new InformacoesTurno { CercadosJogador = clone });
+            return Pontuacao(new InformacoesTurno { CercadosJogador = clone, NumeroTurno = info.NumeroTurno });
         }
     }
- 
 
-    
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Tipos de bot disponíveis na simulação
+    // ─────────────────────────────────────────────────────────────────────────
     public enum TipoBot
     {
         Guloso,
@@ -283,6 +318,8 @@ namespace Extintos.LeonKennedy
 
         private static readonly Random rng = new();
 
+
+
         public JogadorSimulado(string nome, TipoBot tipo)
         {
             Nome = nome;
@@ -299,37 +336,40 @@ namespace Extintos.LeonKennedy
         }
 
         // Calcula e armazena pontuação atual
-        public int CalcularPontuacao()
+        public int CalcularPontuacao(int turnoAtual)
         {
-            PontuacaoTotal = PontuacaoHelper.Calcular(Cercados);
+            PontuacaoTotal = PontuacaoHelper.Calcular(Cercados, turnoAtual);
             return PontuacaoTotal;
         }
 
         // ── Decisão de jogada ───────────────────────────────────────────
         public (Dinossauro dino, Cercados cercado)? Jogar(
-            int turno,
-            Dado dado,
-            Action<string> log,
-            out List<OpcaoAvaliada> todasOpcoes)
+    int turnoAtual,
+    Dado dado,
+    Action<string> log,
+    out List<OpcaoAvaliada> todasOpcoes)
         {
             todasOpcoes = new List<OpcaoAvaliada>();
 
-            // Monta todas as jogadas válidas com seu ganho
-            foreach (var item in Mao.Where(x => x.QuantidadeDinossauros > 0))
+            foreach (var itemMao in Mao.Where(x => x.QuantidadeDinossauros > 0))
             {
                 foreach (var cercado in CercadosExtension.CercadosLista())
                 {
-                    var atual = Cercados.FirstOrDefault(c => c.Cercados == cercado);
-                    var lista = atual?.Dinossauros ?? new List<Dinossauro>();
+                    var cercadoAtual = Cercados.FirstOrDefault(x => x.Cercados == cercado);
+                    var dinosNoCercado = cercadoAtual?.Dinossauros ?? new List<Dinossauro>();
 
-                    if (!cercado.SePodeColocarNoCercado(lista, item.Dinossauro))
+                    if (!cercado.SePodeColocarNoCercado(dinosNoCercado, itemMao.Dinossauro))
                         continue;
 
-                    var ganho = PontuacaoHelper.GanhoSimulado(Cercados, item.Dinossauro, cercado);
+                    var ganho = PontuacaoHelper.GanhoSimulado(
+                        Cercados,
+                        itemMao.Dinossauro,
+                        cercado,
+                        turnoAtual);
 
                     todasOpcoes.Add(new OpcaoAvaliada
                     {
-                        Dino = item.Dinossauro,
+                        Dino = itemMao.Dinossauro,
                         Cercado = cercado,
                         Ganho = ganho
                     });
@@ -339,17 +379,16 @@ namespace Extintos.LeonKennedy
             if (!todasOpcoes.Any())
                 return null;
 
-            // Ordena para log: melhor primeiro
-            todasOpcoes = todasOpcoes.OrderByDescending(o => o.Ganho).ToList();
+            todasOpcoes = todasOpcoes
+                .OrderByDescending(x => x.Ganho)
+                .ToList();
 
-            (Dinossauro dino, Cercados cercado)? escolha = Tipo switch
+            return Tipo switch
             {
                 TipoBot.Guloso => EscolherGuloso(todasOpcoes),
                 TipoBot.Aleatorio => EscolherAleatorio(todasOpcoes),
                 _ => EscolherAleatorio(todasOpcoes)
             };
-
-            return escolha;
         }
 
         private static (Dinossauro, Cercados) EscolherGuloso(List<OpcaoAvaliada> opcoes)
@@ -399,72 +438,87 @@ namespace Extintos.LeonKennedy
     // ─────────────────────────────────────────────────────────────────────────
     public static class PontuacaoHelper
     {
-        public static int Calcular(List<AuxCercado> cercados)
+        private const int TurnoMinimoPontuarIlhaSolitaria = 10;
+
+        public static int Calcular(List<AuxCercado> cercados, int turnoAtual)
         {
-            var pts = 0;
+            var pontos = 0;
 
-            foreach (var c in cercados)
+            foreach (var cercado in cercados)
             {
-                var dinos = c.Dinossauros ?? new List<Dinossauro>();
-                var qtd = dinos.Count;
+                var dinos = cercado.Dinossauros ?? new List<Dinossauro>();
+                var quantidadeDinos = dinos.Count;
 
-                switch (c.Cercados)
+                switch (cercado.Cercados)
                 {
                     case Cercados.FI:
-                        pts += qtd switch { 1 => 2, 2 => 4, 3 => 8, 4 => 12, 5 => 18, 6 => 24, _ => 0 };
+                        pontos += quantidadeDinos switch { 1 => 2, 2 => 4, 3 => 8, 4 => 12, 5 => 18, 6 => 24, _ => 0 };
                         break;
 
                     case Cercados.CD:
-                        pts += dinos.Distinct().Count() switch
-                        { 1 => 1, 2 => 3, 3 => 6, 4 => 10, 5 => 15, 6 => 21, _ => 0 };
+                        pontos += dinos.Distinct().Count() switch { 1 => 1, 2 => 3, 3 => 6, 4 => 10, 5 => 15, 6 => 21, _ => 0 };
                         break;
 
                     case Cercados.MT:
-                        if (qtd == 3) pts += 7;
+                        if (quantidadeDinos == 3)
+                            pontos += 7;
                         break;
 
                     case Cercados.PA:
-                        pts += qtd / 2 * 5;
+                        pontos += quantidadeDinos / 2 * 5;
                         break;
 
                     case Cercados.RI:
-                        pts += qtd;
+                        pontos += quantidadeDinos;
                         break;
 
                     case Cercados.RS:
-                        if (qtd == 1) pts += 7;
+                        if (quantidadeDinos == 1)
+                            pontos += 7;
                         break;
-                    case Cercados.IS:
-                        if (qtd == 1)
-                        {
-                            
-                            var unico = cercados
-                                .SelectMany(x => x.Dinossauros ?? new List<Dinossauro>())
-                                .Count(d => d == dinos[0]) > 1;
 
-                            if (unico) pts += 7;
+                    case Cercados.IS:
+                        if (quantidadeDinos == 1 &&
+                            turnoAtual >= TurnoMinimoPontuarIlhaSolitaria &&
+                            DinossauroDaIlhaEhUnico(cercados, dinos[0]))
+                        {
+                            pontos += 7;
                         }
                         break;
                 }
             }
 
-            return pts;
+            return pontos;
         }
 
-        public static int GanhoSimulado(List<AuxCercado> cercados, Dinossauro dino, Cercados alvo)
+        public static int GanhoSimulado(
+            List<AuxCercado> cercados,
+            Dinossauro dino,
+            Cercados cercadoAlvo,
+            int turnoAtual)
         {
-            var antes = Calcular(cercados);
+            var pontosAntes = Calcular(cercados, turnoAtual);
 
             var clone = cercados
                 .Select(c => new AuxCercado(c.Cercados)
                 {
                     Dinossauros = c.Dinossauros?.ToList() ?? new List<Dinossauro>()
-                }).ToList();
+                })
+                .ToList();
 
-            clone.First(c => c.Cercados == alvo).Dinossauros.Add(dino);
+            clone.First(c => c.Cercados == cercadoAlvo).Dinossauros.Add(dino);
 
-            var depois = Calcular(clone);
-            return depois - antes;
+            var pontosDepois = Calcular(clone, turnoAtual);
+
+            return pontosDepois - pontosAntes;
+        }
+
+        private static bool DinossauroDaIlhaEhUnico(List<AuxCercado> cercados, Dinossauro dinoIlha)
+        {
+            return !cercados
+                .Where(c => c.Cercados != Cercados.IS)
+                .SelectMany(c => c.Dinossauros ?? new List<Dinossauro>())
+                .Any(d => d == dinoIlha);
         }
     }
 
@@ -475,7 +529,7 @@ namespace Extintos.LeonKennedy
     {
         private static readonly Random rng = new();
 
-     
+
         public static void ExecutarPartida(int qtdJogadores, Action<string> log)
         {
             if (qtdJogadores < 2 || qtdJogadores > 4)
@@ -487,7 +541,7 @@ namespace Extintos.LeonKennedy
             log($"╚══════════════════════════════════════════════════════╝");
             log("");
 
-           
+
             var jogadores = CriarJogadores(qtdJogadores);
 
             log("Jogadores nesta partida:");
@@ -495,25 +549,24 @@ namespace Extintos.LeonKennedy
                 log($"   {j.Nome} [{j.Tipo}]");
             log("");
 
-         
-            var baralho = CriarBaralho(0);
+
+            var baralho = CriarSaco(qtdJogadores);
             log($" Saco criado: {baralho.Count} dinossauros, sorteando...");
             log("");
 
-       
+
             const int maoSize = 6;
             DistribuirMaos(jogadores, baralho, maoSize, log);
+            const int qtdMaxTurnos = 12;
+            var info = new InformacoesTurno { NumeroTurno = 0 };
 
-          
-            const int maxTurno = 30;
-            var rodada = 0;
 
-            while (rodada < maxTurno)
+            while (info.NumeroTurno < qtdMaxTurnos)
             {
-                rodada++;
+                info.NumeroTurno++;
 
                 log($"┌─────────────────────────────────────────────────────");
-                log($"│  RODADA {rodada}");                                  
+                log($"│  RODADA {info.NumeroTurno}");
                 log($"└─────────────────────────────────────────────────────");
 
                 var algumJogou = false;
@@ -526,7 +579,7 @@ namespace Extintos.LeonKennedy
                     log($"\n  ▶ Turno de {jogador.Nome} ({jogador.Tipo})  |  Dado: {dado}");
                     LogMao(jogador, log);
 
-                    var jogada = jogador.Jogar(rodada, dado, log, out var opcoes);
+                    var jogada = jogador.Jogar(info.NumeroTurno, dado, log, out var opcoes);
 
                     LogOpcoes(opcoes, jogada, log);
 
@@ -536,25 +589,25 @@ namespace Extintos.LeonKennedy
                         continue;
                     }
 
-                
+
                     jogador.RemoverDaMao(jogada.Value.dino);
                     jogador.AdicionarAoCercado(jogada.Value.dino, jogada.Value.cercado);
 
                     log($"  Jogada: [{jogada.Value.dino}] → cercado [{jogada.Value.cercado}]");
-                    log($"  Pontuação de {jogador.Nome}: {jogador.CalcularPontuacao()} pts");
+                    log($"  Pontuação de {jogador.Nome}: {jogador.CalcularPontuacao(info.NumeroTurno)} pts");
 
                     algumJogou = true;
                 }
 
                 PassarMaos(jogadores, log);
 
-              
+
                 ReabastecerMaos(jogadores, baralho, maoSize, log);
 
                 log("");
                 LogPlacar(jogadores, log);
 
-       
+
                 if (!algumJogou && baralho.Count == 0)
                 {
                     log("\n🏁 Nenhum jogador tem mais jogadas possíveis. Fim de partida!");
@@ -565,7 +618,7 @@ namespace Extintos.LeonKennedy
             LogResultadoFinal(jogadores, log);
         }
 
-      
+
 
         public static void ExecutarPartida2Jogadores(Action<string> log) =>
             ExecutarPartida(2, log);
@@ -576,10 +629,10 @@ namespace Extintos.LeonKennedy
         public static void ExecutarPartida4Jogadores(Action<string> log) =>
             ExecutarPartida(4, log);
 
-      
+
         private static List<JogadorSimulado> CriarJogadores(int qtd)
         {
-         
+
             var tiposOponentes = new[] { TipoBot.Aleatorio, TipoBot.Guloso, TipoBot.Aleatorio };
             var jogadores = new List<JogadorSimulado>();
 
@@ -587,8 +640,8 @@ namespace Extintos.LeonKennedy
             {
                 var tipo = i == 0 ? TipoBot.Guloso : tiposOponentes[i - 1];
                 var emoji = tipo == TipoBot.Guloso ? "🧠" : "🎲";
-        
-                
+
+
                 string nomeJogador = i == 0 ? $"{emoji} Leon Kennedy" : $"{emoji} Jogador {i + 1}";
 
                 jogadores.Add(new JogadorSimulado(nomeJogador, tipo));
@@ -602,24 +655,32 @@ namespace Extintos.LeonKennedy
         /// Baralho: todas as combinações de Dinossauro * quantidade típica.
         /// Ajuste os multiplicadores conforme as regras reais do jogo.
         /// </summary>
-        /// <param name="jogadores"></param>
-        private static List<Dinossauro> CriarBaralho(int jogadores)
+        private static List<Dinossauro> CriarSaco(int qtdJogadores)
         {
             var baralho = new List<Dinossauro>();
             var dinos = Enum.GetValues(typeof(Dinossauro)).Cast<Dinossauro>().ToList();
 
-            switch (jogadores)
+            switch (qtdJogadores)
             {
                 case 2:
-                    for (var i = 0; i < 4; i++)
-                    baralho.Add(d);
+                    foreach (var d in dinos)
+                        for (var i = 0; i < 4; i++)
+                            baralho.Add(d);
                     break;
-                case 3: 
-                
-            }
-               
 
-            // Embaralha (Fisher-Yates)
+                case 3:
+                    foreach (var d in dinos)
+                        for (var i = 0; i < 6; i++)
+                            baralho.Add(d);
+                    break;
+
+                case 4:
+                    foreach (var d in dinos)
+                        for (var i = 0; i < 8; i++)
+                            baralho.Add(d);
+                    break;
+            }
+
             for (var i = baralho.Count - 1; i > 0; i--)
             {
                 var j = rng.Next(i + 1);
@@ -628,7 +689,6 @@ namespace Extintos.LeonKennedy
 
             return baralho;
         }
-
         private static void DistribuirMaos(
             List<JogadorSimulado> jogadores,
             List<Dinossauro> baralho,
@@ -667,12 +727,12 @@ namespace Extintos.LeonKennedy
             return valores[rng.Next(valores.Length)];
         }
 
-     
+
         private static void PassarMaos(List<JogadorSimulado> jogadores, Action<string> log)
         {
             if (jogadores.Count < 2) return;
 
-            log("\n  Passando mãos...");
+            log("\nPassando mãos...");
 
             // Guarda mão do último para dar ao primeiro
             var maoTemp = jogadores[jogadores.Count - 1].Mao;
@@ -691,7 +751,7 @@ namespace Extintos.LeonKennedy
             }
         }
 
-      
+
         private static void ReabastecerMaos(
             List<JogadorSimulado> jogadores,
             List<Dinossauro> baralho,
@@ -724,7 +784,7 @@ namespace Extintos.LeonKennedy
             }
         }
 
-     
+
         private static void LogMao(JogadorSimulado j, Action<string> log)
         {
             var itens = j.Mao.Where(x => x.QuantidadeDinossauros > 0).ToList();
@@ -764,7 +824,7 @@ namespace Extintos.LeonKennedy
                 log($"     [{i + 1:D2}] {o.Dino,-14} → {o.Cercado,-5}  ganho: {ganhoStr,4} pts {marcador}");
             }
 
-          
+
             var melhorGanho = opcoes.First().Ganho;
             var ganhoEscolhido = escolhida.HasValue
                 ? opcoes.First(o => o.Dino == escolhida.Value.dino && o.Cercado == escolhida.Value.cercado).Ganho
@@ -831,7 +891,7 @@ namespace Extintos.LeonKennedy
         }
     }
 
-   
+
     public static class TestRunnerPartidas
     {
         public static void ExecutarTodos(Action<string> log)

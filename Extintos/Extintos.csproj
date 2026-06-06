@@ -1,216 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{3104DDC3-9F79-4206-BE8D-1AF30AF39E15}</ProjectGuid>
-        <OutputType>WinExe</OutputType>
-        <RootNamespace>Extintos</RootNamespace>
-        <AssemblyName>Extintos</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
-        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-        <Deterministic>true</Deterministic>
-        <LangVersion>9</LangVersion>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="DraftServer">
-            <HintPath>.\DraftServer.dll</HintPath>
-        </Reference>
-        <Reference Include="System">
-            <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
-        </Reference>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Messaging"/>
-        <Reference Include="System.Xml.Linq"/>
-        <Reference Include="System.Data.DataSetExtensions"/>
-        <Reference Include="Microsoft.CSharp"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Deployment"/>
-        <Reference Include="System.Drawing"/>
-        <Reference Include="System.Net.Http"/>
-        <Reference Include="System.Windows.Forms"/>
-        <Reference Include="System.Xml"/>
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="DinossauroVisual.cs"/>
-        <Compile Include="Enumeration\AuxCercado.cs"/>
-        <Compile Include="Enumeration\AuxDinossauro.cs"/>
-        <Compile Include="Enumeration\Cercado.cs"/>
-        <Compile Include="Enumeration\Dado.cs"/>
-        <Compile Include="Enumeration\Dinossauros.cs"/>
-        <Compile Include="Enumeration\ResultadoDecisao.cs"/>
-        <Compile Include="Enumeration\ResultadoEstrategia.cs"/>
-        <Compile Include="Forms\Form1.cs"/>
-        <Compile Include="Forms\Form1.Designer.cs"/>
-        <Compile Include="Forms\FormDraftosaurus.cs"/>
-        <Compile Include="Forms\FormDraftosaurus.Designer.cs"/>
-        <Compile Include="LeonKennedy\EstrategiaAnalizador.cs"/>
-        <Compile Include="LeonKennedy\EstrategiaGulosa.cs"/>
-        <Compile Include="LeonKennedy\EstrategiaValidator.cs"/>
-        <Compile Include="LeonKennedy\IEstrategia.cs"/>
-        <Compile Include="LeonKennedy\ResultadoTeste.cs">
-            <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="LeonKennedy\ResultadoTeste.Designer.cs">
-            <DependentUpon>ResultadoTeste.cs</DependentUpon>
-        </Compile>
-        <Compile Include="LeonKennedy\TestesOffline.cs"/>
-        <Compile Include="Model\InformacoesTurno.cs"/>
-        <Compile Include="Model\Jogador.cs"/>
-        <Compile Include="Model\Partida.cs"/>
-        <Compile Include="Model\PartidaInfo.cs"/>
-        <Compile Include="Properties\Resources.Designer.cs">
-            <AutoGen>True</AutoGen>
-            <DesignTime>True</DesignTime>
-            <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
-        <Compile Include="Util\Config.cs"/>
-        <Compile Include="Forms\FormLobby.cs">
-            <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="Forms\FormLobby.Designer.cs">
-            <DependentUpon>FormLobby.cs</DependentUpon>
-        </Compile>
-        <Compile Include="Util\ConfigEstategia.cs"/>
-        <Compile Include="Util\DraftService.cs"/>
-        <Compile Include="Util\Forms.cs"/>
-        <Compile Include="Forms\FormJogadores.cs">
-            <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="Forms\FormJogadores.Designer.cs">
-            <DependentUpon>FormJogadores.cs</DependentUpon>
-        </Compile>
-        <Compile Include="Program.cs"/>
-        <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="Util\MouseInput.cs"/>
-        <Compile Include="Util\RandomHelper.cs"/>
-        <EmbeddedResource Include="Forms\Form1.resx"/>
-        <EmbeddedResource Include="Forms\FormDraftosaurus.resx"/>
-        <EmbeddedResource Include="Forms\FormJogadores.resx">
-            <DependentUpon>FormJogadores.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="Forms\FormLobby.resx">
-            <DependentUpon>FormLobby.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="Properties\Resources.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <SubType>Designer</SubType>
-            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
-        <None Include="Properties\Settings.settings">
-            <Generator>SettingsSingleFileGenerator</Generator>
-            <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-        </None>
-        <Compile Include="Properties\Settings.Designer.cs">
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Settings.settings</DependentUpon>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        </Compile>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="App.config"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\TabuleiroDrafto.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Braquiossauro.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Espinossauro.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Estegossauro.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Parasaurolofo.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Tiranossauro.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Triceratops.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Capa_Extintos.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\FundoGeral.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Dado_Alimentacao.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Dado_Banheiro.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Dado_CercadoVazio.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Dado_Floresta.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Dado_Pradaria.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Dado_ReiSelva.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\Mesa.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\MaoAberta.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\MaoFechada.png"/>
-    </ItemGroup>
-    <ItemGroup>
-        <Content Include="bin\Debug\DraftServer.xml"/>
-        <Content Include="bin\Debug\frank_ocean_-_american_wedding__tradução_legenda___iG94xNaNAXw__1_.wav"/>
-        <Content Include="bin\Debug\Resources\leon.jpg"/>
-        <Content Include="bin\Debug\Resources\leonCoelinho.jpg"/>
-        <Content Include="bin\Debug\Resources\leonSemCamisa.jpg"/>
-        <Content Include="Resources\leon.jpg">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Resources\leonCoelinho.jpg">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Resources\leonSemCamisa.jpg">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-    <ItemGroup>
-        <COMReference Include="MediaPlayer">
-            <Guid>{22D6F304-B0F6-11D0-94AB-0080C74C7E95}</Guid>
-            <VersionMajor>1</VersionMajor>
-            <VersionMinor>0</VersionMinor>
-            <Lcid>0</Lcid>
-            <WrapperTool>tlbimp</WrapperTool>
-            <Isolated>False</Isolated>
-            <EmbedInteropTypes>True</EmbedInteropTypes>
-        </COMReference>
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3104DDC3-9F79-4206-BE8D-1AF30AF39E15}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Extintos</RootNamespace>
+    <AssemblyName>Extintos</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DraftServer">
+      <HintPath>.\DraftServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Auxiliares\AuxCercado.cs" />
+    <Compile Include="Auxiliares\AuxDinossauro.cs" />
+    <Compile Include="DinossauroVisual.cs" />
+    <Compile Include="Enumeration\Cercado.cs" />
+    <Compile Include="Enumeration\Dado.cs" />
+    <Compile Include="Enumeration\Dinossauros.cs" />
+    <Compile Include="Interfaces\IEstrategia.cs" />
+    <Compile Include="Interfaces\ResultadoDecisao.cs" />
+    <Compile Include="Interfaces\ResultadoEstrategia.cs" />
+    <Compile Include="LeonKennedy\ConfigEstrategia.cs" />
+    <Compile Include="LeonKennedy\EstrategiaAnalizador.cs" />
+    <Compile Include="LeonKennedy\EstrategiaGulosa.cs" />
+    <Compile Include="LeonKennedy\EstrategiaWays.cs" />
+    <Compile Include="Model\InformacoesTurno.cs" />
+    <Compile Include="Model\Jogador.cs" />
+    <Compile Include="Model\Oponente.cs" />
+    <Compile Include="Model\Partida.cs" />
+    <Compile Include="Model\PartidaInfo.cs" />
+    <Compile Include="Model\Tabuleiro.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ConfigTela.cs" />
+    <Compile Include="Services\DraftService.cs" />
+    <Compile Include="Services\Helper.cs" />
+    <Compile Include="Services\MouseInput.cs" />
+    <Compile Include="Services\Validator.cs" />
+    <Compile Include="Telas\Jogadores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\Jogadores.Designer.cs">
+      <DependentUpon>Jogadores.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Telas\Lobby.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\Lobby.Designer.cs">
+      <DependentUpon>Lobby.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Telas\TelaInicial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\TelaInicial.Designer.cs" />
+    <Compile Include="Telas\TelaPartida.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\TelaPartida.Designer.cs" />
+    <Compile Include="Testes\Debbug.cs" />
+    <Compile Include="Testes\EstrategiaTeste.cs" />
+    <Compile Include="Testes\PartidaTeste.cs" />
+    <Compile Include="Testes\ResultadoTeste.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Testes\ResultadoTeste.Designer.cs">
+      <DependentUpon>ResultadoTeste.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Testes\TestesOffline.cs" />
+    <Compile Include="Testes\TestesOnline.cs" />
+    <Compile Include="Util\Forms.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\Jogadores.resx">
+      <DependentUpon>Jogadores.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\Lobby.resx">
+      <DependentUpon>Lobby.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\TelaInicial.resx" />
+    <EmbeddedResource Include="Telas\TelaPartida.resx" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TabuleiroDrafto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Braquiossauro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Espinossauro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Estegossauro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Parasaurolofo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Tiranossauro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Triceratops.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Capa_Extintos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FundoGeral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dado_Alimentacao.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dado_Banheiro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dado_CercadoVazio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dado_Floresta.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dado_Pradaria.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dado_ReiSelva.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mesa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MaoAberta.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MaoFechada.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\DraftServer.xml" />
+    <Content Include="bin\Debug\frank_ocean_-_american_wedding__tradução_legenda___iG94xNaNAXw__1_.wav" />
+    <Content Include="bin\Debug\Resources\leon.jpg" />
+    <Content Include="bin\Debug\Resources\leonCoelinho.jpg" />
+    <Content Include="bin\Debug\Resources\leonSemCamisa.jpg" />
+    <Content Include="Resources\leon.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\leonCoelinho.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\leonSemCamisa.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MediaPlayer">
+      <Guid>{22D6F304-B0F6-11D0-94AB-0080C74C7E95}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using Extintos.Enumeration;
+﻿using Extintos.Enumeration;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Extintos.LeonKennedy
 {
@@ -49,9 +50,17 @@ namespace Extintos.LeonKennedy
                     break;
 
                 case Cercados.IS:
+                    var especieEhUnica = !info.CercadosJogador
+                        .SelectMany(c =>
+                            c.Dinossauros ?? new List<Dinossauro>())
+                        .Any(d => d == dino);
 
-                    if (qtdAtual == 0)
-                        bonus += 35;
+                    if (qtdAtual == 0 &&
+                        info.NumeroTurno >= 10 &&
+                        especieEhUnica)
+                    {
+                        bonus += 8;
+                    }
 
                     break;
 

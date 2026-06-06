@@ -74,8 +74,6 @@ namespace Extintos
         {
             return ListarJogadores(idPartida).Count;
         }
-
-
         public static Partida BuscaPeloId(char Status, int IdPartida)
         {
             var partidas = ListarPartidas(Status);

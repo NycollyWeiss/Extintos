@@ -107,16 +107,10 @@ namespace Extintos.Telas
                         }
                     }
 
-                    var consolidado = DinossaurosNoUniverso
-                        .GroupBy(x => x.Dinossauro)
-                        .Select(g =>
-                            new AuxDinossauro(
-                                g.Key,
-                                g.Sum(x => x.QuantidadeDinossauros)))
-                        .ToList();
+                     AuxUniverso.ConsolidarDino(DinossaurosNoUniverso);
 
-                    DinossaurosNoUniverso.Clear();
-                    DinossaurosNoUniverso.AddRange(consolidado);
+                    //DinossaurosNoUniverso.Clear();
+                   // DinossaurosNoUniverso.AddRange(consolidado);
 
                     _ultimoTurnoProcessado = turnoAtual;
                    

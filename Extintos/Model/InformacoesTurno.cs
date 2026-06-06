@@ -22,6 +22,9 @@ namespace Extintos.Enumeration
                 MaoJogador = DraftService.ObterMao(idJogador, senhaJogador);
                 CercadosJogador = jogador.meusCercados;
                 IdJogadorQueRolouDado = idJogador;
+                QuantidadeJogadores = Partida.QuantidadeJogadores(idPartida);
+                IdPartida = idPartida;
+                MeuId = idJogador;
             }
             catch (Exception ex)
             {
@@ -43,6 +46,8 @@ namespace Extintos.Enumeration
 
         public int IdJogadorQueRolouDado { get; set; }
         public int QuantidadeJogadores { get; set; }
+        public int IdPartida { get; set; }
+        public int MeuId { get; set; }
 
         public static InformacoesTurno CriarOffline(
             List<AuxDinossauro> mao,

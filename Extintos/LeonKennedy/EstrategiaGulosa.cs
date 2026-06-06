@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Extintos.Auxiliares;
 using Extintos.Enumeration;
 using Extintos.LeonKennedy;
 using Extintos.Model;
@@ -72,6 +73,21 @@ namespace Extintos.Interfaces
             Dinossauro dino,
             Cercados cercado)
         {
+
+            if (cercado == Cercados.RS)
+            {
+                bool podeVirarRei =
+                    Tabuleiro.DinoViraReiDaSelva(
+                        info,
+                        dino,
+                        info.QuantidadeJogadores);
+
+                if (!podeVirarRei)
+                {
+                    return -100;
+                }
+            }
+
             var ganhoPontuacao =
                 ComidinhaDoGuloso(info, dino, cercado);
 

@@ -42,6 +42,7 @@ namespace Extintos.Enumeration
         public char StatusTurno { get; set; }
 
         public int IdJogadorQueRolouDado { get; set; }
+        public int QuantidadeJogadores { get; set; }
 
         public static InformacoesTurno CriarOffline(
             List<AuxDinossauro> mao,

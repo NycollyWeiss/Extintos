@@ -71,31 +71,31 @@ namespace Extintos.Telas
 
                 if (_ultimoTurnoJogado == turnoAtual)
                 {
-                    Console.WriteLine($"Já joguei no turno {turnoAtual}");
+                    Console.WriteLine($"Já joguei no turno {turnoAtual}.");
                     return;
                 }
-
                 if (_ultimoTurnoProcessado != turnoAtual)
                 {
-                    if (turnoAtual == 1)
-                    {
-                        DinossaurosNoUniverso.Clear();
-                        DinossaurosNoUniverso.AddRange(decisoes.MaoJogador);
-                    }
-                    else if (turnoAtual == 2 ||
-                             turnoAtual == 7 ||
-                             turnoAtual == 8)
+                    var quantidadeJogadores = nomesJogadores.Count;
+
+                    if ((turnoAtual <= quantidadeJogadores)||(turnoAtual > 6 && turnoAtual <= 6 + quantidadeJogadores))
                     {
                         DinossaurosNoUniverso.AddRange(decisoes.MaoJogador);
                     }
-                    else if (turnoAtual == 3 ||
-                             turnoAtual == 9)
-                    {
+
+                    if ((turnoAtual <= quantidadeJogadores + 1) || (turnoAtual > 6 && turnoAtual <= 7 + quantidadeJogadores)) { 
                         try
                         {
-                            var turnos = DraftService.ObterTurnos(_dadosJogador.idPartida, 2);
+                            var retornoTurnoAnterior =
+                                Jogo.VerificarTurno(
+                                    _dadosJogador.idPartida,
+                                    turnoAtual - 1);
 
-                            var dinosOponente = DadosOponete.ParserDinosOponente(turnos, _dadosJogador.IdJogador);
+                            var dinosOponente =
+                                DadosOponete.ParserDinosOponente(
+                                    retornoTurnoAnterior,
+                                    _dadosJogador.IdJogador);
+
 
                             DinossaurosNoUniverso.AddRange(
                                 dinosOponente);
@@ -119,6 +119,7 @@ namespace Extintos.Telas
                     DinossaurosNoUniverso.AddRange(consolidado);
 
                     _ultimoTurnoProcessado = turnoAtual;
+                   
                 }
 
                 Console.WriteLine($"Jogador: {_dadosJogador.IdJogador}");

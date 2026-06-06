@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Extintos.Auxiliares;
+﻿using Extintos.Auxiliares;
 using Extintos.Enumeration;
 using Extintos.LeonKennedy;
 using Extintos.Model;
+using Extintos.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Extintos.Interfaces
 {
@@ -73,6 +74,16 @@ namespace Extintos.Interfaces
             Dinossauro dino,
             Cercados cercado)
         {
+
+            if (cercado == Cercados.FI && PodeColocarFlorestaIgualdade(info, dino))
+            {
+                return 100;
+            }
+            if (cercado == Cercados.FI && !PodeColocarFlorestaIgualdade(info, dino))
+            {
+                return int.MinValue;
+            }
+
 
             if (cercado == Cercados.RS)
             {
@@ -317,6 +328,23 @@ namespace Extintos.Interfaces
             }
 
             return null;
+        }
+
+        public static bool PodeColocarFlorestaIgualdade(InformacoesTurno info, Dinossauro especie)
+        {
+            var florestaIgualdade = info.CercadosJogador
+                .FirstOrDefault(x => x.Cercados == Cercados.FI);
+
+            // Já tem dino la
+            if (florestaIgualdade != null &&
+                florestaIgualdade.Dinossauros.Any())
+                return true;
+
+            var jogadas = Oponente.ObterJogadasOponentesAteTurno(info.IdPartida, info.MeuId, info.NumeroTurno - 1);
+
+            return !jogadas.Any(d =>d.Dinossauro == especie &&
+                (d.Cercado == Cercados.FI ||
+                 d.Cercado == Cercados.RS));
         }
     }
 }

@@ -119,6 +119,16 @@ namespace Extintos.Interfaces
             return depois - antes;
         }
 //validar a quatidade nos cercados dos oponetes, precisa do tabuleiro universal
+        #region Configuração de Regra do Ilha Solitária
+
+        private const int TurnoMinimoPontuarIlhaSolitaria = 10;
+
+        private static bool IlhaSolitariaPontua(int turnoAtual)
+        {
+            return turnoAtual >= TurnoMinimoPontuarIlhaSolitaria;
+        }
+
+        #endregion
         public int PontuacaoTotal(
             InformacoesTurno info)
         {
@@ -165,17 +175,14 @@ namespace Extintos.Interfaces
                     case Cercados.IS:
                         if (qtd == 1)
                         {
-                            var unico = dinos[0];
+                            var dinoIlha = dinos[0];
 
-                            var apareceEmOutro =
-                                info.CercadosJogador
-                                    .Where(c => c.Cercados != Cercados.IS)
-                                    .SelectMany(c =>
-                                        c.Dinossauros ??
-                                        new List<Dinossauro>())
-                                    .Any(d => d == unico);
+                            var unico = !info.CercadosJogador
+                                .Where(x => x.Cercados != Cercados.IS)
+                                .SelectMany(x => x.Dinossauros ?? new List<Dinossauro>())
+                                .Any(d => d == dinoIlha);
 
-                            if (!apareceEmOutro)
+                            if (unico && IlhaSolitariaPontua(info.NumeroTurno))
                                 pontos += 7;
                         }
 

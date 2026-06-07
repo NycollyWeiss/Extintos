@@ -11,18 +11,20 @@ using Extintos.Auxiliares;
 [AttributeUsage(AttributeTargets.Field)]
 internal sealed class CercadosInfo : Attribute
 {
-    public CercadosInfo(string nome, string restricao, string pontuacao, string codigo)
-    {
-        Nome = nome ?? throw new ArgumentNullException(nameof(nome));
-        Restricao = restricao ?? string.Empty;
-        Pontuacao = pontuacao ?? string.Empty;
-        Codigo = codigo ?? throw new ArgumentNullException(nameof(codigo));
-    }
-
     public string Nome { get; }
     public string Restricao { get; }
     public string Pontuacao { get; }
     public string Codigo { get; }
+    
+    public CercadosInfo(string nome, string restricao, string pontuacao, string codigo)
+    {
+        Nome = nome;
+        Restricao = restricao;
+        Pontuacao = pontuacao;
+        Codigo = codigo;
+    }
+
+   
 }
 
 #endregion
@@ -82,19 +84,7 @@ internal static class CercadosExtension
     {
         return cercado.PegaInfo()?.Nome ?? cercado.ToString();
     }
-
-
-    public static string PegaRestricao(this Cercados cercado)
-    {
-        return cercado.PegaInfo()?.Restricao ?? string.Empty;
-    }
-
-
-    public static string PegaPontuacao(this Cercados cercado)
-    {
-        return cercado.PegaInfo()?.Pontuacao ?? string.Empty;
-    }
-
+    
 
     public static string PegaCodigo(this Cercados cercado)
     {
@@ -117,7 +107,6 @@ internal static class CercadosExtension
     public static bool SePodeColocarNoCercado(this Cercados cercado, List<Dinossauro> dinosNoCercado,
         Dinossauro novoDino)
     {
-        if (novoDino == default) return false;
         var dinosCodigos = dinosNoCercado?.Select(d => d.PegaCodigo()).ToList() ?? new List<string>();
         var quantosTemNoCercado = dinosCodigos.Count;
         var novo = novoDino.PegaCodigo();

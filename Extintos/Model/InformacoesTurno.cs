@@ -40,7 +40,6 @@ namespace Extintos.Enumeration
         public bool JogueioDado { get; set; }
         public char StatusPartida { get; set; }
         public char StatusTurno { get; set; }
-
         public int IdJogadorQueRolouDado { get; set; }
 
         public static InformacoesTurno CriarOffline(

@@ -117,7 +117,7 @@ internal static class CercadosExtension
     public static bool SePodeColocarNoCercado(this Cercados cercado, List<Dinossauro> dinosNoCercado,
         Dinossauro novoDino)
     {
-        if (novoDino == default) return false;
+        if (!Enum.IsDefined(typeof(Dinossauro), novoDino)) return false;
         var dinosCodigos = dinosNoCercado?.Select(d => d.PegaCodigo()).ToList() ?? new List<string>();
         var quantosTemNoCercado = dinosCodigos.Count;
         var novo = novoDino.PegaCodigo();

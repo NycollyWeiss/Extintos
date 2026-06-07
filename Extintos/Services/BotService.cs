@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Draft;
 using Extintos.Auxiliares;
 using Extintos.Enumeration;
 using Extintos.Interfaces;
@@ -11,37 +10,46 @@ using Extintos.Model;
 
 namespace Extintos.Services
 {
-    // responsável por toda a lógica de decisão e execução de turno do bot
+    // responsável por toda a lógica de decisão e execução de turno do bot.
     public class BotService
     {
+        // dependências
         private readonly Jogador _jogador;
         private readonly IEstategia _estrategia;
-        
+
+        // estado interno
         private int _ultimoTurnoProcessado = -1;
         private int _ultimoTurnoJogado = -1;
-        
+
         public int TurnoAtual { get; private set; } = 1;
-        
         public List<AuxDinossauro> DinossaurosNoUniverso { get; } = new();
-        
+
+        // Evento para a UI
+        // Disparado após uma jogada ser confirmada pelo servidor.
+        // A UI assina isso para executar a animação visual (ExecutarMovimentoVisual).
         public event Func<string, string, Task> JogadaConfirmada;
-        
+
+        //  construtor
         public BotService(Jogador jogador, IEstategia estrategia)
         {
             _jogador = jogador;
             _estrategia = estrategia;
         }
 
+        // API pública
         public async Task ExecutarTurnoAsync(CancellationToken token)
         {
             try
             {
                 token.ThrowIfCancellationRequested();
 
-                if (!ValidarDadosJogador()) return;
+                if (_jogador == null || _jogador.idPartida <= 0 || string.IsNullOrWhiteSpace(_jogador.Senha))
+                {
+                    Console.WriteLine("Jogador nulo ou partida/senha inválida.");
+                    return;
+                }
 
                 var decisoes = new InformacoesTurno(_jogador.IdJogador, _jogador.idPartida, _jogador.Senha, _jogador);
-
                 TurnoAtual = decisoes.NumeroTurno;
 
                 Console.WriteLine();
@@ -58,7 +66,12 @@ namespace Extintos.Services
                 AtualizarUniversoDinos(decisoes);
                 LogarEstadoTurno(decisoes);
 
-                if (!ValidarMaoECercados(decisoes)) return;
+                if (decisoes.MaoJogador == null || decisoes.MaoJogador.Count == 0 || 
+                    decisoes.CercadosJogador == null || decisoes.CercadosJogador.Count == 0)
+                {
+                    Console.WriteLine("Mão vazia ou nenhum cercado carregado.");
+                    return;
+                }
 
                 var jogada = _estrategia.Avaliar(decisoes);
                 if (!jogada.HasValue)
@@ -77,9 +90,7 @@ namespace Extintos.Services
 
                 Console.WriteLine($"Enviando: {codigoDino} -> {codigoCercado}");
 
-                var proximoTurno = await DraftService.JogarAsync(_jogador.IdJogador, _jogador.Senha, codigoDino, 
-                    codigoCercado, token);
-
+                var proximoTurno = await DraftService.JogarAsync(_jogador.IdJogador, _jogador.Senha, codigoDino, codigoCercado, token);
                 Console.WriteLine($"Servidor retornou: {proximoTurno}");
 
                 if (proximoTurno == decisoes.NumeroTurno)
@@ -90,13 +101,13 @@ namespace Extintos.Services
 
                 Console.WriteLine("Jogada confirmada.");
 
+                // atualiza o Model localmente
                 _jogador.ColocarDinossauro(escolha.dino, escolha.cercado);
                 _ultimoTurnoJogado = decisoes.NumeroTurno;
-                
                 if (JogadaConfirmada != null)
                     await JogadaConfirmada.Invoke(codigoDino, codigoCercado);
-
                 JaJogueiNesseTurno(decisoes.NumeroTurno);
+                await VerificarHistoricoAsync(); // só roda após jogada confirmada
             }
             catch (OperationCanceledException)
             {
@@ -107,10 +118,6 @@ namespace Extintos.Services
                 Console.WriteLine($"ERRO COMPLETO: {ex}");
                 Console.WriteLine($"STACK: {ex.StackTrace}");
             }
-            finally
-            {
-                await VerificarHistoricoAsync();
-            }
         }
 
         public bool JaJogueiNesseTurno(int turnoAtual)
@@ -119,56 +126,17 @@ namespace Extintos.Services
             if (string.IsNullOrWhiteSpace(historico)) return false;
 
             var achouTurno = historico.IndexOf($"Turno {turnoAtual}", StringComparison.OrdinalIgnoreCase) >= 0;
-            var achouJogador = historico.IndexOf(_jogador.IdJogador.ToString(), 
-                StringComparison.OrdinalIgnoreCase) >= 0;
+            var achouJogador = historico.IndexOf(_jogador.IdJogador.ToString(), StringComparison.OrdinalIgnoreCase) >= 0;
 
             if (achouTurno && achouJogador)
             {
                 Console.WriteLine($"Já joguei neste turno (histórico): Turno {turnoAtual}");
                 return true;
             }
-
             return false;
         }
 
-        public async Task<bool> AguardarAtualizacaoHistoricoAsync(
-            int turno, int idJogador, int tentativas = 5, int delayMs = 1500)
-        {
-            for (var i = 0; i < tentativas; i++)
-            {
-                await Task.Delay(delayMs);
-                var historicoBruto = DraftService.ObterHistoricoBruto(_jogador.idPartida);
-                Console.WriteLine($"🔍 Verificando histórico ({i + 1}/{tentativas})...");
-
-                if (historicoBruto.Contains($"Turno {turno}") &&
-                    historicoBruto.Contains(idJogador.ToString()))
-                {
-                    Console.WriteLine("Histórico atualizado com sucesso!");
-                    return true;
-                }
-            }
-
-            Console.WriteLine("⚠ Histórico não refletiu após todas as tentativas.");
-            return false;
-        }
-
-        private bool ValidarDadosJogador()
-        {
-            if (_jogador == null)
-            {
-                Console.WriteLine("Jogador nulo.");
-                return false;
-            }
-
-            if (_jogador.idPartida <= 0 || string.IsNullOrWhiteSpace(_jogador.Senha))
-            {
-                Console.WriteLine("Partida ou senha inválida.");
-                return false;
-            }
-
-            return true;
-        }
-
+        // privados
         private void AtualizarUniversoDinos(InformacoesTurno decisoes)
         {
             if (_ultimoTurnoProcessado == TurnoAtual) return;
@@ -207,23 +175,6 @@ namespace Extintos.Services
             _ultimoTurnoProcessado = TurnoAtual;
         }
 
-        private bool ValidarMaoECercados(InformacoesTurno decisoes)
-        {
-            if (decisoes.MaoJogador == null || decisoes.MaoJogador.Count == 0)
-            {
-                Console.WriteLine("Mão vazia.");
-                return false;
-            }
-
-            if (decisoes.CercadosJogador == null || decisoes.CercadosJogador.Count == 0)
-            {
-                Console.WriteLine("Nenhum cercado carregado.");
-                return false;
-            }
-
-            return true;
-        }
-
         private void LogarEstadoTurno(InformacoesTurno decisoes)
         {
             Console.WriteLine($"Jogador: {_jogador.IdJogador}");
@@ -245,9 +196,7 @@ namespace Extintos.Services
             {
                 await Task.Delay(2000);
                 var historico = DraftService.ObterHistoricoBruto(_jogador.idPartida);
-                Console.WriteLine(
-                    "Histórico atualizado? " +
-                    historico.Contains(_jogador.IdJogador.ToString()));
+                Console.WriteLine("Histórico atualizado? " + historico.Contains(_jogador.IdJogador.ToString()));
             }
             catch
             {

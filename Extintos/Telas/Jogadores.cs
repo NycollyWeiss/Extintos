@@ -10,8 +10,7 @@ namespace Extintos.Telas
 {
     public partial class Jogadores : Form
     {
-        private readonly Jogador dadosJogador; //*******
-
+        private readonly Jogador _dadosJogador;
         public Jogadores()
         {
             InitializeComponent();
@@ -31,30 +30,30 @@ namespace Extintos.Telas
 
         internal Jogadores(Jogador dadosJogador) : this() //Construtor com parâmetro 
         {
-            this.dadosJogador = dadosJogador;
+            this._dadosJogador = dadosJogador;
             lblSenhaGeradaa.Text = dadosJogador.Senha;
         }
 
 
         private void bntListaJogadores_Click(object sender, EventArgs e)
         {
-            dgvJogadores.DataSource = Partida.ListarJogadores(dadosJogador.idPartida);
+            dgvJogadores.DataSource = Partida.ListarJogadores(_dadosJogador.idPartida);
         }
 
 
         private void bntEntrar_Click(object sender, EventArgs e)
         {
-            //teste do GPT pra arrumar essa bosta de botão
-            var form = new TelaPartida("", dadosJogador);
+            //teste do GPT pra arrumar essa droga de botão
+            var form = new TelaPartida(_dadosJogador);            
             form.Show();
             Hide();
 
             Task.Run(() =>
             {
                 var retorno = Partida.IniciarPartida(
-                    dadosJogador.IdJogador,
-                    dadosJogador.Senha,
-                    dadosJogador.idPartida
+                    _dadosJogador.IdJogador,
+                    _dadosJogador.Senha,
+                    _dadosJogador.idPartida
                 );
             });
 

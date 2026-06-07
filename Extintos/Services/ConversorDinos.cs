@@ -5,7 +5,7 @@ namespace Extintos.Services
     {
         public static string ConverterParaCodigo(string tipo)
         {
-            var t = tipo.ToUpper();
+            var t = tipo.ToUpperInvariant();
             if (t.Contains("TIRANOSSAURO") || t == "TI") return "Ti";
             if (t.Contains("BRAQUIOSSAURO") || t == "BR") return "Br";
             if (t.Contains("ESTEGOSSAURO")  || t == "ET") return "Et";

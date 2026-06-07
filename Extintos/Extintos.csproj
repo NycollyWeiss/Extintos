@@ -61,6 +61,7 @@
         <Compile Include="Interfaces\IEstrategia.cs" />
         <Compile Include="Interfaces\ResultadoDecisao.cs" />
         <Compile Include="Interfaces\ResultadoEstrategia.cs" />
+        <Compile Include="Layout\TabuleiroLayout.cs" />
         <Compile Include="LeonKennedy\ConfigEstrategia.cs" />
         <Compile Include="LeonKennedy\EstrategiaAnalizador.cs" />
         <Compile Include="LeonKennedy\EstrategiaGulosa.cs" />
@@ -73,7 +74,6 @@
         <Compile Include="Model\Partida.cs" />
         <Compile Include="Model\PartidaInfo.cs" />
         <Compile Include="Model\Tabuleiro.cs" />
-        <Compile Include="Model\TabuleiroLayout.cs" />
         <Compile Include="Properties\Resources.Designer.cs">
             <AutoGen>True</AutoGen>
             <DesignTime>True</DesignTime>
@@ -83,6 +83,7 @@
         <Compile Include="Services\ConfigTela.cs" />
         <Compile Include="Services\ConversorDinos.cs" />
         <Compile Include="Services\DraftService.cs" />
+        <Compile Include="Services\FabricaDinosService.cs" />
         <Compile Include="Services\Helper.cs" />
         <Compile Include="Services\MouseInput.cs" />
         <Compile Include="Services\ProvedorDeImagens.cs" />

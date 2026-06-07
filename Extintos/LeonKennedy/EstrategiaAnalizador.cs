@@ -3,8 +3,6 @@ using Extintos.Enumeration;
 
 namespace Extintos.LeonKennedy
 {
-    
-
     public class EstrategiaAnalizador
     {
         public static int BonusJogada(InformacoesTurno info, Cercados cercado, Dinossauro dino)

@@ -2,7 +2,7 @@
 
 namespace Extintos
 {
-    internal class DinossauroVisual
+    public class DinossauroVisual
     {
         public int altura;
         public Rectangle area;

@@ -70,7 +70,10 @@ namespace Extintos
             return listaJogadores;
         }
 
-
+        public static int QuantidadeJogadores(int idPartida)
+        {
+            return ListarJogadores(idPartida).Count;
+        }
         public static Partida BuscaPeloId(char Status, int IdPartida)
         {
             var partidas = ListarPartidas(Status);

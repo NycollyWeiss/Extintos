@@ -270,8 +270,8 @@ namespace Extintos.Services
                 if (p.Length >= 3
                     && int.TryParse(p[0].Trim(), out var idJogador)
                     && idJogador != meuId
-                    && Enum.TryParse<Dinossauro>(p[1].Trim(), true, out var dino)
-                    && Enum.TryParse<Cercados>(p[2].Trim(), true, out var cercado)) 
+                    && Enum.TryParse<Cercados>(p[1].Trim(), true, out var cercado)
+                    && Enum.TryParse<Dinossauro>(p[2].Trim(), true, out var dino)) 
                 {
 
                     list.Add(new AuxJogadaOponente(idJogador, dino, cercado, turnoSelecionado));

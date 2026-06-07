@@ -19,7 +19,6 @@ namespace Extintos.Auxiliares
                         g.Sum(x => x.QuantidadeDinossauros)))
                 .ToList();
 
-
             dinosPraConsolidar.Clear();
             dinosPraConsolidar.AddRange(consolidado);
         }

@@ -1,6 +1,7 @@
 using Draft;
 using Extintos.Auxiliares;
 using Extintos.Services;
+using System;
 using System.Collections.Generic;
 
 namespace Extintos.Model
@@ -28,14 +29,25 @@ namespace Extintos.Model
         //consulta detalhadamente as jogadas realizadas pelos oponentes ate n turno
         public static List<AuxJogadaOponente> ObterJogadasOponentesAteTurno( int idPartida, int meuId, int turnoSelecionado)
         {
+            Console.WriteLine(
+         $"Entrou em ObterJogadasOponentesAteTurno. Turno selecionado = {turnoSelecionado}");
+
             var resultado = new List<AuxJogadaOponente>();
 
             for (int turno = 1; turno <= turnoSelecionado; turno++)
             {
                 var retorno = Jogo.VerificarTurno(idPartida, turno);
 
+
+                Console.WriteLine("================================");
+                Console.WriteLine($"Turno consultado: {turno}");
+                Console.WriteLine(retorno);
+
                 resultado.AddRange(DadosOponete.ParserJogadaOponente(retorno, meuId, turno));
             }
+
+            Console.WriteLine(
+        $"Total de jogadas encontradas: {resultado.Count}");
 
             return resultado;
         }

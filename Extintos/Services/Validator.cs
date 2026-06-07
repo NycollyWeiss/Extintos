@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using Extintos.Auxiliares;
 using Extintos.Enumeration;
-using Extintos.Auxiliares;
+using System;
+using System.Linq;
 
 namespace Extintos.Model
 {
@@ -11,6 +12,8 @@ namespace Extintos.Model
             Cercados cercado,
             Dinossauro dino)
         {
+            Console.WriteLine($"Testando {dino} em {cercado}");
+
             if (info == null)
                 return false;
 
@@ -24,10 +27,17 @@ namespace Extintos.Model
                 .FirstOrDefault(x => x.Cercados == cercado);
 
             if (cercadoAtual == null)
+            {
+                Console.WriteLine("Falhou: cercadoAtual null");
                 return false;
+            }
 
             if (!ValidarDado(info, cercado, cercadoAtual))
+            {
+                Console.WriteLine("Falhou: ValidarDado");
+
                 return false;
+            }
 
             return cercado.SePodeColocarNoCercado(
                 cercadoAtual.Dinossauros,

@@ -24,9 +24,9 @@ namespace Extintos.Enumeration
     {
         //comentário repetido a seguir usado somente para retirar o aviso automático do rider
 
-        [DinossauroInfo("(BR) Braquiossauro", "Roxo", "BR")]
+        [DinossauroInfo("(TR) Tricerátops", "Amarelo", "TR")]
         // ReSharper disable once InconsistentNaming
-        BR,
+        TR,
 
         [DinossauroInfo("(EP) Espinossauro", "Laranja", "EP")]
         // ReSharper disable once InconsistentNaming
@@ -44,9 +44,9 @@ namespace Extintos.Enumeration
         // ReSharper disable once InconsistentNaming
         TI,
 
-        [DinossauroInfo("(TR) Tricerátops", "Amarelo", "TR")]
+        [DinossauroInfo("(BR) Braquiossauro", "Roxo", "BR")]
         // ReSharper disable once InconsistentNaming
-        TR
+        BR
     }
 
 

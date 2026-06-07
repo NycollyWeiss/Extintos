@@ -343,6 +343,7 @@ namespace Extintos.Interfaces
                 florestaIgualdade.Dinossauros.Any())
                 return true;
 
+            
             var jogadas = Oponente.ObterJogadasOponentesAteTurno(info.IdPartida, info.MeuId, info.NumeroTurno - 1);
 
             return !jogadas.Any(d =>d.Dinossauro == especie &&

@@ -47,28 +47,7 @@ namespace Extintos
             return listaPartidas;
         }
 
-        public static List<Jogador> ListarJogadores(int Id)
-        {
-            var retorno = Jogo.ListarJogadores(Id);
-            if ("".Equals(retorno)) return new List<Jogador>();
-
-            retorno = retorno.Replace("\r", "");
-            retorno = retorno.Substring(0, retorno.Length - 1);
-            var retornoJogadores = retorno.Split('\n');
-            var listaJogadores = new List<Jogador>();
-            for (var i = 0; i < retornoJogadores.Length; i++)
-            {
-                var jogador = retornoJogadores[i];
-                var dados = jogador.Split(',');
-                var j = new Jogador();
-                j.IdJogador = Convert.ToInt32(dados[0]);
-                j.NomeJogador = dados[1];
-                j.Pontuacao = Convert.ToInt32(dados[2]);
-                listaJogadores.Add(j);
-            }
-
-            return listaJogadores;
-        }
+       
 
         public static int QuantidadeJogadores(int idPartida)
         {

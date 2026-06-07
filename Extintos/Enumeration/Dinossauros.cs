@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Extintos.Enumeration
@@ -22,30 +24,30 @@ namespace Extintos.Enumeration
 
     public enum Dinossauro
     {
-        //comentário repetido a seguir usado somente para retirar o aviso automático do rider
+        
 
         [DinossauroInfo("(BR) Braquiossauro", "Roxo", "BR")]
-        // ReSharper disable once InconsistentNaming
+    
         BR,
 
         [DinossauroInfo("(EP) Espinossauro", "Laranja", "EP")]
-        // ReSharper disable once InconsistentNaming
+       
         EP,
 
         [DinossauroInfo("(ET) Estegossauro", "Azul", "ET")]
-        // ReSharper disable once InconsistentNaming
+        
         ET,
 
         [DinossauroInfo("(PA) Parasaurolófo", "Verde", "PA")]
-        // ReSharper disable once InconsistentNaming
+    
         PA,
 
         [DinossauroInfo("(TI) Tiranossauro", "Vermelho", "TI")]
-        // ReSharper disable once InconsistentNaming
+      
         TI,
 
         [DinossauroInfo("(TR) Tricerátops", "Amarelo", "TR")]
-        // ReSharper disable once InconsistentNaming
+      
         TR
     }
 
@@ -65,6 +67,13 @@ namespace Extintos.Enumeration
         public static string PegaCodigo(this Dinossauro dino)
         {
             return dino.GetInfo()?.Codigo;
+        }
+
+        public static List<Dinossauro> EspeciesExistentes ()
+        {
+            return Enum.GetValues(typeof(Dinossauro))
+                .Cast<Dinossauro>()
+                .ToList();
         }
     }
 }

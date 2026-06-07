@@ -12,7 +12,7 @@ using Extintos.Auxiliares;
 using Extintos.Model;
 
 namespace Extintos.Services
-{
+{ //arrumar os metodos, validar oq faz sentido ficar nas outras claases
     public class DraftService
     {
         public static List<AuxDinossauro> ObterMao(int idJogador, string senhaJogador)
@@ -30,8 +30,8 @@ namespace Extintos.Services
         {
             return Jogo.CriarPartida(nomePartida, senhaPartida, nomeGrupo);
         }
-        
-        public static string ListarJogadoresBruto(int idPartida)
+
+        public static string ListarJogadores(int idPartida)
         {
             return Jogo.ListarJogadores(idPartida);
         }
@@ -52,11 +52,6 @@ namespace Extintos.Services
         public static string ObterTurnos(int idPartida, int quantidade)
         {
             return Jogo.VerificarTurno(idPartida, quantidade);
-        }
-        
-        public static string Jogar(int idJogador, string senha, string codigoDino, string codigoCercado)
-        {
-            return Jogo.Jogar(idJogador, senha, codigoDino, codigoCercado);
         }
         
         public static async Task<T> ChamarSeguroAsync<T>(Func<T> metodoDll, CancellationToken token,
@@ -113,7 +108,7 @@ namespace Extintos.Services
             return new PartidasInfo.PartidaInfo(raw);
         }
         
-        public static async Task<List<AuxDinossauro>> ObterMaoAsync(int idJogador, string senha,
+        public static async Task<List<AuxDinossauro>> PegarMaoAsync(int idJogador, string senha,
             CancellationToken token)
         {
             var raw = await ChamarSeguroAsync(() => Jogo.ExibirMao(idJogador, senha), token, 2000);
@@ -133,15 +128,17 @@ namespace Extintos.Services
                 4000);
 
             Debug.WriteLine($"[JOGAR RETORNO] {retorno}");
-
-            var match = Regex.Match(retorno, @"\d+");
+            var match = Regex.Match(retorno, @"\d+"); //esse treco aqui é pra pegar um padrao dentro do 
+            //texto e retorna quando acha o primeiro, esse @\d+ é pra pegar um digito de 0-9 é 
+            //pra ter 100% de certeza que vai ter o retorno numerico,pra n dar aquele bug do carai 
+            //eu achei q era igual o Matcher do java por isso tava dando erro, foi mal :/
             if (match.Success && int.TryParse(match.Value, out var proximoTurno))
 
                 return proximoTurno;
+            
             if (string.IsNullOrWhiteSpace(retorno))
                 throw new Exception("Resposta vazia da DLL.");
-
-
+            
             if (retorno.IndexOf("não está em andamento", StringComparison.OrdinalIgnoreCase) >= 0)
                 throw new InvalidOperationException("Partida não iniciada ou já encerrada.");
 
@@ -155,18 +152,13 @@ namespace Extintos.Services
         }
 
 
-        public static async Task<List<JogadorInfo>> ObterJogadoresAsync(int idPartida, CancellationToken token)
+        public static async Task<List<Jogador>> PegaJogadoresAsync(int idPartida, CancellationToken token)
         {
-            // A DLL retorna List<Jogador> diretamente. Forçamos o tipo para o compilador entender.
-            var listaDll = await ChamarSeguroAsync(
-                () => Partida.ListarJogadores(idPartida), token, 3000);
 
-            return listaDll.Select(j => new JogadorInfo
-            {
-                Id = j.IdJogador,
-                Nome = j.NomeJogador ?? "Bot",
-                Pontuacao = j.Pontuacao
-            }).ToList();
+            var raw = await ChamarSeguroAsync(
+                () => ListarJogadores(idPartida), token, 3000);
+
+            return ParserJogadores.Parse(raw);
         }
 
 
@@ -181,28 +173,26 @@ namespace Extintos.Services
         }
     }
 
-    public class JogadorInfo
-    {
-        public int Id { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public int Pontuacao { get; set; }
-    }
 
     public static class ParserJogadores
     {
-        public static List<JogadorInfo> Parse(string raw)
-        {
-            var list = new List<JogadorInfo>();
-            foreach (var linha in raw.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            public static List<Jogador> Parse(string raw)
             {
-                var p = linha.Split(',');
-                if (p.Length >= 3 && int.TryParse(p[0], out var id) && int.TryParse(p[2], out var pts))
-                    list.Add(new JogadorInfo { Id = id, Nome = p[1], Pontuacao = pts });
-            }
+                var list = new List<Jogador>();
+                foreach (var linha in raw.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var p = linha.Split(',');
+            
+                    
+                    if (p.Length >= 3 && int.TryParse(p, out var id) && int.TryParse(p, out var pts))                    {
+                    
+                        list.Add(new Jogador { IdJogador = id, NomeJogador = p, Pontuacao = pts });
+                    }
+                }
 
-            return list;
+                return list;
+            }
         }
-    }
 
     public static class ParserMao
     {

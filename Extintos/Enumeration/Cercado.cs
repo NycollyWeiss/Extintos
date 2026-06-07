@@ -114,10 +114,11 @@ internal static class CercadosExtension
         return CercadosLista().Select(c => new AuxCercado(c)).ToList();
     }
 
+    //pode ser esse enum aqui 
     public static bool SePodeColocarNoCercado(this Cercados cercado, List<Dinossauro> dinosNoCercado,
         Dinossauro novoDino)
     {
-        if (novoDino == default) return false;
+        if (!Enum.IsDefined(typeof(Dinossauro), novoDino)) return false;
         var dinosCodigos = dinosNoCercado?.Select(d => d.PegaCodigo()).ToList() ?? new List<string>();
         var quantosTemNoCercado = dinosCodigos.Count;
         var novo = novoDino.PegaCodigo();
@@ -181,6 +182,43 @@ internal static class CercadosExtension
             Cercados.IS => quantidade == 1 ? 7 : 0,
             _ => 0
         };
+    }
+
+    public static bool SePodeColocarNoCercado(this Cercados cercado, bool dinosNoCercado)
+    {
+        if (!Enum.IsDefined(typeof(Dinossauro), novoDino)) return false;
+        var dinosCodigos = dinosNoCercado?.Select(d => d.PegaCodigo()).ToList() ?? new List<string>();
+        var quantosTemNoCercado = dinosCodigos.Count;
+        var novo = novoDino.PegaCodigo();
+        return cercado switch
+        {
+            Cercados.FI => PodeFlorestaIgualdade(dinosCodigos, novo),
+            Cercados.CD => PodeCampinaDaDiferenca(dinosCodigos, novo),
+            Cercados.IS => quantosTemNoCercado == 0,
+            Cercados.RS => quantosTemNoCercado == 0,
+            Cercados.MT => quantosTemNoCercado < 3,
+            Cercados.PA => quantosTemNoCercado <= 6,
+            Cercados.RI => true,
+            _ => false
+        };
+    }
+
+    public static bool SePodeColocarNoCercado(this Cercados cercado, AuxCercado cercadoEscolhido, Dinossauro novoDino)
+    {
+        int quantosDessaEspecieTemNoCercado;
+        
+        int quantidadeTotalNoCercado;
+        
+        var dinos = DinoExtension.EspeciesExistentes();
+
+        if (!dinos.Contains(novoDino)) return false;
+
+        quantosDessaEspecieTemNoCercado = cercadoEscolhido.Dinossauros.Count(dino => dino.Dino == novoDino);
+        
+        quantidadeTotalNoCercado = cercadoEscolhido.Dinossauros.Count;
+        
+        
+        return;
     }
 }
 

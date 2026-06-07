@@ -3,17 +3,15 @@ namespace Extintos.Auxiliares
 {
     public class AuxDinossauro
     {
+        
+        public Dinossauro Dino { get; }
+        public int QuantidadeDinossauros { get; set; }
+        
         public AuxDinossauro(Dinossauro dinossauro, int quantidadeDinossauros)
         {
-            Dinossauro = dinossauro;
+            Dino = dinossauro;
             QuantidadeDinossauros = quantidadeDinossauros;
         }
-
-        public AuxDinossauro()
-        {
-        }
-
-        public Dinossauro Dinossauro { get; set; }
-        public int QuantidadeDinossauros { get; set; }
+        
     }
 }

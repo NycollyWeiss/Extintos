@@ -30,8 +30,7 @@ namespace Extintos.Model
                 return false;
 
             return cercado.SePodeColocarNoCercado(
-                cercadoAtual.Dinossauros,
-                dino);
+                    cercadoAtual,dino);
         }
 
       

@@ -5,10 +5,27 @@ using System.Collections.Generic;
 
 namespace Extintos.Model
 {
-    public class Oponente
+    public class Oponente : Jogador
     {
+        
+//cercados preenchidos, id, pontuaçao atual, pontuaçao pontencial, dinos de preferencia(por cercado), quantidade de t-rex
+        public Oponente(
+            List<AuxCercado> meusCercados,
+            int idJogador,
+            string nomeJogador,
+            int pontuacao,
+            int idPartida,
+            Jogador jogadorQueVaiPassarMao,
+            Jogador jogadorQueVaiReceberSuaMao)
+            : base(meusCercados, idJogador, nomeJogador, pontuacao, idPartida, jogadorQueVaiPassarMao, jogadorQueVaiReceberSuaMao)
+        {
+        }
+//
 
-        //consulta o universo conhecido do oponente ate n turno
+
+        // public static int PontuacaoAtual();
+        
+
         public static List<AuxDinossauro> ObterDinosOponentesAteTurno(int idPartida, int meuId, int turnoSelecionado)
         {
             var resultado = new List<AuxDinossauro>();

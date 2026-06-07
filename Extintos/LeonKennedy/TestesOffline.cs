@@ -104,7 +104,7 @@ namespace Extintos.LeonKennedy
                 log($" - {c.Cercados}: {c.Dinossauros.Count}");
         }
 
-        private static void ValidarJogada(
+        private static void ValidarJogadaBRFudido(
             InformacoesTurno info,
             (Dinossauro dino, Cercados cercado) jogada,
             Action<string> log)

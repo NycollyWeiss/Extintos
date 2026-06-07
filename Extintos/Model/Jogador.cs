@@ -9,18 +9,14 @@ namespace Extintos.Model
 {
     public class Jogador
     {
-        public List<AuxCercado> _meusCercados;
-
+        public List<AuxCercado>? _meusCercados;
         public int IdJogador { get; set; }
-
-        public string NomeJogador { get; set; }
-
-        public string Senha { get; set; }
-
-        public int Pontuacao { get; set; }
-
-
-        public int idPartida { get; set; }
+        public string NomeJogador {get; set;}
+        public string Senha { get; set;}
+        public int Pontuacao { get; set;} 
+        public int IdPartida { get; set; }
+        public Jogador? JogadorQueVaiPassarMao  { get; set; }
+        public Jogador? JogadorQueVaiReceberSuaMao { get; set; }
 
         //carregador lazy, carrega uma lista inicial de cercados por causa do erro do caralho q eu n entendi ate agr
         public List<AuxCercado> meusCercados
@@ -29,6 +25,28 @@ namespace Extintos.Model
             set => _meusCercados = value;
         }
 
+        public Jogador (List<AuxCercado> meusCercados, int idJogador, string nomeJogador,
+            int pontuacao,
+            int idPartida,
+            Jogador jogadorQueVaiPassarMao,
+            Jogador jogadorQueVaiReceberSuaMao)
+        {
+            this._meusCercados = meusCercados;
+            this.IdJogador = idJogador;
+            this.NomeJogador = nomeJogador;
+            this.Pontuacao = pontuacao;
+            this.IdPartida = idPartida;
+            this.JogadorQueVaiPassarMao = jogadorQueVaiPassarMao;
+            this.JogadorQueVaiReceberSuaMao = jogadorQueVaiReceberSuaMao;
+        }
+
+        public Jogador()
+        {
+            
+        }
+        
+        
+        
         public static Jogador EntrarNaPartida(int idPartida, string nomeJogador, string senhaJogador)
         {
             var retornoEntrar = DraftService.EntrarPartida(idPartida, nomeJogador, senhaJogador);
@@ -65,14 +83,14 @@ namespace Extintos.Model
             jogador.Senha = dadosJogador[1];
             jogador.NomeJogador = nomeJogador;
             jogador.Pontuacao = 0;
-            jogador.idPartida = idPartida;
+            jogador.IdPartida = idPartida;
             jogador.meusCercados = CercadosExtension.CercadoAuxLista();
 
             return jogador;
         }
         public static string BuscaPeloId(int idJogador, int idPartida)
         {
-            var jogadores = Partida.ListarJogadores(idPartida);
+            var jogadores = DraftService.ListarJogadores(idPartida);
             var jogadorEncontrado = jogadores.Find(j => j.IdJogador == idJogador);
 
             if (jogadorEncontrado == null)

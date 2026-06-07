@@ -137,3 +137,4 @@ namespace Extintos.Enumeration
 
 //ex de uso pra percorrer ela e ver se pode colocar no cercad
 //foreach (var cercadoEscolido in valida)
+

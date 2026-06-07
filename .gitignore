@@ -6,6 +6,9 @@
 Extintos/bin
 Extintos/obj
 
+Extintos/bin/*
+Extintos/obj/*
+
 .vs/
 *.suo
 *.user

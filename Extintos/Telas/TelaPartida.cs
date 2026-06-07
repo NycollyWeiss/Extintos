@@ -27,7 +27,7 @@ namespace Extintos.Telas
             _timerRobozinho?.Dispose();
             base.OnFormClosing(e);
         }
-        
+
         #region Campos e Propriedades
 
         private readonly Jogador _dadosJogador;

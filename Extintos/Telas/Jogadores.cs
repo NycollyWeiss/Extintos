@@ -45,8 +45,8 @@ namespace Extintos.Telas
 
         private void bntEntrar_Click(object sender, EventArgs e)
         {
-            //teste do GPT pra arrumar essa bosta de botão
-            var form = new TelaPartida("", dadosJogador);
+            
+            var form = new TelaPartida( dadosJogador);
             form.Show();
             Hide();
 

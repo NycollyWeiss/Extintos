@@ -11,6 +11,11 @@ namespace Extintos.LeonKennedy
 {
     internal class EstrategiaGulosa : IEstategia
     {
+        public ConfigEstrategia ConfigEstrategia;
+        public EstrategiaGulosa(ConfigEstrategia configEstrategia)
+        {
+            this.ConfigEstrategia = configEstrategia;
+        }
         public string Nome => "Guloso Inteligente";
 
         public (Dinossauro dino, Cercados cercado)? Avaliar(InformacoesTurno info)

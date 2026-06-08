@@ -50,8 +50,8 @@ namespace Extintos.Model
                     return !cercadoAtual.Dinossauros.Any();
 
                 case Dado.TI:
-
-                    return !cercadoAtual.Dinossauros.Contains(AuxDinossauro.Dino == Dinossauro.TI);
+                    Dinossauro dino = Dinossauro.TI;
+                    return !cercadoAtual.Dinossauros.Exists(x => x.Dino == dino);
 
                 default:
 

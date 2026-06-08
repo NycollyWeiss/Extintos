@@ -118,14 +118,7 @@ namespace Extintos.Telas
             var senhaJogador = txtSenhaDaPartida.Text;
 
             var jogadores = DraftService.PegaJogadoresAsync(idPartidaJogando, new CancellationToken());
-            var ativos = jogadores.Split(',');
-            for (var i = 0; i < ativos.Length; i++)
-            {
-                //  if (jogador.Equals(ativos[i]))
-                // {
-
-                // }
-            }
+        
         }
 
         private void FormLobby_Load(object sender, EventArgs e)

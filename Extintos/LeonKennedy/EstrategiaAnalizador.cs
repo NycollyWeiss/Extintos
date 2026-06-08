@@ -57,8 +57,6 @@ namespace Extintos.LeonKennedy
                     break;
 
                 case Cercados.CD:
-
-                    if (!alvo.Dinossauros.Contains())
                         bonus += 8;
 
                     break;

@@ -23,9 +23,15 @@ namespace Extintos.Enumeration
                 MaoJogador = DraftService.ObterMao(idJogador, senhaJogador);
                 CercadosJogador = jogador.MeusCercados;
                 IdJogadorQueRolouDado = idJogador;
-                QtdJogadores = Tabuleiro.QuantidadeJogadores(IdPartida, new CancellationToken());
+                Tabuleiro meuTabuleiro = new Tabuleiro.Builder()
+                    .QuantidadeJogadoresAsync(idPartida).GetAwaiter().GetResult()
+                    .IdDaPartida(idPartida) 
+                    .Build();
+
                 IdPartida = idPartida;
                 MeuId = idJogador;
+                Tabuleiro = meuTabuleiro; 
+                QtdJogadores = meuTabuleiro.QuantidadeJogadores;
             }
             catch (Exception ex)
             {

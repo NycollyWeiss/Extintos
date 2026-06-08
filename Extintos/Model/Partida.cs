@@ -51,13 +51,6 @@ namespace Extintos
         }
 
         
-        public static Partida BuscaPeloId(char Status, int IdPartida)
-        {
-            var partidas = DraftService.ObterEstadoAsync(IdPartida, new CancellationToken());
-            var partidaEncontrada = partidas.Find(p => p.IdPartida == IdPartida);
-            return partidaEncontrada;
-        }
-
 // metodo tipo tupla, tudo que ta nos ( ) é os tipos de retorno e o verificaPartida é o nome e o parametro
 //putaria de c# em java é mais bonito, negocio feiao
 //é uma versao melhor do metodo do claro

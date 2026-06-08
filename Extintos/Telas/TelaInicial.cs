@@ -26,39 +26,43 @@ namespace Extintos.Telas
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Size = new System.Drawing.Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             this.WindowState = FormWindowState.Maximized;
-            
         }
-        
         
         private void btnCriarPartida_Click(object sender, EventArgs e) 
         {
-          
-            string nomePartida = txtNomedaPartida.Text;
+            string nomePartida  = txtNomedaPartida.Text;
             string senhaPartida = txtSenhadaPartida.Text;
-            string nomeGrupo = txtNomedoGrupo.Text;
+            string nomeGrupo    = txtNomedoGrupo.Text;
 
-            if (string.IsNullOrEmpty(nomePartida) ||
+            if (string.IsNullOrEmpty(nomePartida)  ||
                 string.IsNullOrEmpty(senhaPartida) ||
                 string.IsNullOrEmpty(nomeGrupo))
             {
-                MessageBox.Show("Todos os campos devem ser preechidos!!\n\n", "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Todos os campos devem ser preenchidos!!\n\n",
+                    "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string retorno = DraftService.CriarPartida(nomePartida, senhaPartida, nomeGrupo);
+
+            // A DLL retorna "ERRO: Partida já existente" quando o nome já existe em partida Aberta ou Jogando
+            if (retorno.StartsWith("ERRO", StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show(retorno, "Não foi possível criar a partida",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             
-            
-            string retorno = DraftService.CriarPartida(nomePartida, senhaPartida, nomeGrupo);
-            
-            if (string.IsNullOrEmpty(retorno))
+            if (!int.TryParse(retorno.Trim(), out int idPartidaCriada))
             {
-                
-                MessageBox.Show($"Falha ao criar partida. Detalhes: {retorno}", "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Resposta inesperada do servidor: {retorno}",
+                    "ERRO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            else
-            {
-                Lobby form = new Lobby();
-                form.Show();
-                this.Hide();
-            }
+
+            Lobby form = new Lobby();
+            form.Show();
+            this.Hide();
 
         }
 
@@ -67,7 +71,6 @@ namespace Extintos.Telas
             Forms.Lobby.Show();
             this.Hide();
         }
-
-    
+        
     }
 }

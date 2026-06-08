@@ -209,14 +209,26 @@ namespace Extintos.Services
         public static List<AuxDinossauro> Parse(string raw)
         {
             var list = new List<AuxDinossauro>();
+            
+            //Console.WriteLine($"\n[DEBUG SERVER] Mão Bruta:{raw}");
+
             foreach (var linha in raw.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 var p = linha.Split(',');
-                if (p.Length == 2 && Enum.TryParse<Dinossauro>(p[0].Trim(), true, out var dino) &&
-                    int.TryParse(p[1], out var qtd))
-                    list.Add(new AuxDinossauro(dino, qtd));
+                if (p.Length >= 2)
+                {
+                    var dinoIdentificado = ConversorDinos.StringParaEnum(p[0]);
+                    
+                    if (dinoIdentificado.HasValue && int.TryParse(p[1], out var qtd))
+                    {
+                        list.Add(new AuxDinossauro(dinoIdentificado.Value, qtd));
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[ERRO PARSE] Servidor mandou '{p[0]}' e o C# não entendeu!");
+                    }
+                }
             }
-
             return list;
         }
     }
@@ -226,15 +238,19 @@ namespace Extintos.Services
         public static List<AuxDinossauro> ParserDinossauros(string raw, int turno)
         {
             var list = new List<AuxDinossauro>();
-
             foreach (var linha in raw.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Skip(1))
             {
                 var p = linha.Split(',');
-
-                if (p.Length >= 3 && Enum.TryParse<Dinossauro>(p[0].Trim(), true, out var dino))
-                    list.Add(new AuxDinossauro(dino, 1));
+                if (p.Length >= 3)
+                {
+                    var codigoLimpo = ConversorDinos.ConverterParaCodigo(p[0].Trim()).ToUpperInvariant();
+                    
+                    if (Enum.TryParse<Dinossauro>(codigoLimpo, true, out var dino))
+                    {
+                        list.Add(new AuxDinossauro(dino, 1));
+                    }
+                }
             }
-
             return list;
         }
     }
@@ -244,41 +260,40 @@ namespace Extintos.Services
         public static List<AuxDinossauro> ParserDinosOponente(string raw, int meuId)
         {
             var list = new List<AuxDinossauro>();
-
             foreach (var linha in raw.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Skip(1))
             {
                 var p = linha.Split(',');
-
-                if (p.Length >= 3
-                    && int.TryParse(p[0].Trim(), out var idJogador)
-                    && idJogador != meuId
-                    && Enum.TryParse<Dinossauro>(p[1].Trim(), true, out var dino))
-                    list.Add(new AuxDinossauro(dino, 1));
+                if (p.Length >= 3 && int.TryParse(p[0].Trim(), out var idJogador) && idJogador != meuId)
+                {
+                    var codigoLimpo = ConversorDinos.ConverterParaCodigo(p[1].Trim()).ToUpperInvariant();
+                    
+                    if (Enum.TryParse<Dinossauro>(codigoLimpo, true, out var dino))
+                    {
+                        list.Add(new AuxDinossauro(dino, 1));
+                    }
+                }
             }
-
             return list;
         }
 
         public static List<AuxJogadaOponente> ParserJogadaOponente(string raw, int meuId, int turnoSelecionado)
         {
             var list = new List<AuxJogadaOponente>();
-
             foreach (var linha in raw.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Skip(1))
             {
                 var p = linha.Split(',');
-
-                if (p.Length >= 3
-                    && int.TryParse(p[0].Trim(), out var idJogador)
-                    && idJogador != meuId
-                    && Enum.TryParse<Dinossauro>(p[1].Trim(), true, out var dino)
-                    && Enum.TryParse<Cercados>(p[2].Trim(), true, out var cercado)) 
+                if (p.Length >= 3 && int.TryParse(p[0].Trim(), out var idJogador) && idJogador != meuId)
                 {
-
-                    list.Add(new AuxJogadaOponente(idJogador, dino, cercado, turnoSelecionado));
+                    var codigoLimpo = ConversorDinos.ConverterParaCodigo(p[1].Trim()).ToUpperInvariant();
+                    
+                    if (Enum.TryParse<Dinossauro>(codigoLimpo, true, out var dino) &&
+                        Enum.TryParse<Cercados>(p[2].Trim(), true, out var cercado))
+                    {
+                        list.Add(new AuxJogadaOponente(idJogador, dino, cercado, turnoSelecionado));
+                    }
                 }
             }
             return list;
-
         }
     }
 }

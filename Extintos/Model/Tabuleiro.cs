@@ -11,13 +11,13 @@ namespace Extintos.Model
 {
     public class Tabuleiro
     {
-      
         public class JogadaOponente
         {
             public int IdJogador { get; set; }
             public Dinossauro Dinossauro { get; set; }
             public Cercados Cercado { get; set; }
             public int Turno { get; set; }
+            // Sugestão: Se o histórico guardar quantidades, adicione: public int Quantidade { get; set; }
 
             public JogadaOponente(int idJogador, Dinossauro dinossauro, Cercados cercado, int turno)
             {
@@ -29,20 +29,18 @@ namespace Extintos.Model
         }
         
         public int QuantidadeJogadores { get; private set; }
-        
         public int QuantidadeEspecies { get; private set; }
-        
         public InformacoesTurno Turno { get; private set; }
-        
         public AuxCercado CercadoAtual { get; private set; }       
-        
         public Jogador LeonKennedy { get; private set; }
         
-        public List<Oponente> QuengasDoLeon { get; private set; }
+        // CORREÇÃO 1: Inicialização para evitar NullReferenceException
+        public List<Oponente> QuengasDoLeon { get; private set; } = new List<Oponente>();
+        
         public int IdDaPartida { get; private set; }
 
+        // Construtor privado obriga o uso do Builder
         private Tabuleiro() { }
-        
 
         public static int ContaDinosValidosNoTabuleiro(Jogador jogador, Dinossauro especie)
         {
@@ -65,6 +63,8 @@ namespace Extintos.Model
                         .GroupBy(j => j.Dinossauro)
                         .Select(dinoGrupo => new AuxDinossauro(
                             dinoGrupo.Key,
+                            // CORREÇÃO 2: Se sua classe JogadaOponente tiver "Quantidade", use .Sum(x => x.Quantidade).
+                            // Se cada registro no histórico for 1 dinossauro, .Count() está correto.
                             dinoGrupo.Count() 
                         ))
                         .ToList()
@@ -73,38 +73,37 @@ namespace Extintos.Model
 
         public static List<AuxDinossauro> QuantidadeAtualDeCadaEspecie(List<Oponente> quengasDoLeon)
         {
+            if (quengasDoLeon == null || !quengasDoLeon.Any()) return new List<AuxDinossauro>();
+
             return quengasDoLeon
-                .SelectMany(oponente => oponente.MeusCercados)
-                .SelectMany(cercado => cercado.Dinossauros)
+                .SelectMany(oponente => oponente.MeusCercados ?? new List<AuxCercado>())
+                .SelectMany(cercado => cercado.Dinossauros ?? new List<AuxDinossauro>())
                 .GroupBy(dino => dino.Dino)
                 .Select(grupo => new AuxDinossauro(grupo.Key, grupo.Sum(d => d.QuantidadeDinossauros)))
                 .ToList();
         }
 
-        public static void ConsolidarDino(List<AuxDinossauro> dinosPraConsolidar)
+        // CORREÇÃO 3: Retornar uma nova lista em vez de modificar a original (evita bugs de referência)
+        public static List<AuxDinossauro> ConsolidarDino(List<AuxDinossauro> dinosPraConsolidar)
         {
-            var consolidado = dinosPraConsolidar
-                .GroupBy(x => x.Dino) 
-                .Select(g =>
-                    new AuxDinossauro(
-                        g.Key,
-                        g.Sum(x => x.QuantidadeDinossauros)))
-                .ToList();
+            if (dinosPraConsolidar == null || !dinosPraConsolidar.Any()) return new List<AuxDinossauro>();
 
-            dinosPraConsolidar.Clear();
-            dinosPraConsolidar.AddRange(consolidado);
+            return dinosPraConsolidar
+                .GroupBy(x => x.Dino) 
+                .Select(g => new AuxDinossauro(g.Key, g.Sum(x => x.QuantidadeDinossauros)))
+                .ToList();
         }
 
         public static int QuantidadeConhecidaPorEspecie(List<AuxDinossauro> universoConhecido, Dinossauro especie)
         {
-            return universoConhecido
-                .FirstOrDefault(x => x.Dino == especie)?.QuantidadeDinossauros ?? 0;
+            return universoConhecido?.FirstOrDefault(x => x.Dino == especie)?.QuantidadeDinossauros ?? 0;
         }
       
         public class Builder
         {
             private readonly Tabuleiro _tabuleiro = new Tabuleiro();
 
+            // Mantém o async, mas agora sabemos que DEVEMOS usar 'await' ao chamar
             public async Task<Builder> QuantidadeJogadoresAsync(int idDaPartida, CancellationToken ct = default)
             {
                 var jogadores = await DraftService.PegaJogadoresAsync(idDaPartida, ct);
@@ -115,6 +114,13 @@ namespace Extintos.Model
             public Builder IdDaPartida(int idDaPartida)
             {
                 _tabuleiro.IdDaPartida = idDaPartida;
+                return this;
+            }
+
+            // Você pode adicionar mais métodos de build aqui se precisar
+            public Builder ComJogadorPrincipal(Jogador jogador)
+            {
+                _tabuleiro.LeonKennedy = jogador;
                 return this;
             }
 

@@ -11,7 +11,7 @@ namespace Extintos.Telas
 {
     public partial class Jogadores : Form
     {
-        private readonly Jogador dadosJogador; //*******
+        private readonly Jogador dadosJogador; //*******ul
 
         public Jogadores()
         {
@@ -37,11 +37,11 @@ namespace Extintos.Telas
         }
 
 
-        private void bntListaJogadores_Click(object sender, EventArgs e)
+        private async void bntListaJogadores_Click(object sender, EventArgs e)
         {
-            dgvJogadores.DataSource = DraftService.PegaJogadoresAsync(dadosJogador.IdPartida, new CancellationToken());
+            var jogadores = await DraftService.PegaJogadoresAsync(dadosJogador.IdPartida, new CancellationToken());
+            dgvJogadores.DataSource = jogadores;
         }
-
 
         private void bntEntrar_Click(object sender, EventArgs e)
         {

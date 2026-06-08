@@ -46,7 +46,10 @@ namespace Extintos.Services
         {
             return Jogo.VerificarPartida(idPartida);
         }
-        
+        public static string Jogar(int idJogador, string senha, string codigoDino, string codigoCercado)
+        {
+            return Jogo.Jogar(idJogador, senha, codigoDino, codigoCercado);
+        }
         public static string Versao => Jogo.versao;
         
         public static string ObterTurnos(int idPartida, int quantidade)
@@ -184,7 +187,7 @@ namespace Extintos.Services
                     String[] p = linha.Split(',');
             
                     
-                    if (p.Length >= 3 && int.TryParse(p[0], out var id) &&  int.TryParse(p[2], out  int pts))                    {
+                    if (p.Length >= 2 && int.TryParse(p[0], out var id) &&  int.TryParse(p[2], out  int pts))                    {
                     
                         list.Add(new Jogador { IdJogador = id, NomeJogador = p[1], Pontuacao = pts });
                     }

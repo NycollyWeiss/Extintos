@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using Extintos.LeonKennedy;
+using Extintos.Services;
 
 namespace Extintos
 {
@@ -9,7 +10,15 @@ namespace Extintos
         [STAThread]
         private static void Main()
         {
-            Application.Run(Forms.TelaInicial);
+            try
+            {
+                MusicaService.Iniciar();
+                Application.Run(Forms.TelaInicial);
+            }
+            finally
+            {
+                MusicaService.Parar();
+            }
 
             //Application.Run(new FormResultadoTeste());
         }

@@ -73,25 +73,19 @@ namespace Extintos.Telas
             // if (txtSenhaDaPartida.Text != senhaDaPartida)
 
 
-            var DadosJogador = Jogador.EntrarNaPartida(idPartida, nomeJogador, senhaDaPartida);
-            //string[] dadosJogador = DadosJogador.Split(',');
-            //int idJogador = int.Parse(dadosJogador[0]);
-            //string senhaJogador = dadosJogador[1];
-
-            if (txtSenhaDaPartida.Text != senhaDaPartida)
+            try
             {
-                MessageBox.Show("A senha digitada não corresponde à da partida selecionada.\n\n", "ERRO",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtSenhaDaPartida.Clear();
+                var DadosJogador = Jogador.EntrarNaPartida(idPartida, nomeJogador, senhaDaPartida);
+                var formJogadores = new Jogadores(DadosJogador);
+                formJogadores.Show();
+                Hide();
             }
-
-
-            //  Partida p = (Partida)dgvPartida.SelectedRows[0].DataBoundItem;
-
-            var formJogadores = new Jogadores(DadosJogador);
-
-            formJogadores.Show();
-            Hide();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao entrar na partida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSenhaDaPartida.Clear();
+                txtSenhaDaPartida.Focus();
+            }
         }
 
         private void btnVoltar1_Click(object sender, EventArgs e)

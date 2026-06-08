@@ -34,6 +34,7 @@
             this.txtHistorico = new System.Windows.Forms.TextBox();
             this.frmTimer = new System.Windows.Forms.Timer(this.components);
             this.picDado = new System.Windows.Forms.PictureBox();
+            this.btnVoltarLobby = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picDado)).BeginInit();
             this.SuspendLayout();
             // 
@@ -85,7 +86,20 @@
             this.picDado.TabIndex = 74;
             this.picDado.TabStop = false;
             // 
-            // TelaPartidaTelaPartida
+            // btnVoltarLobby
+            // 
+            this.btnVoltarLobby.BackColor = System.Drawing.Color.Tomato;
+            this.btnVoltarLobby.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVoltarLobby.ForeColor = System.Drawing.Color.White;
+            this.btnVoltarLobby.Location = new System.Drawing.Point(12, 12);
+            this.btnVoltarLobby.Name = "btnVoltarLobby";
+            this.btnVoltarLobby.Size = new System.Drawing.Size(235, 39);
+            this.btnVoltarLobby.TabIndex = 75;
+            this.btnVoltarLobby.Text = "<   Voltar para o Lobby";
+            this.btnVoltarLobby.UseVisualStyleBackColor = false;
+            this.btnVoltarLobby.Click += new System.EventHandler(this.btnVoltarLobby_Click_1);
+            // 
+            // TelaPartida
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -93,6 +107,7 @@
             this.BackgroundImage = global::Extintos.Properties.Resources.Mesa;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1028, 609);
+            this.Controls.Add(this.btnVoltarLobby);
             this.Controls.Add(this.picDado);
             this.Controls.Add(this.txtHistorico);
             this.Controls.Add(this.lblVersaoTres);
@@ -109,6 +124,8 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Button btnVoltarLobby;
 
         #endregion
         private System.Windows.Forms.Label lblVersao3;

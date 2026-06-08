@@ -35,7 +35,7 @@ namespace Extintos.Model
 
             if (retornoEntrar.StartsWith("ERRO"))
             {
-                throw new Exception($"Servidor recusou a entrada: {retornoEntrar}");
+                throw new Exception($"Servidor recusou a entrada! {retornoEntrar}");
             }
 
             if (string.IsNullOrWhiteSpace(retornoEntrar))

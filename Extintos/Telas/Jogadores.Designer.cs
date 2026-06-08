@@ -35,7 +35,6 @@
             this.bntListaJogadores = new System.Windows.Forms.Button();
             this.lblSenhaGeradaa = new System.Windows.Forms.Label();
             this.btnProximo = new System.Windows.Forms.Button();
-            this.btnCadastrarNovoJogador = new System.Windows.Forms.Button();
             this.lblTituloAddJogadores = new System.Windows.Forms.Label();
             this.lblVersao2 = new System.Windows.Forms.Label();
             this.btnVoltar2 = new System.Windows.Forms.Button();
@@ -96,20 +95,6 @@
             this.btnProximo.Text = "Iniciar Partida";
             this.btnProximo.UseVisualStyleBackColor = false;
             this.btnProximo.Click += new System.EventHandler(this.bntEntrar_Click);
-            // 
-            // btnCadastrarNovoJogador
-            // 
-            this.btnCadastrarNovoJogador.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnCadastrarNovoJogador.BackColor = System.Drawing.Color.Tomato;
-            this.btnCadastrarNovoJogador.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCadastrarNovoJogador.ForeColor = System.Drawing.Color.White;
-            this.btnCadastrarNovoJogador.Location = new System.Drawing.Point(369, 501);
-            this.btnCadastrarNovoJogador.Name = "btnCadastrarNovoJogador";
-            this.btnCadastrarNovoJogador.Size = new System.Drawing.Size(186, 41);
-            this.btnCadastrarNovoJogador.TabIndex = 51;
-            this.btnCadastrarNovoJogador.Text = "Cadastrar novo jogador";
-            this.btnCadastrarNovoJogador.UseVisualStyleBackColor = false;
-            this.btnCadastrarNovoJogador.Click += new System.EventHandler(this.btnCadastrarNovoJogador_Click);
             // 
             // lblTituloAddJogadores
             // 
@@ -187,7 +172,6 @@
             this.Controls.Add(this.btnVoltar2);
             this.Controls.Add(this.lblVersao2);
             this.Controls.Add(this.lblTituloAddJogadores);
-            this.Controls.Add(this.btnCadastrarNovoJogador);
             this.Controls.Add(this.btnProximo);
             this.Controls.Add(this.lblSenhaGeradaa);
             this.Controls.Add(this.bntListaJogadores);
@@ -197,7 +181,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvJogadores)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
@@ -212,7 +195,6 @@
         private System.Windows.Forms.Label lblSenhaGeradaa;
         private System.Windows.Forms.Label lblIdGeradoJogado;
         private System.Windows.Forms.Button btnProximo;
-        private System.Windows.Forms.Button btnCadastrarNovoJogador;
         private System.Windows.Forms.Label lblTituloAddJogadores;
         private System.Windows.Forms.Label lblVersao2;
         private System.Windows.Forms.Button btnVoltar2;

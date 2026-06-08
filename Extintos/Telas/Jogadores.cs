@@ -64,12 +64,6 @@ namespace Extintos.Telas
             */
         }
 
-        private void btnCadastrarNovoJogador_Click(object sender, EventArgs e)
-        {
-            Forms.Lobby.Show();
-            Hide();
-        }
-
         private void btnVoltar2_Click_1(object sender, EventArgs e)
         {
             var lobby = new Lobby();

@@ -120,6 +120,8 @@ namespace Extintos.Telas
 
             picDado.BringToFront();
             picDado.Visible = true;
+            
+            btnVoltarLobby.Visible = false;
         }
 
         #endregion
@@ -245,12 +247,18 @@ namespace Extintos.Telas
 
 
             g.DrawString($"Rodada: {rodadaAtual}  -  Turno: {turnoAtual}",
-                new Font("Segoe UI", 20, FontStyle.Bold), Brushes.White, 30, 30);
+                new Font("Segoe UI", 20, FontStyle.Bold), Brushes.White, 30, 70);
+
+
+            using var fonteExtintos = new Font("Bahnschrift SemiBold", 35, FontStyle.Bold);
+
+            g.DrawString("EXTINTOS", fonteExtintos, Brushes.White, ClientSize.Width - 350, 60);
+
 
 
             if (!string.IsNullOrEmpty(nomeJogadorDado) && picDado.Visible)
             {
-                var textX = picDado.Location.X - 20;
+                var textX = picDado.Location.X - 10;
                 var textY = picDado.Location.Y - 60;
                 g.DrawString($"{nomeJogadorDado} jogou o dado",
                     new Font("Segoe UI", 18, FontStyle.Bold), Brushes.White, textX, textY);
@@ -573,6 +581,7 @@ namespace Extintos.Telas
                     ultimoTurnoExibido = info.numeroTurno;
                     turnoAtual = info.numeroTurno;
                     rodadaAtual = ((info.numeroTurno - 1) / 6) + 1;
+
                     if (nomesJogadores.ContainsKey(info.idJogador)) nomeJogadorDado = nomesJogadores[info.idJogador];
 
                     ListarHistorico();
@@ -597,7 +606,12 @@ namespace Extintos.Telas
                 var dadosVerificacao = DraftService.VerificarPartidaBruto(_dadosJogador.idPartida);
                 var dados = dadosVerificacao.Split(',');
                 var statusPartida = dados[0];
-
+                
+                if (statusPartida == "E")
+                {
+                    btnVoltarLobby.Visible = true;
+                    return;
+                }
 
                 if (statusPartida == "J")
                 {
@@ -627,5 +641,12 @@ namespace Extintos.Telas
             }
         }
         #endregion
+
+        private void btnVoltarLobby_Click_1(object sender, EventArgs e)
+        {
+            var lobby = new Lobby();
+            lobby.Show();
+            Close();
+        }
     }
 }

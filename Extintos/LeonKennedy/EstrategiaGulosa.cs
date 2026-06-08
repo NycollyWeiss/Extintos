@@ -108,7 +108,7 @@ namespace Extintos.LeonKennedy
                         if (qtdDinos == 1)
                         {
                             var dinoIlha = dinos.First(d => d.QuantidadeDinossauros > 0).Dino;
-                            var especieEhUnica = info.CercadosJogador
+                            var   especieEhUnica = info.CercadosJogador
                                 .SelectMany(c => c.Dinossauros ?? new List<AuxDinossauro>())
                                 .Where(d => d.QuantidadeDinossauros > 0)
                                 .Count(d => d.Dino == dinoIlha) == 1;
@@ -233,7 +233,9 @@ namespace Extintos.LeonKennedy
         private bool PodeColocarFlorestaIgualdade(InformacoesTurno info, Dinossauro especie)
         {
             var florestaIgualdade = info.CercadosJogador.FirstOrDefault(x => x.Cercados == Cercados.FI);
+            
             if (info.NumeroTurno == 1) return false;
+            
             if (florestaIgualdade?.Dinossauros?.Any() == true)
                 return true;
 

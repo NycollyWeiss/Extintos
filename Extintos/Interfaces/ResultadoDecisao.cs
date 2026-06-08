@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Extintos.Auxiliares;
 using Extintos.Enumeration;
 
 namespace Extintos.Interfaces
@@ -9,6 +10,7 @@ namespace Extintos.Interfaces
         public Dinossauro Dinossauro { get; set; }
         public Cercados Cercado { get; set; }
         public int Pontuacao { get; set; }
+        
         public List<ResultadoEstrategia> TodasAsOpcoes { get; set; } = new();
 
         public string LogResumo =>

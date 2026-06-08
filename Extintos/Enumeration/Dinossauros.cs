@@ -6,7 +6,7 @@ using System.Reflection;
 namespace Extintos.Enumeration
 {
     [AttributeUsage(AttributeTargets.Field)]
-    internal class DinossauroInfo : Attribute
+  public class DinossauroInfo : Attribute
     {
         public DinossauroInfo(string nome, string cor, string codigo)
 
@@ -52,28 +52,5 @@ namespace Extintos.Enumeration
     }
 
 
-    internal static class DinoExtension
-    {
-        public static DinossauroInfo GetInfo(this Dinossauro dino)
-        {
-            var field = dino.GetType().GetField(dino.ToString());
-            return field?.GetCustomAttribute<DinossauroInfo>();
-        }
-
-        public static string PegaNome(this Dinossauro dino)
-        {
-            return dino.GetInfo()?.Nome ?? dino.ToString();
-        }
-        public static string PegaCodigo(this Dinossauro dino)
-        {
-            return dino.GetInfo()?.Codigo;
-        }
-
-        public static List<Dinossauro> EspeciesExistentes ()
-        {
-            return Enum.GetValues(typeof(Dinossauro))
-                .Cast<Dinossauro>()
-                .ToList();
-        }
-    }
+   
 }

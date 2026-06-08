@@ -55,8 +55,10 @@
     <ItemGroup>
         <Compile Include="Auxiliares\AuxCercado.cs" />
         <Compile Include="Auxiliares\AuxDinossauro.cs" />
-        <Compile Include="Auxiliares\AuxJogadaOponente.cs" />
         <Compile Include="Auxiliares\AuxUniverso.cs" />
+        <Compile Include="Auxiliares\CercadoExtension.cs" />
+        <Compile Include="Auxiliares\DadoExtension.cs" />
+        <Compile Include="Auxiliares\DinossauroExtension.cs" />
         <Compile Include="Enumeration\Cercado.cs" />
         <Compile Include="Enumeration\Dado.cs" />
         <Compile Include="Enumeration\Dinossauros.cs" />

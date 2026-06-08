@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Extintos.Enumeration;
 using Extintos.Auxiliares;
+using Extintos.Extension;
 
 namespace Extintos.Model
 {
@@ -14,7 +15,7 @@ namespace Extintos.Model
             if (info == null)
                 return false;
 
-            var possuiDino = info.MaoJogador.Any(x => x.Dinossauro == dino &&
+            var possuiDino = info.MaoJogador.Any(x => x.Dino == dino &&
                                                       x.QuantidadeDinossauros > 0);
 
             if (!possuiDino)
@@ -39,7 +40,7 @@ namespace Extintos.Model
             Cercados cercado,
             AuxCercado cercadoAtual)
         {
-            // Quem rolou o dado ignora a restrição
+           
             if (info.JogueioDado)
                 return true;
 

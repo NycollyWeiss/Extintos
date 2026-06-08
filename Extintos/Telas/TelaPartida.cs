@@ -381,7 +381,7 @@ namespace Extintos.Telas
         private void ConfigurarSistema()
         {
             _config = new ConfigEstrategia();
-            var estrategia = new EstrategiaGulosa(_config);
+            var estrategia = new EstrategiaGulosa(_confi);
         }
 
         private void ConfigurarJanela()
@@ -692,7 +692,7 @@ namespace Extintos.Telas
                         try
                         {
                             var codigoDino = ConverterParaCodigoDino(dinoSelecionado.Tipo);
-                            var retorno = DraftService.JogarAsync(_dadosJogador.IdJogador, _dadosJogador.Senha, codigoDino, cercado.Key);
+                            var retorno = DraftService.JogarAsync(_dadosJogador.IdJogador, _dadosJogador.Senha, codigoDino, cercado.Key, new CancellationToken());
 
                             if (!retorno.Contains("ERRO"))
                             {

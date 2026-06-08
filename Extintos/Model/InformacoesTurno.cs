@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Draft;
 using Extintos.Model;
 using Extintos.Services;
@@ -22,7 +23,7 @@ namespace Extintos.Enumeration
                 MaoJogador = DraftService.ObterMao(idJogador, senhaJogador);
                 CercadosJogador = jogador.MeusCercados;
                 IdJogadorQueRolouDado = idJogador;
-                QuantidadeJogadores = Partida.QuantidadeJogadores(idPartida);
+                QtdJogadores = Tabuleiro.QuantidadeJogadores(IdPartida, new CancellationToken());
                 IdPartida = idPartida;
                 MeuId = idJogador;
             }
@@ -45,7 +46,8 @@ namespace Extintos.Enumeration
         public char StatusTurno { get; set; }
 
         public int IdJogadorQueRolouDado { get; set; }
-        public int QuantidadeJogadores { get; set; }
+        public Tabuleiro Tabuleiro { get; set; }
+        public int QtdJogadores { get; set; }
         public int IdPartida { get; set; }
         public int MeuId { get; set; }
 

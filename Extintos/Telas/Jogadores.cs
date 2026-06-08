@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Draft;
@@ -38,7 +39,7 @@ namespace Extintos.Telas
 
         private void bntListaJogadores_Click(object sender, EventArgs e)
         {
-            dgvJogadores.DataSource = Partida.ListarJogadores(dadosJogador.IdPartida);
+            dgvJogadores.DataSource = DraftService.PegaJogadoresAsync(dadosJogador.IdPartida, new CancellationToken());
         }
 
 

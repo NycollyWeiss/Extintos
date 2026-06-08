@@ -57,17 +57,7 @@ namespace Extintos.Telas
             var idPartida = Convert.ToInt32(idDaPartida);
 
             //Verifica se o jogador colocado já está na partida
-            var jogadores = DraftService.ListarJogadoresBruto(idPartida);
-            var ativos = jogadores.Split(',');
-            for (var i = 0; i < ativos.Length; i++)
-                if (nomeJogador.Equals(ativos[i]))
-                {
-                    MessageBox.Show("Jogador já existente!! Digite outro nome\n\n", "ERRO", MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    txtNomeDoJogador.Clear();
-                    nomeJogador = txtNomeDoJogador.Text;
-                    return;
-                }
+            var jogadores = DraftService.PegaJogadoresAsync(idPartida, new CancellationToken());
 
             // string verificaSenha = Jogo.ListarPartidas
 

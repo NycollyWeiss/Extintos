@@ -101,7 +101,7 @@ namespace Extintos
             //Boto um trim ? talvez 
 
             var mensagemInicio = $"O Jogador: {Jogador.BuscaPeloId(idJogador, idPartida)} iniciou a partida!\n" +
-                                 $"Jogador com o dado: {Jogador.BuscaPeloId(verificacao.idJogador)}\n" +
+                                 $"Jogador com o dado: {Jogador.BuscaPeloId(verificacao.idJogador, idPartida)}\n" +
                                  $"Turno: {verificacao.numeroTurno}\n" +
                                  $"Face do Dado: {dadoAtual.PegaNome()}\n"; //aqui ta a dor de cabeça
 

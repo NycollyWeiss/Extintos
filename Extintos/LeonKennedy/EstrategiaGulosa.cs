@@ -12,13 +12,11 @@ namespace Extintos.LeonKennedy
     internal class EstrategiaGulosa : IEstategia
     {
         public ConfigEstrategia ConfigEstrategia;
-
         public EstrategiaGulosa(ConfigEstrategia configEstrategia)
         {
             this.ConfigEstrategia = configEstrategia;
         }
-
-        public string Nome => "Guloso Inteligente v4 (MT Priority)";
+        public string Nome => "Guloso Inteligente";
 
         public (Dinossauro dino, Cercados cercado)? Avaliar(InformacoesTurno info)
         {
@@ -37,36 +35,28 @@ namespace Extintos.LeonKennedy
                         continue;
 
                     var score = AvaliarJogada(info, item.Dino, cercado);
-                    
+
                     if (score > melhorScore)
                     {
                         melhorScore = score;
                         melhorDino = item.Dino;
                         melhorCercado = cercado;
                     }
-                    else if (score == melhorScore && cercado == Cercados.RI)
-                    {
-                        // Empate: prefere o Rio (segurança)
-                        melhorDino = item.Dino;
-                        melhorCercado = cercado;
-                    }
                 }
             }
 
-            return melhorScore == int.MinValue
-                ? ObterJogadaDeEmergencia(info)
+            return melhorScore == int.MinValue 
+                ? ObterPrimeiraJogadaValida(info) 
                 : (melhorDino, melhorCercado);
         }
 
         private int AvaliarJogada(InformacoesTurno info, Dinossauro dino, Cercados cercado)
         {
-            // Validação de segurança para Floresta da Igualdade
-            if (cercado == Cercados.FI && !PodeColocarFlorestaIgualdade(info, dino))
-                return int.MinValue;
+            if (cercado == Cercados.FI)
+                return PodeColocarFlorestaIgualdade(info, dino) ? 100 : int.MinValue;
 
-            // Validação de segurança para Rei da Selva
             if (cercado == Cercados.RS && !ValidarSoberaniaReiDaSelva(info, dino, isSimulacao: true))
-                return int.MinValue;
+                return -100;
 
             return ComidinhaDoGuloso(info, dino, cercado) +
                    EstrategiaAnalizador.BonusJogada(info, cercado, dino) +
@@ -76,26 +66,71 @@ namespace Extintos.LeonKennedy
         private int ComidinhaDoGuloso(InformacoesTurno info, Dinossauro dino, Cercados cercado) =>
             PontuacaoSimulada(info, cercado, dino) - PontuacaoTotal(info);
 
+        #region Configuração de Regra do Ilha Solitária
+
+        private const int TurnoMinimoPontuarIlhaSolitaria = 10;
+        private static bool IlhaSolitariaPontua(int turnoAtual) => turnoAtual >= TurnoMinimoPontuarIlhaSolitaria;
+
+        #endregion
+
         private int PontuacaoTotal(InformacoesTurno info)
         {
             var pontos = 0;
+
             foreach (var cercado in info.CercadosJogador)
             {
                 var dinos = cercado.Dinossauros ?? new List<AuxDinossauro>();
                 var qtdDinos = dinos.Sum(d => d.QuantidadeDinossauros);
-                pontos += CalcularPontuacaoCercado(cercado.Cercados, qtdDinos, dinos, info);
+
+                switch (cercado.Cercados)
+                {
+                    case Cercados.FI: 
+                        pontos += ScoreFlorestaIgualdade(qtdDinos); 
+                        break;
+                    case Cercados.CD: 
+                        var especiesDistintas = dinos.Where(d => d.QuantidadeDinossauros > 0).Select(d => d.Dino).Distinct().Count();
+                        pontos += ScoreCampinaDiferenca(especiesDistintas); 
+                        break;
+                    case Cercados.MT: 
+                        if (qtdDinos == 3) pontos += 7; 
+                        break;
+                    case Cercados.PA: 
+                        pontos += (qtdDinos / 2) * 5; 
+                        break;
+                    case Cercados.RI: 
+                        pontos += qtdDinos; 
+                        break;
+                    case Cercados.RS:
+                        if (qtdDinos == 1 && ValidarSoberaniaReiDaSelva(info, dinos[0].Dino, isSimulacao: false))
+                            pontos += 7;
+                        break;
+                    case Cercados.IS:
+                        if (qtdDinos == 1)
+                        {
+                            var dinoIlha = dinos.First(d => d.QuantidadeDinossauros > 0).Dino;
+                            var especieEhUnica = info.CercadosJogador
+                                .SelectMany(c => c.Dinossauros ?? new List<AuxDinossauro>())
+                                .Where(d => d.QuantidadeDinossauros > 0)
+                                .Count(d => d.Dino == dinoIlha) == 1;
+
+                            if (especieEhUnica && IlhaSolitariaPontua(info.NumeroTurno))
+                                pontos += 7;
+                        }
+                        break;
+                }
             }
+
             return pontos;
         }
 
         private int PontuacaoSimulada(InformacoesTurno info, Cercados alvo, Dinossauro novoDino)
         {
             var pontos = 0;
+
             foreach (var cercado in info.CercadosJogador)
             {
-                var dinos = cercado.Dinossauros?
-                    .Select(d => new AuxDinossauro(d.Dino, d.QuantidadeDinossauros))
-                    .ToList() ?? new List<AuxDinossauro>();
+                var dinos = cercado.Dinossauros?.Select(d => new AuxDinossauro(d.Dino, d.QuantidadeDinossauros)).ToList() 
+                            ?? new List<AuxDinossauro>();
 
                 if (cercado.Cercados == alvo)
                 {
@@ -112,50 +147,48 @@ namespace Extintos.LeonKennedy
                 }
 
                 var qtdDinos = dinos.Sum(d => d.QuantidadeDinossauros);
-                pontos += CalcularPontuacaoCercado(cercado.Cercados, qtdDinos, dinos, info);
+
+                switch (cercado.Cercados)
+                {
+                    case Cercados.FI: 
+                        pontos += ScoreFlorestaIgualdade(qtdDinos); 
+                        break;
+                    case Cercados.CD: 
+                        var especiesDistintas = dinos.Where(d => d.QuantidadeDinossauros > 0).Select(d => d.Dino).Distinct().Count();
+                        pontos += ScoreCampinaDiferenca(especiesDistintas); 
+                        break;
+                    case Cercados.MT: 
+                        if (qtdDinos == 3) pontos += 7; 
+                        break;
+                    case Cercados.PA: 
+                        pontos += (qtdDinos / 2) * 5; 
+                        break;
+                    case Cercados.RI: 
+                        pontos += qtdDinos; 
+                        break;
+                    case Cercados.RS:
+                        if (qtdDinos == 1 && ValidarSoberaniaReiDaSelva(info, dinos[0].Dino, isSimulacao: true))
+                            pontos += 7;
+                        break;
+                    case Cercados.IS:
+                        if (qtdDinos == 1)
+                        {
+                            var apareceEmOutro = info.CercadosJogador
+                                .Where(c => c.Cercados != Cercados.IS)
+                                .SelectMany(c => c.Dinossauros ?? new List<AuxDinossauro>())
+                                .Where(d => d.QuantidadeDinossauros > 0)
+                                .Any(d => d.Dino == novoDino);
+
+                            if (!apareceEmOutro) pontos += 7;
+                        }
+                        break;
+                }
             }
+
             return pontos;
         }
 
-        private int CalcularPontuacaoCercado(Cercados tipoCercado, int qtdDinos, List<AuxDinossauro> dinos, InformacoesTurno info)
-        {
-            switch (tipoCercado)
-            {
-                case Cercados.FI:
-                    return qtdDinos switch { 1 => 2, 2 => 4, 3 => 8, 4 => 12, 5 => 18, 6 => 24, _ => 0 };
-                case Cercados.CD:
-                    var especiesDistintas = dinos.Where(d => d.QuantidadeDinossauros > 0)
-                        .Select(d => d.Dino).Distinct().Count();
-                    return especiesDistintas switch { 1 => 1, 2 => 3, 3 => 6, 4 => 10, 5 => 15, 6 => 21, _ => 0 };
-                case Cercados.MT:
-                    return qtdDinos == 3 ? 7 : 0;
-                case Cercados.PA:
-                    return (qtdDinos / 2) * 5;
-                case Cercados.RI:
-                    return qtdDinos;
-                case Cercados.RS:
-                    if (qtdDinos == 1 && ValidarSoberaniaReiDaSelva(info, dinos[0].Dino, isSimulacao: false))
-                        return 7;
-                    return 0;
-                case Cercados.IS:
-                    if (qtdDinos == 1)
-                    {
-                        var dinoIlha = dinos.First(d => d.QuantidadeDinossauros > 0).Dino;
-                        var especieEhUnica = info.CercadosJogador
-                            .SelectMany(c => c.Dinossauros ?? new List<AuxDinossauro>())
-                            .Where(d => d.QuantidadeDinossauros > 0)
-                            .Count(d => d.Dino == dinoIlha) == 1;
-                            
-                        if (especieEhUnica && info.NumeroTurno >= 9)
-                            return 7;
-                    }
-                    return 0;
-                default:
-                    return 0;
-            }
-        }
-
-        private bool ValidarSoberaniaReiDaSelva(InformacoesTurno info, Dinossauro especie, bool isSimulacao = false)
+        private bool ValidarSoberaniaReiDaSelva(InformacoesTurno info, Dinossauro especie, bool isSimulacao)
         {
             var meusDinosValidos = info.CercadosJogador
                 .Where(c => c.Cercados != Cercados.RI)
@@ -166,72 +199,53 @@ namespace Extintos.LeonKennedy
             if (isSimulacao)
                 meusDinosValidos++;
 
-            // REGRA DOS 6: Se tenho 4+, soberania garantida
-            if (meusDinosValidos >= 4) return true;
-            // Se tenho 3, forte candidato
-            if (meusDinosValidos == 3) return true;
+            var historicoOponentes = ObterJogadasOponentesAteTurnoFallback(info.IdPartida, info.MeuId, info.NumeroTurno);
 
-            return false;
+            var maxOponentes = historicoOponentes
+                .Where(j => j.Dinossauro == especie && j.Cercado != Cercados.RI)
+                .GroupBy(j => j.IdJogador)
+                .Select(g => g.Count())
+                .DefaultIfEmpty(0)
+                .Max();
+
+            return meusDinosValidos > maxOponentes;
         }
 
-        /// <summary>
-        /// Método de emergência: prioriza o Rio (RI) como porto seguro.
-        /// </summary>
-        private (Dinossauro, Cercados)? ObterJogadaDeEmergencia(InformacoesTurno info)
+        private int ScoreFlorestaIgualdade(int qtdDinos) =>
+            qtdDinos switch { 1 => 2, 2 => 4, 3 => 8, 4 => 12, 5 => 18, 6 => 24, _ => 0 };
+
+        private int ScoreCampinaDiferenca(int qtdDinos) =>
+            qtdDinos switch { 1 => 1, 2 => 3, 3 => 6, 4 => 10, 5 => 15, 6 => 21, _ => 0 };
+
+        private (Dinossauro, Cercados)? ObterPrimeiraJogadaValida(InformacoesTurno info)
         {
-            // 1. Primeiro, tenta encontrar QUALQUER jogada no RIO
-            foreach (var item in info.MaoJogador.Where(x => x.QuantidadeDinossauros > 0))
-            {
-                if (Validator.JogadaValidator(info, Cercados.RI, item.Dino))
-                {
-                    return (item.Dino, Cercados.RI);
-                }
-            }
-
-            // 2. Se o Rio não for válido, procura a melhor jogada restante
-            int melhorScore = int.MinValue;
-            (Dinossauro, Cercados)? melhorJogada = null;
-
             foreach (var item in info.MaoJogador.Where(x => x.QuantidadeDinossauros > 0))
             {
                 foreach (Cercados cercado in Enum.GetValues(typeof(Cercados)))
                 {
-                    if (cercado == Cercados.RI) continue;
-
                     if (Validator.JogadaValidator(info, cercado, item.Dino))
-                    {
-                        int score = AvaliarJogada(info, item.Dino, cercado);
-                        if (score > melhorScore)
-                        {
-                            melhorScore = score;
-                            melhorJogada = (item.Dino, cercado);
-                        }
-                    }
+                        return (item.Dino, cercado);
                 }
             }
-
-            return melhorJogada;
+            return null;
         }
 
         private bool PodeColocarFlorestaIgualdade(InformacoesTurno info, Dinossauro especie)
         {
-            var florestaIgualdade = info.CercadosJogador
-                .FirstOrDefault(x => x.Cercados == Cercados.FI);
-            
-            // Se já tem dinos na FI, o Validator já garantiu que é a mesma espécie
-            if (florestaIgualdade?.Dinossauros?.Any(d => d.QuantidadeDinossauros > 0) == true)
+            var florestaIgualdade = info.CercadosJogador.FirstOrDefault(x => x.Cercados == Cercados.FI);
+            if (info.NumeroTurno == 1) return false;
+            if (florestaIgualdade?.Dinossauros?.Any() == true)
                 return true;
 
-            // Se a FI está VAZIA, só podemos começar se tivermos >= 3 dinos dessa espécie no total
-            var qtdNaMao = info.MaoJogador.Where(d => d.Dino == especie)
-                .Sum(d => d.QuantidadeDinossauros);
-            var qtdNoZoo = info.CercadosJogador
-                .Where(c => c.Cercados != Cercados.RI)
-                .SelectMany(c => c.Dinossauros ?? new List<AuxDinossauro>())
-                .Where(d => d.Dino == especie)
-                .Sum(d => d.QuantidadeDinossauros);
-
-            return (qtdNaMao + qtdNoZoo + 1) >= 3;
+            var jogadas = ObterJogadasOponentesAteTurnoFallback(info.IdPartida, info.MeuId, info.NumeroTurno - 1);
+            
+            return !jogadas.Any(d => d.Dinossauro == especie && 
+                                    (d.Cercado == Cercados.FI || d.Cercado == Cercados.RS));
+        }
+        
+        private List<Tabuleiro.JogadaOponente> ObterJogadasOponentesAteTurnoFallback(int idPartida, int meuId, int turno)
+        {
+            return new List<Tabuleiro.JogadaOponente>();
         }
     }
 }

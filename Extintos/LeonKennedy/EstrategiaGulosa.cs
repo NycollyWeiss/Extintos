@@ -18,7 +18,7 @@ namespace Extintos.LeonKennedy
             this.ConfigEstrategia = configEstrategia;
         }
 
-        public string Nome => "Guloso Inteligente v3 (Blindado)";
+        public string Nome => "Guloso Inteligente v4 (MT Priority)";
 
         public (Dinossauro dino, Cercados cercado)? Avaliar(InformacoesTurno info)
         {
@@ -38,7 +38,6 @@ namespace Extintos.LeonKennedy
 
                     var score = AvaliarJogada(info, item.Dino, cercado);
                     
-                    // Lógica de desempate: se o score for igual, prefere o RIO (segurança)
                     if (score > melhorScore)
                     {
                         melhorScore = score;
@@ -47,6 +46,7 @@ namespace Extintos.LeonKennedy
                     }
                     else if (score == melhorScore && cercado == Cercados.RI)
                     {
+                        // Empate: prefere o Rio (segurança)
                         melhorDino = item.Dino;
                         melhorCercado = cercado;
                     }
@@ -60,9 +60,11 @@ namespace Extintos.LeonKennedy
 
         private int AvaliarJogada(InformacoesTurno info, Dinossauro dino, Cercados cercado)
         {
+            // Validação de segurança para Floresta da Igualdade
             if (cercado == Cercados.FI && !PodeColocarFlorestaIgualdade(info, dino))
                 return int.MinValue;
 
+            // Validação de segurança para Rei da Selva
             if (cercado == Cercados.RS && !ValidarSoberaniaReiDaSelva(info, dino, isSimulacao: true))
                 return int.MinValue;
 
@@ -91,8 +93,9 @@ namespace Extintos.LeonKennedy
             var pontos = 0;
             foreach (var cercado in info.CercadosJogador)
             {
-                var dinos = cercado.Dinossauros?.Select(d => new AuxDinossauro(d.Dino, d.QuantidadeDinossauros)).ToList()
-                            ?? new List<AuxDinossauro>();
+                var dinos = cercado.Dinossauros?
+                    .Select(d => new AuxDinossauro(d.Dino, d.QuantidadeDinossauros))
+                    .ToList() ?? new List<AuxDinossauro>();
 
                 if (cercado.Cercados == alvo)
                 {
@@ -121,7 +124,8 @@ namespace Extintos.LeonKennedy
                 case Cercados.FI:
                     return qtdDinos switch { 1 => 2, 2 => 4, 3 => 8, 4 => 12, 5 => 18, 6 => 24, _ => 0 };
                 case Cercados.CD:
-                    var especiesDistintas = dinos.Where(d => d.QuantidadeDinossauros > 0).Select(d => d.Dino).Distinct().Count();
+                    var especiesDistintas = dinos.Where(d => d.QuantidadeDinossauros > 0)
+                        .Select(d => d.Dino).Distinct().Count();
                     return especiesDistintas switch { 1 => 1, 2 => 3, 3 => 6, 4 => 10, 5 => 15, 6 => 21, _ => 0 };
                 case Cercados.MT:
                     return qtdDinos == 3 ? 7 : 0;
@@ -162,18 +166,20 @@ namespace Extintos.LeonKennedy
             if (isSimulacao)
                 meusDinosValidos++;
 
+            // REGRA DOS 6: Se tenho 4+, soberania garantida
             if (meusDinosValidos >= 4) return true;
+            // Se tenho 3, forte candidato
             if (meusDinosValidos == 3) return true;
 
-            return false; 
+            return false;
         }
 
         /// <summary>
-        /// Método de emergência reescrito para NUNCA escolher Mata Tripla vazia se o Rio for uma opção válida e segura.
+        /// Método de emergência: prioriza o Rio (RI) como porto seguro.
         /// </summary>
         private (Dinossauro, Cercados)? ObterJogadaDeEmergencia(InformacoesTurno info)
         {
-            // 1. Primeiro, tenta encontrar QUALQUER jogada no RIO que seja válida (o porto seguro)
+            // 1. Primeiro, tenta encontrar QUALQUER jogada no RIO
             foreach (var item in info.MaoJogador.Where(x => x.QuantidadeDinossauros > 0))
             {
                 if (Validator.JogadaValidator(info, Cercados.RI, item.Dino))
@@ -182,7 +188,7 @@ namespace Extintos.LeonKennedy
                 }
             }
 
-            // 2. Se o Rio não for válido (ex: dado VZ e Rio já tem dinos), procura a melhor jogada restante
+            // 2. Se o Rio não for válido, procura a melhor jogada restante
             int melhorScore = int.MinValue;
             (Dinossauro, Cercados)? melhorJogada = null;
 
@@ -190,7 +196,7 @@ namespace Extintos.LeonKennedy
             {
                 foreach (Cercados cercado in Enum.GetValues(typeof(Cercados)))
                 {
-                    if (cercado == Cercados.RI) continue; // Já verificamos acima
+                    if (cercado == Cercados.RI) continue;
 
                     if (Validator.JogadaValidator(info, cercado, item.Dino))
                     {
@@ -209,12 +215,16 @@ namespace Extintos.LeonKennedy
 
         private bool PodeColocarFlorestaIgualdade(InformacoesTurno info, Dinossauro especie)
         {
-            var florestaIgualdade = info.CercadosJogador.FirstOrDefault(x => x.Cercados == Cercados.FI);
+            var florestaIgualdade = info.CercadosJogador
+                .FirstOrDefault(x => x.Cercados == Cercados.FI);
             
+            // Se já tem dinos na FI, o Validator já garantiu que é a mesma espécie
             if (florestaIgualdade?.Dinossauros?.Any(d => d.QuantidadeDinossauros > 0) == true)
                 return true;
 
-            var qtdNaMao = info.MaoJogador.Where(d => d.Dino == especie).Sum(d => d.QuantidadeDinossauros);
+            // Se a FI está VAZIA, só podemos começar se tivermos >= 3 dinos dessa espécie no total
+            var qtdNaMao = info.MaoJogador.Where(d => d.Dino == especie)
+                .Sum(d => d.QuantidadeDinossauros);
             var qtdNoZoo = info.CercadosJogador
                 .Where(c => c.Cercados != Cercados.RI)
                 .SelectMany(c => c.Dinossauros ?? new List<AuxDinossauro>())

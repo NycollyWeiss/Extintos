@@ -237,11 +237,11 @@ namespace Extintos.Telas
             var cercados = _layout.ObterCercadosMapeados();
             foreach (var c in cercados)
             {
-                g.DrawRectangle(Pens.Red, c.Value);
-                g.DrawString(c.Key, Font, Brushes.Red, c.Value.X, c.Value.Y);
+                g.DrawRectangle(Pens.Transparent, c.Value);
+                g.DrawString(c.Key, Font, Brushes.Transparent, c.Value.X, c.Value.Y);
                 foreach (var lista in _layout.PosicoesCercados)
                     foreach (var p in lista.Value)
-                        g.DrawRectangle(Pens.Blue, p.X, p.Y, 20, 20);
+                        g.DrawRectangle(Pens.Transparent, p.X, p.Y, 20, 20);
             }
 
 
@@ -256,7 +256,12 @@ namespace Extintos.Telas
             g.DrawImage(imgMao, _layout.MaoX, _layout.MaoY, _layout.MaoLargura, _layout.MaoAltura);
 
             g.DrawString($"Rodada: {_rodadaAtual}  -  Turno: {_turnoAtual}",
-                new Font("Segoe UI", 20, FontStyle.Bold), Brushes.White, 30, 30);
+                new Font("Segoe UI", 20, FontStyle.Bold), Brushes.White, 30, 70);
+
+
+            using var fonteExtintos = new Font("Bahnschrift SemiBold", 35, FontStyle.Bold);
+
+            g.DrawString("EXTINTOS", fonteExtintos, Brushes.White, ClientSize.Width - 350, 60);
 
             if (!string.IsNullOrEmpty(_nomeJogadorDado) && picDado.Visible)
             {

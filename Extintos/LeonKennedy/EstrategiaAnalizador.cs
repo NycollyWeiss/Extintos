@@ -33,37 +33,73 @@ namespace Extintos.LeonKennedy
             switch (cercado)
             {
                 case Cercados.MT: // MATA TRIPLA
-                    if (qtdAtual == 2) bonus += 100; // Última vaga! Prioridade máxima.
-                    else if (qtdAtual == 1) bonus += 30; // Caminho em andamento.
-                    else 
+                    if (qtdAtual == 2)
                     {
-                        // Se for a ÚNICA jogada válida (ex: dado VZ e tudo cheio), não penalize tanto, 
-                        // mas ainda prefira outras opções se existirem.
-                        bonus -= 10; 
+                        // PRIORIDADE ABSOLUTA! Faltando 1 para 7 pontos.
+                        // Isso deve ser a jogada mais atraente do tabuleiro (exceto RS garantido).
+                        bonus += 250;
+                    }
+                    else if (qtdAtual == 1)
+                    {
+                        bonus += 40;
+                        // Se a PA já tem casal completo, MT se torna ainda mais atraente
+                        var qtdTotalPA = info.CercadosJogador
+                            .FirstOrDefault(x => x.Cercados == Cercados.PA)?
+                            .Dinossauros?.Sum(d => d.QuantidadeDinossauros) ?? 0;
+                        if (qtdTotalPA >= 2) bonus += 60;
+                    }
+                    else
+                    {
+                        bonus -= 20; // Não comece MT cedo demais
                     }
                     break;
 
                 case Cercados.PA: // PRADARIA DO AMOR
-                    int qtdDessaEspecieNaPA = dinosNoCercado.Where(d => d.Dino == dino).Sum(d => d.QuantidadeDinossauros);
-                    if (qtdDessaEspecieNaPA % 2 != 0) 
+                    int qtdDessaEspecieNaPA = dinosNoCercado
+                        .Where(d => d.Dino == dino)
+                        .Sum(d => d.QuantidadeDinossauros);
+                    int qtdTotalNaPA = dinosNoCercado.Sum(d => d.QuantidadeDinossauros);
+
+                    if (qtdDessaEspecieNaPA % 2 != 0)
                     {
-                        // Vai se tornar PAR (ex: de 1 vai para 2). COMBO FECHADO!
-                        bonus += 120; 
-                        if (dino == Dinossauro.TI) bonus += 50; 
+                        // Vai formar um casal AGORA! (ex: de 1 vai para 2)
+                        bonus += 150;
+                        if (dino == Dinossauro.TI) bonus += 80; // Casal de T-Rex é espetacular!
                     }
-                    else 
+                    else
                     {
-                        // Vai se tornar ÍMPAR (ex: de 0 vai para 1).
-                        // CORREÇÃO CRÍTICA: Preciso ter >= 2 na mão. 
-                        // Se eu tenho 1 e jogo ele, fico com 0. Preciso de 2 para sobrar 1 para o próximo turno!
-                        if (qtdDessaEspecieNaMao >= 2) 
+                        // Vai se tornar ÍMPAR (ex: de 0 vai para 1, ou de 2 vai para 3).
+                        
+                        // REGRA DO CASAL ÚNICO: Se já temos >= 2 dinos na PA (casal pronto),
+                        // tentar um segundo casal é arriscado e geralmente desperdício.
+                        if (qtdTotalNaPA >= 2)
                         {
-                            bonus += 40; // Tenho o par na mão, é um investimento seguro.
-                            if (dino == Dinossauro.TI) bonus += 20;
+                            // Única exceção: T-Rex E tiver o par na mão
+                            if (dino == Dinossauro.TI && qtdDessaEspecieNaMao >= 2)
+                            {
+                                bonus += 30;
+                            }
+                            else
+                            {
+                                // PENALIDADE SEVERA: Não tente um segundo casal na PA!
+                                // Vá para MT, FI ou CD.
+                                bonus -= 200;
+                            }
                         }
-                        else 
+                        else
                         {
-                            bonus -= 200; // DESPERDÍCIO CRÍTICO AUMENTADO: Deixar dino solto na PA sem ter o par na mão.
+                            // A PA está vazia ou tem apenas 1 dino solto.
+                            // CORREÇÃO CRÍTICA: Preciso ter >= 2 na mão (um para jogar, um que sobra)
+                            if (qtdDessaEspecieNaMao >= 2)
+                            {
+                                bonus += 50; // Tenho o par na mão, investimento seguro.
+                                if (dino == Dinossauro.TI) bonus += 30;
+                            }
+                            else
+                            {
+                                // DESPERDÍCIO CRÍTICO: Iniciar casal sem ter o par na mão.
+                                bonus -= 250;
+                            }
                         }
                     }
                     break;
@@ -71,15 +107,23 @@ namespace Extintos.LeonKennedy
                 case Cercados.FI: // FLORESTA DA IGUALDADE
                     if (qtdAtual == 0)
                     {
-                        if (totalEspecieDisponivelParaMi >= 4) bonus += 120; 
-                        else if (totalEspecieDisponivelParaMi >= 3) bonus += 50; 
-                        else bonus -= 250; // SUICÍDIO: Iniciar FI com apenas 1 ou 2 dinos no total.
+                        // Só comece FI se tiver pelo menos 3 dinos dessa espécie no total
+                        if (totalEspecieDisponivelParaMi >= 4) 
+                            bonus += 150; // Excelente, vai encher fácil!
+                        else if (totalEspecieDisponivelParaMi >= 3) 
+                            bonus += 60; // Arriscado, mas aceitável.
+                        else 
+                            bonus -= 300; // SUICÍDIO: Iniciar FI com 1 ou 2 dinos.
                     }
                     else
                     {
-                        if (qtdAtual == 2 && totalEspecieDisponivelParaMi >= 3) bonus += 100; 
-                        else if (qtdAtual >= 3) bonus += 60; 
-                        else bonus -= 30; 
+                        // Já tem dinos na FI. Incentivar a NÃO PARAR DE ENCHER!
+                        if (qtdAtual == 2 && totalEspecieDisponivelParaMi >= 3) 
+                            bonus += 120; // Não deixe morrer com 2! Busque o 3º (8 pts)
+                        else if (qtdAtual >= 3) 
+                            bonus += 80; // Continue enchendo, pontuação exponencial.
+                        else 
+                            bonus -= 50; // Está estagnado.
                     }
                     break;
 
@@ -87,34 +131,42 @@ namespace Extintos.LeonKennedy
                     bool temNoCD = dinosNoCercado.Any(d => d.Dino == dino && d.QuantidadeDinossauros > 0);
                     if (!temNoCD)
                     {
-                        if (qtdDessaEspecieNaMao <= 1) bonus += 60; 
-                        else bonus += 20; 
+                        if (qtdDessaEspecieNaMao <= 1) 
+                            bonus += 70; // Dino solitário na mão, perfeito para Campina!
+                        else 
+                            bonus += 25; // Bom, mas talvez fosse melhor pra FI ou PA.
                     }
                     break;
 
                 case Cercados.RS: // REI DA SELVA
                     if (qtdAtual == 0)
                     {
-                        if (totalEspecieDisponivelParaMi >= 4) bonus += 250; 
-                        else if (totalEspecieDisponivelParaMi == 3) bonus += 90; 
-                        else bonus -= 120; 
+                        if (totalEspecieDisponivelParaMi >= 4) 
+                            bonus += 300; // Soberania garantida! T-REX DE 7 PONTOS!
+                        else if (totalEspecieDisponivelParaMi == 3) 
+                            bonus += 100; // Forte candidato.
+                        else 
+                            bonus -= 150; // Prematuro.
                     }
                     break;
 
                 case Cercados.IS: // ILHA SOLITÁRIA
                     if (qtdAtual == 0)
                     {
-                        var cercadoCD = info.CercadosJogador.FirstOrDefault(x => x.Cercados == Cercados.CD);
-                        int qtdEspeciesNoCD = cercadoCD?.Dinossauros?.Count(d => d.QuantidadeDinossauros > 0) ?? 0;
+                        var cercadoCD = info.CercadosJogador
+                            .FirstOrDefault(x => x.Cercados == Cercados.CD);
+                        int qtdEspeciesNoCD = cercadoCD?.Dinossauros?
+                            .Count(d => d.QuantidadeDinossauros > 0) ?? 0;
+                        
                         if (qtdEspeciesNoCD == 6)
                         {
-                            bonus -= 300; 
+                            bonus -= 400; // IMPOSSÍVEL PONTUAR. FUJA!
                             break;
                         }
 
                         if (info.NumeroTurno < 9)
                         {
-                            bonus -= 150; // Muito cedo.
+                            bonus -= 200; // Muito cedo.
                             break;
                         }
 
@@ -122,11 +174,11 @@ namespace Extintos.LeonKennedy
                         
                         if (especieEhUnicaNoMeuZoo)
                         {
-                            bonus += 180; 
+                            bonus += 200; // Late game + espécie inédita = 7 pontos!
                         }
                         else
                         {
-                            bonus -= 250; 
+                            bonus -= 300; // Já temos esse dino. IS dará ZERO.
                         }
                     }
                     break;
@@ -142,13 +194,19 @@ namespace Extintos.LeonKennedy
 
             switch (cercado)
             {
-                case Cercados.MT: return (3 - qtd) * 10;
-                case Cercados.FI: return qtd * 15;
+                case Cercados.MT: 
+                    // Se tem 2, o potencial é MÁXIMO (falta 1 para 7 pts)
+                    return (3 - qtd) * 15;
+                case Cercados.FI: 
+                    return qtd * 20; // Potencial exponencial
                 case Cercados.CD:
-                    var especiesDistintas = alvo.Dinossauros?.Count(d => d.QuantidadeDinossauros > 0) ?? 0;
-                    return (6 - especiesDistintas) * 8;
-                case Cercados.PA: return 20;
-                default: return 0;
+                    var especiesDistintas = alvo.Dinossauros?
+                        .Count(d => d.QuantidadeDinossauros > 0) ?? 0;
+                    return (6 - especiesDistintas) * 10;
+                case Cercados.PA: 
+                    return 25; // Potencial para casais
+                default: 
+                    return 0;
             }
         }
     }

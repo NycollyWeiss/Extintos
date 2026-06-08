@@ -8,7 +8,7 @@ namespace Extintos.LeonKennedy
 
     public class EstrategiaAnalizador
     {
-        public static int BonusJogada(InformacoesTurno info, Cercados cercado, Dinossauro dino)
+        public static int BonusJogada(InformacoesTurno info, Cercados cercado, Dinossauro dino, bool especieEhUnica)
         {
             var bonus = 0;
 
@@ -41,11 +41,7 @@ namespace Extintos.LeonKennedy
                     break;
 
                 case Cercados.IS:
-                    var especieEhUnica = !info.CercadosJogador
-                        .SelectMany(c =>
-                            c.Dinossauros ?? new List<Dinossauro>())
-                        .Any(d => d == dino);
-
+                    
                     if (qtdAtual == 0 &&
                         info.NumeroTurno >= 10 &&
                         especieEhUnica)
@@ -63,7 +59,7 @@ namespace Extintos.LeonKennedy
 
                 case Cercados.CD:
 
-                    if (!alvo.Dinossauros.Contains(dino))
+                    if (!alvo.Dinossauros.Contains())
                         bonus += 8;
 
                     break;

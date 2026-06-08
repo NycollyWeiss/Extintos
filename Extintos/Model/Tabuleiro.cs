@@ -46,9 +46,9 @@ namespace Extintos.Model
 
         public static int ContaDinosValidosNoTabuleiro(Jogador jogador, Dinossauro especie)
         {
-            if (jogador?.meusCercados == null) return 0;
+            if (jogador?.MeusCercados == null) return 0;
             
-            return jogador.meusCercados
+            return jogador.MeusCercados
                 .Where(c => c.Cercados != Cercados.RI)
                 .SelectMany(c => c.Dinossauros)
                 .Where(d => d.Dino == especie)
@@ -74,7 +74,7 @@ namespace Extintos.Model
         public static List<AuxDinossauro> QuantidadeAtualDeCadaEspecie(List<Oponente> quengasDoLeon)
         {
             return quengasDoLeon
-                .SelectMany(oponente => oponente.meusCercados)
+                .SelectMany(oponente => oponente.MeusCercados)
                 .SelectMany(cercado => cercado.Dinossauros)
                 .GroupBy(dino => dino.Dino)
                 .Select(grupo => new AuxDinossauro(grupo.Key, grupo.Sum(d => d.QuantidadeDinossauros)))

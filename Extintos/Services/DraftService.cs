@@ -181,12 +181,12 @@ namespace Extintos.Services
                 var list = new List<Jogador>();
                 foreach (var linha in raw.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    var p = linha.Split(',');
+                    String[] p = linha.Split(',');
             
                     
-                    if (p.Length >= 3 && int.TryParse(p, out var id) && int.TryParse(p, out var pts))                    {
+                    if (p.Length >= 3 && int.TryParse(p[0], out var id) &&  int.TryParse(p[2], out  int pts))                    {
                     
-                        list.Add(new Jogador { IdJogador = id, NomeJogador = p, Pontuacao = pts });
+                        list.Add(new Jogador { IdJogador = id, NomeJogador = p[1], Pontuacao = pts });
                     }
                 }
 
@@ -249,9 +249,9 @@ namespace Extintos.Services
             return list;
         }
 
-        public static List<AuxJogadaOponente> ParserJogadaOponente(string raw, int meuId, int turnoSelecionado)
+        public static List<Tabuleiro.JogadaOponente> ParserJogadaOponente(string raw, int meuId, int turnoSelecionado)
         {
-            var list = new List<AuxJogadaOponente>();
+            var list = new List<Tabuleiro.JogadaOponente>();
 
             foreach (var linha in raw.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Skip(1))
             {
@@ -260,11 +260,11 @@ namespace Extintos.Services
                 if (p.Length >= 3
                     && int.TryParse(p[0].Trim(), out var idJogador)
                     && idJogador != meuId
-                    && Enum.TryParse<Dinossauro>(p[1].Trim(), true, out var dino)
-                    && Enum.TryParse<Cercados>(p[2].Trim(), true, out var cercado)) 
+                    && Enum.TryParse<Cercados>(p[1].Trim(), true, out var cercado)
+                    && Enum.TryParse<Dinossauro>(p[2].Trim(), true, out var dino))
+                  
                 {
-
-                    list.Add(new AuxJogadaOponente(idJogador, dino, cercado, turnoSelecionado));
+                    list.Add(new Tabuleiro.JogadaOponente(idJogador, dino, cercado, turnoSelecionado));
                 }
             }
             return list;

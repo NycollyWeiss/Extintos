@@ -1,5 +1,6 @@
 ﻿using System;
 using Draft;
+using Extintos.Auxiliares;
 using Extintos.Enumeration;
 
 namespace Extintos.Model

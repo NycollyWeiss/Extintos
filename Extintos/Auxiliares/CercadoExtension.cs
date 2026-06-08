@@ -9,9 +9,10 @@ using Extintos.Enumeration;
 
 namespace Extintos.Auxiliares
 {
-    internal static class CercadosExtension
+    public static class CercadosExtension
     {
         private static readonly ConcurrentDictionary<Cercados, CercadosInfo?> InfoCache = new();
+        public static List<AuxCercado> set { get; set; }
 
         public static CercadosInfo? PegaInfo(this Cercados cercado)
         {
@@ -20,14 +21,44 @@ namespace Extintos.Auxiliares
                 var field = c.GetType().GetField(c.ToString());
                 return field?.GetCustomAttribute<CercadosInfo>();
             });
+
         }
 
-        public static string PegaNome(this Cercados cercado) => cercado.PegaInfo()?.Nome ?? cercado.ToString();
-        public static string PegaCodigo(this Cercados cercado) => cercado.PegaInfo()?.Codigo ?? cercado.ToString();
-        public static List<Cercados> CercadosLista() => Enum.GetValues(typeof(Cercados)).Cast<Cercados>().ToList();
-        public static List<AuxCercado> CercadoAuxLista() => CercadosLista().Select(c => new AuxCercado(c)).ToList();
+        public static string PegaNome(this Cercados cercado)
+            {
+                return cercado.PegaInfo()?.Nome ?? cercado.ToString();
+            }
 
 
+            public static string PegaRestricao(this Cercados cercado)
+            {
+                return cercado.PegaInfo()?.Restricao ?? string.Empty;
+            }
+
+
+            public static string PegaPontuacao(this Cercados cercado)
+            {
+                return cercado.PegaInfo()?.Pontuacao ?? string.Empty;
+            }
+
+
+            public static string PegaCodigo(this Cercados cercado)
+            {
+                return cercado.PegaInfo()?.Codigo ?? cercado.ToString();
+            }
+
+
+            public static List<Cercados> CercadosLista()
+            {
+                return Enum.GetValues(typeof(Cercados))
+                    .Cast<Cercados>()
+                    .ToList();
+            }
+
+            public static List<AuxCercado> CercadoAuxLista()
+            {
+                return CercadosLista().Select(c => new AuxCercado(c)).ToList();
+            }
 
 
         public static bool SePodeColocarNoCercado(this Cercados cercado, AuxCercado cercadoEscolhido,

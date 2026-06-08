@@ -63,8 +63,6 @@
         <Compile Include="Enumeration\Dado.cs" />
         <Compile Include="Enumeration\Dinossauros.cs" />
         <Compile Include="Interfaces\IEstrategia.cs" />
-        <Compile Include="Interfaces\ResultadoDecisao.cs" />
-        <Compile Include="Interfaces\ResultadoEstrategia.cs" />
         <Compile Include="Layout\TabuleiroLayout.cs" />
         <Compile Include="LeonKennedy\ConfigEstrategia.cs" />
         <Compile Include="LeonKennedy\EstrategiaAnalizador.cs" />

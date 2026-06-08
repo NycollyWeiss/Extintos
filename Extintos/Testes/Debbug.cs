@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Extintos.Auxiliares;
 using Extintos.Enumeration;
 using Extintos.Interfaces;
 using Extintos.LeonKennedy;
@@ -39,7 +40,7 @@ using Extintos.Model;
 
         private static bool ValidarRegras(InformacoesTurno info, Dinossauro dino, Cercados cercado, Action<string> log)
         {
-            var itemMao = info.MaoJogador?.FirstOrDefault(x => x.Dinossauro == dino);
+            var itemMao = info.MaoJogador?.FirstOrDefault(x => x.Dino == dino);
             if (itemMao == null || itemMao.QuantidadeDinossauros <= 0)
             {
                 log("BURRO BURRO: Tentou jogar um dinossauro que NÃO TEM na mão. TÁ ALUCINANDO.");
@@ -114,7 +115,7 @@ using Extintos.Model;
             var depois = estr.PontuacaoSimulada(info, cercado, dino); 
             var ganhoPontuacao = depois - antes;
 
-            var bonus = EstrategiaAnalizador.BonusJogada(info, cercado, dino);
+            var bonus = EstrategiaAnalizador.BonusJogada(info, cercado, dino, TODO);
             var potencial = EstrategiaAnalizador.PotencialFuturo(info, cercado, dino);
 
             return ganhoPontuacao + bonus + potencial;

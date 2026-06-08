@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using Draft;
 using Extintos.Enumeration;
 using Extintos.Auxiliares;
@@ -9,43 +11,44 @@ namespace Extintos.Model
 {
     public class Jogador
     {
-        public List<AuxCercado>? _meusCercados;
-        public int IdJogador { get; set; }
-        public string NomeJogador {get; set;}
-        public string Senha { get; set;}
-        public int Pontuacao { get; set;} 
-        public int IdPartida { get; set; }
-        public Jogador? JogadorQueVaiPassarMao  { get; set; }
-        public Jogador? JogadorQueVaiReceberSuaMao { get; set; }
+        private List<AuxCercado> _meusCercados;
 
-        //carregador lazy, carrega uma lista inicial de cercados por causa do erro do caralho q eu n entendi ate agr
-        public List<AuxCercado> meusCercados
-        {
+        public int IdJogador { get; set; }
+        public string NomeJogador { get; set; }
+        
+        public string Senha { get; private set; }
+        
+        public int Pontuacao { get; set; } 
+        public int IdPartida { get; set; }
+        
+        public Jogador JogadorQueVaiPassarMao { get; set; }
+        public Jogador JogadorQueVaiReceberSuaMao { get; set; }
+
+        public List<AuxCercado> MeusCercados
+        { 
             get => _meusCercados ??= CercadosExtension.CercadoAuxLista();
-            set => _meusCercados = value;
+            private set => _meusCercados = value; // Setter privado para resolver o aviso do IDE
         }
 
-        public Jogador (List<AuxCercado> meusCercados, int idJogador, string nomeJogador,
+        public Jogador(List<AuxCercado> meusCercados, int idJogador, string nomeJogador,
             int pontuacao,
             int idPartida,
             Jogador jogadorQueVaiPassarMao,
             Jogador jogadorQueVaiReceberSuaMao)
         {
-            this._meusCercados = meusCercados;
-            this.IdJogador = idJogador;
-            this.NomeJogador = nomeJogador;
-            this.Pontuacao = pontuacao;
-            this.IdPartida = idPartida;
-            this.JogadorQueVaiPassarMao = jogadorQueVaiPassarMao;
-            this.JogadorQueVaiReceberSuaMao = jogadorQueVaiReceberSuaMao;
+            _meusCercados = meusCercados;
+            IdJogador = idJogador;
+            NomeJogador = nomeJogador;
+            Pontuacao = pontuacao;
+            IdPartida = idPartida;
+            JogadorQueVaiPassarMao = jogadorQueVaiPassarMao;
+            JogadorQueVaiReceberSuaMao = jogadorQueVaiReceberSuaMao;
         }
 
+       
         public Jogador()
         {
-            
         }
-        
-        
         
         public static Jogador EntrarNaPartida(int idPartida, string nomeJogador, string senhaJogador)
         {
@@ -68,57 +71,50 @@ namespace Extintos.Model
                 throw new Exception($"Formato de resposta inesperado do servidor: '{retornoEntrar}'");
             }
 
-            var jogador = new Jogador();
-
-            if (int.TryParse(dadosJogador[0], out int idConvertido))
+            if (!int.TryParse(dadosJogador[0], out int idConvertido))
             {
-                jogador.IdJogador = idConvertido;
-            }
-            else
-            {
-                throw new Exception(
-                    $"O valor retornado pelo servidor para o ID não é um número válido: '{dadosJogador[0]}'");
+                throw new Exception($"O valor retornado pelo servidor para o ID não é um número válido: '{dadosJogador[0]}'");
             }
 
-            jogador.Senha = dadosJogador[1];
-            jogador.NomeJogador = nomeJogador;
-            jogador.Pontuacao = 0;
-            jogador.IdPartida = idPartida;
-            jogador.meusCercados = CercadosExtension.CercadoAuxLista();
-
-            return jogador;
+            return new Jogador
+            {
+                IdJogador = idConvertido,
+                Senha = dadosJogador[1],
+                NomeJogador = nomeJogador,
+                Pontuacao = 0,
+                IdPartida = idPartida,
+                MeusCercados = CercadosExtension.CercadoAuxLista()
+            };
         }
+
         public static string BuscaPeloId(int idJogador, int idPartida)
         {
-            var jogadores = DraftService.ListarJogadores(idPartida);
-            var jogadorEncontrado = jogadores.Find(j => j.IdJogador == idJogador);
+            var jogadores = DraftService.PegaJogadoresAsync(idPartida, CancellationToken.None).GetAwaiter().GetResult();
+            
+            
+            var jogadorEncontrado = jogadores?.FirstOrDefault(j => j.IdJogador == idJogador);
 
-            if (jogadorEncontrado == null)
-                return null;
-
-            return jogadorEncontrado.NomeJogador;
+            return jogadorEncontrado?.NomeJogador;
         }
-
-        public static string BuscaPeloId(int idJogador)
-        {
-            var todasPartidas = Partida.ListarPartidas('T');
-
-            foreach (var partida in todasPartidas)
-            {
-                var jogadores = Partida.ListarJogadores(partida.IdPartida);
-                var jogadorEncontrado = jogadores.Find(j => j.IdJogador == idJogador);
-
-                if (jogadorEncontrado != null)
-                    return jogadorEncontrado.NomeJogador;
-            }
-
-            return null;
-        }
+        
 
         public void ColocarDinossauro(Dinossauro dino, Cercados cerca)
         {
-            var cercado = meusCercados.Find(c => c.Cercados.Equals(cerca));
-            cercado.Dinossauros.Add(dino);
+            var cercado = MeusCercados.FirstOrDefault(c => c.Cercados.Equals(cerca));
+            
+            if (cercado != null)
+            {
+                var dinoExistente = cercado.Dinossauros.FirstOrDefault(d => d.Dino == dino);
+
+                if (dinoExistente != null)
+                {
+                    dinoExistente.QuantidadeDinossauros++;
+                }
+                else
+                {
+                    cercado.Dinossauros.Add(new AuxDinossauro(dino, 1));
+                }
+            }
         }
     }
 }

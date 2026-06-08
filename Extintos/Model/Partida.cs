@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Draft;
+using Extintos.Auxiliares;
 using Extintos.Enumeration;
 using Extintos.Model;
 

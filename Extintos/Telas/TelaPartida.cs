@@ -49,7 +49,7 @@ namespace Extintos.Telas
                     return;
                 }
 
-                if (_dadosJogador.idPartida <= 0 ||
+                if (_dadosJogador.IdPartida <= 0 ||
                     string.IsNullOrWhiteSpace(_dadosJogador.Senha))
                 {
                     Console.WriteLine("Partida ou senha inválida.");
@@ -58,7 +58,7 @@ namespace Extintos.Telas
 
                 var decisoes = new InformacoesTurno(
                     _dadosJogador.IdJogador,
-                    _dadosJogador.idPartida,
+                    _dadosJogador.IdPartida,
                     _dadosJogador.Senha,
                     _dadosJogador);
 
@@ -88,7 +88,7 @@ namespace Extintos.Telas
                         {
                             var retornoTurnoAnterior =
                                 Jogo.VerificarTurno(
-                                    _dadosJogador.idPartida,
+                                    _dadosJogador.IdPartida,
                                     turnoAtual - 1);
 
                             var dinosOponente =
@@ -124,7 +124,7 @@ namespace Extintos.Telas
 
                 foreach (var d in decisoes.MaoJogador)
                     Console.WriteLine(
-                        $"{d.Dinossauro} x{d.QuantidadeDinossauros}");
+                        $"{d.Dino} x{d.QuantidadeDinossauros}");
 
                 Console.WriteLine("CERCADOS:");
 
@@ -238,7 +238,7 @@ namespace Extintos.Telas
             {
                 await Task.Delay(2000);
 
-                var historico = DraftService.ObterHistoricoBruto(_dadosJogador.idPartida);
+                var historico = DraftService.ObterHistoricoBruto(_dadosJogador.IdPartida);
 
                 Console.WriteLine(
                     "Histórico atualizado? " +
@@ -252,7 +252,7 @@ namespace Extintos.Telas
 
         private bool JaJogueiNesseTurno(int turnoAtual)
         {
-            var historico = DraftService.ObterHistoricoBruto(_dadosJogador.idPartida);
+            var historico = DraftService.ObterHistoricoBruto(_dadosJogador.IdPartida);
             if (string.IsNullOrWhiteSpace(historico)) return false;
 
             var termoTurno = $"Turno {turnoAtual}";
@@ -277,7 +277,7 @@ namespace Extintos.Telas
             {
                 await Task.Delay(delayMs);
 
-                var historicoBruto = DraftService.ObterHistoricoBruto(_dadosJogador.idPartida);
+                var historicoBruto = DraftService.ObterHistoricoBruto(_dadosJogador.IdPartida);
                 Console.WriteLine($"🔍 Verificando histórico ({i + 1}/{tentativas})...");
 
                 if (historicoBruto.Contains($"Turno {turno}") && historicoBruto.Contains(idJogador.ToString()))
@@ -440,16 +440,7 @@ namespace Extintos.Telas
         {
             try
             {
-                var retorno = DraftService.ListarJogadoresBruto(_dadosJogador.idPartida);
-                var linhas = retorno.Replace("\r", "")
-                    .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-                nomesJogadores.Clear();
-                foreach (var linha in linhas)
-                {
-                    var dados = linha.Split(',');
-                    if (dados.Length >= 2) nomesJogadores.Add(int.Parse(dados[0].Trim()), dados[1].Trim());
-                }
+                var retorno = DraftService.PegaJogadoresAsync(_dadosJogador.IdPartida, new CancellationToken());
             }
             catch (Exception ex)
             {
@@ -461,7 +452,7 @@ namespace Extintos.Telas
         {
             try
             {
-                var retorno = DraftService.ObterHistoricoBruto(_dadosJogador.idPartida);
+                var retorno = DraftService.ObterHistoricoBruto(_dadosJogador.IdPartida);
                 txtHistorico.Text = retorno.Replace(".", ".\r\n");
                 txtHistorico.ScrollBars = ScrollBars.Both;
                 txtHistorico.Multiline = true;
@@ -504,9 +495,9 @@ namespace Extintos.Telas
                     var posX = centroX + coluna * espacamentoX;
                     var posY = centroY + linha * espacamentoY;
 
-                    var d = new DinossauroVisual(PegarImagemDinossauro(item.Dinossauro), posX, posY)
+                    var d = new DinossauroVisual(PegarImagemDinossauro(item.Dino), posX, posY)
                     {
-                        Tipo = item.Dinossauro.ToString(),
+                        Tipo = item.Dino.ToString(),
                         largura = tamanhoDino,
                         altura = tamanhoDino,
                         area = new Rectangle(posX, posY, tamanhoDino, tamanhoDino)

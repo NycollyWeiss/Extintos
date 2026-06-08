@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using Draft;
 using Extintos.Model;
@@ -126,7 +127,7 @@ namespace Extintos.Telas
             var jogador = txtIdDaPartida.Text;
             var senhaJogador = txtSenhaDaPartida.Text;
 
-            var jogadores = DraftService.ListarJogadoresBruto(idPartidaJogando);
+            var jogadores = DraftService.PegaJogadoresAsync(idPartidaJogando, new CancellationToken());
             var ativos = jogadores.Split(',');
             for (var i = 0; i < ativos.Length; i++)
             {

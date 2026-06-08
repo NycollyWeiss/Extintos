@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Draft;
 using Extintos.Auxiliares;
 using Extintos.Enumeration;
@@ -52,7 +53,7 @@ namespace Extintos
         
         public static Partida BuscaPeloId(char Status, int IdPartida)
         {
-            var partidas = DraftService.ListarPartidas(Status);
+            var partidas = DraftService.ObterEstadoAsync(IdPartida, new CancellationToken());
             var partidaEncontrada = partidas.Find(p => p.IdPartida == IdPartida);
             return partidaEncontrada;
         }

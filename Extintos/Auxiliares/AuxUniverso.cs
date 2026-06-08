@@ -12,7 +12,7 @@ namespace Extintos.Auxiliares
         public static void ConsolidarDino(List<AuxDinossauro> dinosPraConsolidar)
         {
             var consolidado = dinosPraConsolidar
-                .GroupBy(x => x.Dinossauro)
+                .GroupBy(x => x.Dino)
                 .Select(g =>
                     new AuxDinossauro(
                         g.Key,
@@ -27,7 +27,7 @@ namespace Extintos.Auxiliares
         public static int QuantidadeConhecidaPorEspecie(List<AuxDinossauro> universoConhecido, Dinossauro especie)
         {
             return universoConhecido
-                .FirstOrDefault(x => x.Dinossauro == especie)?.QuantidadeDinossauros ?? 0;
+                .FirstOrDefault(x => x.Dino == especie)?.QuantidadeDinossauros ?? 0;
         }
 
 

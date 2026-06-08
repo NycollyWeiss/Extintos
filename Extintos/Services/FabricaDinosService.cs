@@ -35,11 +35,11 @@ namespace Extintos.Services
 
                     var dino = new DinossauroVisual(
                         ProvedorDeImagens.PegarImagemDinossauro(
-                            item.Dinossauro),
+                            item.Dino),
                         posX,
                         posY)
                     {
-                        Tipo = item.Dinossauro.ToString(),
+                        Tipo = item.Dino.ToString(),
                         largura = tamanhoDino,
                         altura = tamanhoDino,
                         area = new Rectangle(

@@ -38,7 +38,7 @@ namespace Extintos.Telas
 
         private void bntListaJogadores_Click(object sender, EventArgs e)
         {
-            dgvJogadores.DataSource = Partida.ListarJogadores(dadosJogador.idPartida);
+            dgvJogadores.DataSource = Partida.ListarJogadores(dadosJogador.IdPartida);
         }
 
 
@@ -54,7 +54,7 @@ namespace Extintos.Telas
                 var retorno = Partida.IniciarPartida(
                     dadosJogador.IdJogador,
                     dadosJogador.Senha,
-                    dadosJogador.idPartida
+                    dadosJogador.IdPartida
                 );
             });
 

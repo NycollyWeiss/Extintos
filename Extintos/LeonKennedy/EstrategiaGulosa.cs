@@ -54,7 +54,7 @@ namespace Extintos.LeonKennedy
                 return -100;
 
             return ComidinhaDoGuloso(info, dino, cercado) +
-                   EstrategiaAnalizador.BonusJogada(info, cercado, dino, TODO) +
+                   EstrategiaAnalizador.BonusJogada(info, cercado, dino) +
                    EstrategiaAnalizador.PotencialFuturo(info, cercado, dino);
         }
 

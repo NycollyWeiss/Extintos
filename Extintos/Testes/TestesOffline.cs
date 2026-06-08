@@ -125,7 +125,7 @@ namespace Extintos.LeonKennedy
         {
             var ok = true;
 
-            var item = info.MaoJogador.FirstOrDefault(x => x.Dinossauro == jogada.dino);
+            var item = info.MaoJogador.FirstOrDefault(x => x.Dino == jogada.dino);
 
             if (item == null || item.QuantidadeDinossauros <= 0)
             {
@@ -182,10 +182,10 @@ namespace Extintos.LeonKennedy
                     var atual = info.CercadosJogador.FirstOrDefault(x => x.Cercados == c);
                     var lista = atual?.Dinossauros ?? new List<Dinossauro>();
 
-                    if (!c.SePodeColocarNoCercado(lista, item.Dinossauro))
+                    if (!c.SePodeColocarNoCercado(lista, item.Dino))
                         continue;
 
-                    var ganho = CalcularGanho(info, item.Dinossauro, c);
+                    var ganho = CalcularGanho(info, item.Dino, c);
 
                     if (ganho > melhor)
                         melhor = ganho;
@@ -358,18 +358,18 @@ namespace Extintos.LeonKennedy
                     var cercadoAtual = Cercados.FirstOrDefault(x => x.Cercados == cercado);
                     var dinosNoCercado = cercadoAtual?.Dinossauros ?? new List<Dinossauro>();
 
-                    if (!cercado.SePodeColocarNoCercado(dinosNoCercado, itemMao.Dinossauro))
+                    if (!cercado.SePodeColocarNoCercado(dinosNoCercado, itemMao.Dino))
                         continue;
 
                     var ganho = PontuacaoHelper.GanhoSimulado(
                         Cercados,
-                        itemMao.Dinossauro,
+                        itemMao.Dino,
                         cercado,
                         turnoAtual);
 
                     todasOpcoes.Add(new OpcaoAvaliada
                     {
-                        Dino = itemMao.Dinossauro,
+                        Dino = itemMao.Dino,
                         Cercado = cercado,
                         Ganho = ganho
                     });
@@ -706,13 +706,13 @@ namespace Extintos.LeonKennedy
                 {
                     var carta = baralho[0];
                     baralho.RemoveAt(0);
-                    var slot = j.Mao.First(x => x.Dinossauro == carta);
+                    var slot = j.Mao.First(x => x.Dino == carta);
                     slot.QuantidadeDinossauros++;
                 }
 
                 var resumo = string.Join(", ",
                     j.Mao.Where(x => x.QuantidadeDinossauros > 0)
-                         .Select(x => $"{x.Dinossauro}×{x.QuantidadeDinossauros}"));
+                         .Select(x => $"{x.Dino}×{x.QuantidadeDinossauros}"));
 
                 log($"   {j.Nome}: [{resumo}]");
             }
@@ -746,7 +746,7 @@ namespace Extintos.LeonKennedy
             {
                 var resumo = string.Join(", ",
                     j.Mao.Where(x => x.QuantidadeDinossauros > 0)
-                         .Select(x => $"{x.Dinossauro}×{x.QuantidadeDinossauros}"));
+                         .Select(x => $"{x.Dino}×{x.QuantidadeDinossauros}"));
                 log($"     {j.Nome} recebe: [{(string.IsNullOrEmpty(resumo) ? "vazia" : resumo)}]");
             }
         }
@@ -773,7 +773,7 @@ namespace Extintos.LeonKennedy
                     {
                         var carta = baralho[0];
                         baralho.RemoveAt(0);
-                        var slot = j.Mao.First(x => x.Dinossauro == carta);
+                        var slot = j.Mao.First(x => x.Dino == carta);
                         slot.QuantidadeDinossauros++;
                         reabasteceu++;
                     }
@@ -795,7 +795,7 @@ namespace Extintos.LeonKennedy
                 return;
             }
 
-            log("  Mão: " + string.Join("  ", itens.Select(x => $"{x.Dinossauro}×{x.QuantidadeDinossauros}")));
+            log("  Mão: " + string.Join("  ", itens.Select(x => $"{x.Dino}×{x.QuantidadeDinossauros}")));
         }
 
         private static void LogOpcoes(

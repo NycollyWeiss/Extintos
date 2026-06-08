@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Extintos.Enumeration;
 using Extintos.Auxiliares;
-using Extintos.Extension;
 
 namespace Extintos.Model
 {
@@ -52,8 +51,7 @@ namespace Extintos.Model
 
                 case Dado.TI:
 
-                    return !cercadoAtual.Dinossauros
-                        .Contains(Dinossauro.TI);
+                    return !cercadoAtual.Dinossauros.Contains(Dinossauro.TI);
 
                 default:
 

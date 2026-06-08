@@ -701,7 +701,7 @@ namespace Extintos.Telas
                         try
                         {
                             var codigoDino = ConverterParaCodigoDino(dinoSelecionado.Tipo);
-                            var retorno = DraftService.Jogar(_dadosJogador.IdJogador, _dadosJogador.Senha, codigoDino, cercado.Key);
+                            var retorno = DraftService.JogarAsync(_dadosJogador.IdJogador, _dadosJogador.Senha, codigoDino, cercado.Key);
 
                             if (!retorno.Contains("ERRO"))
                             {
@@ -880,7 +880,7 @@ namespace Extintos.Telas
 
             try
             {
-                var info = await Task.Run(() => Partida.VerificaPartida(_dadosJogador.idPartida));
+                var info = await Task.Run(() => Partida.VerificaPartida(_dadosJogador.IdPartida));
 
                 if (info.numeroTurno != ultimoTurnoExibido)
                 {
@@ -911,7 +911,7 @@ namespace Extintos.Telas
 
             try
             {
-                var dadosVerificacao = DraftService.VerificarPartidaBruto(_dadosJogador.idPartida);
+                var dadosVerificacao = DraftService.VerificarPartidaBruto(_dadosJogador.IdPartida);
                 var dados = dadosVerificacao.Split(',');
                 var statusPartida = dados[0];
 

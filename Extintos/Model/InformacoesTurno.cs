@@ -20,7 +20,7 @@ namespace Extintos.Enumeration
                 JogueioDado = estado.IdJogadorDaVez == idJogador;
                 NumeroTurno = estado.TurnoAtual;
                 MaoJogador = DraftService.ObterMao(idJogador, senhaJogador);
-                CercadosJogador = jogador.meusCercados;
+                CercadosJogador = jogador.MeusCercados;
                 IdJogadorQueRolouDado = idJogador;
                 QuantidadeJogadores = Partida.QuantidadeJogadores(idPartida);
                 IdPartida = idPartida;

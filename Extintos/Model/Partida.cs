@@ -4,6 +4,7 @@ using Draft;
 using Extintos.Auxiliares;
 using Extintos.Enumeration;
 using Extintos.Model;
+using Extintos.Services;
 
 namespace Extintos
 {
@@ -48,15 +49,10 @@ namespace Extintos
             return listaPartidas;
         }
 
-       
-
-        public static int QuantidadeJogadores(int idPartida)
-        {
-            return ListarJogadores(idPartida).Count;
-        }
+        
         public static Partida BuscaPeloId(char Status, int IdPartida)
         {
-            var partidas = ListarPartidas(Status);
+            var partidas = DraftService.ListarPartidas(Status);
             var partidaEncontrada = partidas.Find(p => p.IdPartida == IdPartida);
             return partidaEncontrada;
         }
@@ -103,7 +99,7 @@ namespace Extintos
 
             //Boto um trim ? talvez 
 
-            var mensagemInicio = $"O Jogador: {Jogador.BuscaPeloId(idJogador)} iniciou a partida!\n" +
+            var mensagemInicio = $"O Jogador: {Jogador.BuscaPeloId(idJogador, idPartida)} iniciou a partida!\n" +
                                  $"Jogador com o dado: {Jogador.BuscaPeloId(verificacao.idJogador)}\n" +
                                  $"Turno: {verificacao.numeroTurno}\n" +
                                  $"Face do Dado: {dadoAtual.PegaNome()}\n"; //aqui ta a dor de cabeça

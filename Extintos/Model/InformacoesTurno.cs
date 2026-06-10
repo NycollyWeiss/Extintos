@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Draft;
 using Extintos.Model;
 using Extintos.Services;
@@ -10,37 +11,63 @@ namespace Extintos.Enumeration
 {
     public class InformacoesTurno
     {
-        public InformacoesTurno(int idJogador, int idPartida, string senhaJogador, Jogador jogador)
+        private InformacoesTurno()
         {
+        }
+
+        public static async Task<InformacoesTurno> CriarAsync(
+            int idJogador, 
+            int idPartida, 
+            string senhaJogador, 
+            Jogador jogador)
+        {
+            Console.WriteLine("[InformacoesTurno] Iniciando criação...");
+            
+            var instancia = new InformacoesTurno();
+            
             try
             {
-                var estado = PartidasInfo.PartidaInfo.Obter(idPartida); // atribuir resposabilidade pro draftserver
-                StatusPartida = estado.StatusPartida;
-                StatusTurno = estado.StatusTurno;
-                DadoAtual = estado.FaceDadoAtual;
-                JogueioDado = estado.IdJogadorDaVez == idJogador;
-                NumeroTurno = estado.TurnoAtual;
-                MaoJogador = DraftService.ObterMao(idJogador, senhaJogador);
-                CercadosJogador = jogador.MeusCercados;
-                IdJogadorQueRolouDado = idJogador;
-                Tabuleiro meuTabuleiro = new Tabuleiro.Builder()
-                    .QuantidadeJogadoresAsync(idPartida).GetAwaiter().GetResult()
-                    .IdDaPartida(idPartida) 
-                    .Build();
-
-                IdPartida = idPartida;
-                MeuId = idJogador;
-                Tabuleiro = meuTabuleiro; 
-                QtdJogadores = meuTabuleiro.QuantidadeJogadores;
+                Console.WriteLine("[InformacoesTurno] Obtendo estado da partida...");
+                var estado = PartidasInfo.PartidaInfo.Obter(idPartida);
+                
+                instancia.StatusPartida = estado.StatusPartida;
+                instancia.StatusTurno = estado.StatusTurno;
+                instancia.DadoAtual = estado.FaceDadoAtual;
+                instancia.JogueioDado = estado.IdJogadorDaVez == idJogador;
+                instancia.NumeroTurno = estado.TurnoAtual;
+                
+                Console.WriteLine($"[InformacoesTurno] Estado obtido: Turno={estado.TurnoAtual}, Dado={estado.FaceDadoAtual}");
+                
+                Console.WriteLine("[InformacoesTurno] Obtendo mão do jogador...");
+                instancia.MaoJogador = DraftService.ObterMao(idJogador, senhaJogador);
+                Console.WriteLine($"[InformacoesTurno] Mão obtida: {instancia.MaoJogador?.Count ?? 0} dinossauros");
+                
+                instancia.CercadosJogador = jogador.MeusCercados;
+                instancia.IdJogadorQueRolouDado = idJogador;
+                
+                Console.WriteLine("[InformacoesTurno] Construindo tabuleiro...");
+                
+              
+                var builder = new Tabuleiro.Builder();
+                await builder.QuantidadeJogadoresAsync(idPartida);
+                builder.IdDaPartida(idPartida);
+                instancia.Tabuleiro = builder.Build();
+                
+                instancia.IdPartida = idPartida;
+                instancia.MeuId = idJogador;
+                instancia.QtdJogadores = instancia.Tabuleiro.QuantidadeJogadores;
+                
+                Console.WriteLine($"[InformacoesTurno] Tabuleiro construído: {instancia.QtdJogadores} jogadores");
+                Console.WriteLine("[InformacoesTurno] Criação concluída com sucesso!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao montar DecisoesTurno: {ex.Message}");
+                Console.WriteLine($"[InformacoesTurno ERRO] {ex.Message}");
+                Console.WriteLine($"[InformacoesTurno STACK] {ex.StackTrace}");
+                throw;
             }
-        }
-
-        public InformacoesTurno()
-        {
+            
+            return instancia;
         }
 
         public List<AuxDinossauro> MaoJogador { get; set; } = new();
@@ -50,29 +77,10 @@ namespace Extintos.Enumeration
         public bool JogueioDado { get; set; }
         public char StatusPartida { get; set; }
         public char StatusTurno { get; set; }
-
         public int IdJogadorQueRolouDado { get; set; }
         public Tabuleiro Tabuleiro { get; set; }
         public int QtdJogadores { get; set; }
         public int IdPartida { get; set; }
         public int MeuId { get; set; }
-
-        public static InformacoesTurno CriarOffline(
-            List<AuxDinossauro> mao,
-            List<AuxCercado> cercados,
-            Dado dado,
-            int turno)
-        {
-            return new InformacoesTurno
-            {
-                MaoJogador = mao,
-                CercadosJogador = cercados,
-                DadoAtual = dado,
-                NumeroTurno = turno,
-                StatusPartida = 'E',
-                StatusTurno = 'A',
-                JogueioDado = true
-            };
-        }
     }
 }

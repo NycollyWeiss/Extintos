@@ -1,6 +1,7 @@
 ﻿using Extintos.Enumeration;
 using System.Collections.Generic;
 using System.Linq;
+using Extintos.Auxiliares;
 
 namespace Extintos.LeonKennedy
 {
@@ -11,11 +12,23 @@ namespace Extintos.LeonKennedy
         public static int BonusJogada(InformacoesTurno info, Cercados cercado, Dinossauro dino)
         {
             var bonus = 0;
+            var alvo = info.CercadosJogador.FirstOrDefault(x => x.Cercados == cercado);
+            if (alvo == null) return 0;
 
-            var alvo = info.CercadosJogador
-                .First(x => x.Cercados == cercado);
+            var dinosNoCercado = alvo.Dinossauros ?? new List<AuxDinossauro>();
+            var qtdAtual = dinosNoCercado.Sum(d => d.QuantidadeDinossauros);
 
-            var qtdAtual = alvo.Dinossauros.Count;
+            int qtdDessaEspecieNoZoo = info.CercadosJogador
+                .Where(c => c.Cercados != Cercados.RI)
+                .SelectMany(c => c.Dinossauros ?? new List<AuxDinossauro>())
+                .Where(d => d.Dino == dino)
+                .Sum(d => d.QuantidadeDinossauros);
+
+            int qtdDessaEspecieNaMao = info.MaoJogador
+                .Where(d => d.Dino == dino)
+                .Sum(d => d.QuantidadeDinossauros);
+
+            int totalEspecieDisponivelParaMi = qtdDessaEspecieNoZoo + qtdDessaEspecieNaMao + 1;
 
             switch (cercado)
             {
@@ -33,21 +46,49 @@ namespace Extintos.LeonKennedy
 
                     break;
 
-                case Cercados.RS:
-
+                case Cercados.RS: 
                     if (qtdAtual == 0)
-                        bonus += 40;
-
+                    {
+                        if (totalEspecieDisponivelParaMi >= 4) 
+                            bonus += 300; 
+                        else if (totalEspecieDisponivelParaMi == 3) 
+                            bonus += 100;
+                        else 
+                            bonus -= 150;
+                    }
                     break;
 
-                case Cercados.IS:
-                    
-                    if (qtdAtual == 0 &&
-                        info.NumeroTurno >= 10)
+                case Cercados.IS: 
+                    if (qtdAtual == 0)
                     {
-                        bonus += 8;
-                    }
+                        var cercadoCD = info.CercadosJogador
+                            .FirstOrDefault(x => x.Cercados == Cercados.CD);
+                        int qtdEspeciesNoCD = cercadoCD?.Dinossauros?
+                            .Count(d => d.QuantidadeDinossauros > 0) ?? 0;
+                        
+                        if (qtdEspeciesNoCD == 6)
+                        {
+                            bonus -= 400; 
+                            break;
+                        }
 
+                        if (info.NumeroTurno < 9)
+                        {
+                            bonus -= 200; 
+                            break;
+                        }
+
+                        bool especieEhUnicaNoMeuZoo = (qtdDessaEspecieNoZoo == 0);
+                        
+                        if (especieEhUnicaNoMeuZoo)
+                        {
+                            bonus += 200; 
+                        }
+                        else
+                        {
+                            bonus -= 300; 
+                        }
+                    }
                     break;
 
                 case Cercados.FI:

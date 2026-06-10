@@ -45,16 +45,14 @@ namespace Extintos.Services
                 }
                 Console.WriteLine($"[Bot] Jogador OK: ID={_jogador.IdJogador}, Partida={_jogador.IdPartida}");
 
-                // CORREÇÃO CRÍTICA: Usar factory method assíncrono
                 Console.WriteLine("[Bot] Criando InformacoesTurno...");
-                InformacoesTurno decisoes;
+               
+                 var decisoes = await InformacoesTurno.CriarAsync(_jogador.IdJogador,
+                    _jogador.IdPartida,
+                    _jogador.Senha,
+                    _jogador);
                 try
                 {
-                    decisoes = await InformacoesTurno.CriarAsync(
-                        _jogador.IdJogador, 
-                        _jogador.IdPartida, 
-                        _jogador.Senha, 
-                        _jogador);
                     Console.WriteLine($"[Bot] InformacoesTurno criado. Turno={decisoes.NumeroTurno}");
                 }
                 catch (Exception ex)
